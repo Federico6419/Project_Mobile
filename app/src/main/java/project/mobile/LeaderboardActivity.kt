@@ -54,7 +54,7 @@ class LeaderboardActivity : AppCompatActivity() {
             intent = Intent(this, MainActivity::class.java)
             startActivity(intent)
         }
-    }//
+    }
 
 
 
