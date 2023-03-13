@@ -48,6 +48,12 @@ class LeaderboardActivity : AppCompatActivity() {
         GlobalScope.launch {
             getLeaderB()
         }
+
+        val signUpButton = findViewById(R.id.ReturnButton) as ImageButton
+        signUpButton.setOnClickListener(){
+            intent = Intent(this, MainActivity::class.java)
+            startActivity(intent)
+        }
     }
 
 
