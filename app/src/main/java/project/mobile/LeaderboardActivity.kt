@@ -24,7 +24,7 @@ data class Users(
     val username: String?,
     @SerializedName("score")
     val score: Int?
-)
+)//
 
 
 var users = arrayOf<String>("","","","","","","","","","")
