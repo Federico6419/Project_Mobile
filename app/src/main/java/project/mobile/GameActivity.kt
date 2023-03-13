@@ -1,5 +1,5 @@
-package project.mobile//
-//
+package project.mobile
+
 import android.annotation.SuppressLint
 import android.graphics.ImageDecoder
 import android.graphics.drawable.AnimatedImageDrawable
