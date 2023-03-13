@@ -1,4 +1,4 @@
-package project.mobile
+package project.mobile//
 
 import android.annotation.SuppressLint
 import android.graphics.ImageDecoder
