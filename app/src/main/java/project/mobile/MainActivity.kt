@@ -21,7 +21,7 @@ import android.location.LocationManager
 import android.os.Build
 import androidx.annotation.RequiresApi
 
-var weather = ""
+var weather = "" //
 var city = ""
 @Suppress("DEPRECATED_IDENTITY_EQUALS")
 class MainActivity : AppCompatActivity(),LocationListener{
