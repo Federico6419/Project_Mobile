@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/blu_figo"
+    android:background="#0A4D88"
     tools:context=".GameSettingsActivity">
 
     <TextView
@@ -13,7 +13,7 @@
         android:fontFamily="sans-serif-black"
         android:padding="30dp"
         android:text="Game settings"
-        android:textColor="#6dffbf"
+        android:textColor="#FFA76D"
         android:textSize="30dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
@@ -28,7 +28,7 @@
         android:layout_height="wrap_content"
 
         android:text="Choose the plane"
-        android:textColor="#6dffbf"
+        android:textColor="#0FF38F"
         android:textSize="20dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
@@ -174,7 +174,7 @@
         android:fontFamily="sans-serif-light"
         android:text="Current opponent: None"
         android:textColor="@color/white"
-        android:textSize="20dp"
+        android:textSize="18dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.494"
@@ -185,15 +185,15 @@
 
     <EditText
         android:id="@+id/Username"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_width="344dp"
+        android:layout_height="46dp"
         android:layout_marginTop="452dp"
         android:hint="Insert Username"
         android:textAlignment="center"
         android:textColor="#6bfff7"
         android:textColorHint="#52afaa"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="1.0"
+        app:layout_constraintHorizontal_bias="0.492"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         tools:ignore="MissingConstraints" />
@@ -204,6 +204,7 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="500dp"
         android:text="Set opponent"
+        app:backgroundTint="@color/purple_700"
         android:textAllCaps="false"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.482"
