@@ -17,7 +17,6 @@ class SettingsActivity : AppCompatActivity() {
 
         supportActionBar?.setTitle("                     Death Planes")
 
-        val message=intent.getStringExtra("msg")
         val id=intent.getStringExtra("ID")
 
         var username = findViewById(R.id.Username) as EditText
@@ -31,14 +30,6 @@ class SettingsActivity : AppCompatActivity() {
 
         val passwordText: TextView = findViewById(R.id.Password) as TextView
         passwordText.text = intent.getStringExtra("Password")
-
-        message?.let {
-            val MessageText: TextView = findViewById(R.id.MessageText) as TextView
-            MessageText.text = ""
-        } ?: run {
-            val MessageText: TextView = findViewById(R.id.MessageText) as TextView
-            MessageText.text = message
-        }
 
         // set on-click listener
         userButton.setOnClickListener {

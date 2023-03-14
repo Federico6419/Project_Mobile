@@ -42,7 +42,7 @@
         android:layout_height="45dp"
         android:hint="Email"
         android:textAlignment="center"
-        android:textColor="@color/black"
+        android:textColor="#6bfff7"
         android:textColorHint="#99A3A4"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"

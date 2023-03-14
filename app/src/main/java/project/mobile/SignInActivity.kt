@@ -11,10 +11,7 @@ import com.google.firebase.database.ktx.database
 import com.google.firebase.ktx.Firebase
 import android.util.Log
 import com.google.firebase.auth.FirebaseAuth
-import com.google.firebase.database.DataSnapshot
-import com.google.firebase.database.DatabaseError
-import com.google.firebase.database.FirebaseDatabase
-import com.google.firebase.database.ValueEventListener
+import com.google.firebase.database.*
 import com.google.firebase.database.ktx.getValue
 
 class SignInActivity : AppCompatActivity() {
@@ -55,18 +52,46 @@ class SignInActivity : AppCompatActivity() {
             if (email.isNotEmpty() && password.isNotEmpty()) {
                 firebaseAuth.signInWithEmailAndPassword(email, password).addOnCompleteListener {
                     if (it.isSuccessful) {
+                        //Take the user id
+                        var id = firebaseAuth.uid
+
                         //Connect to Firebase Database
                         val database = Firebase.database("https://mobileproject2-50486-default-rtdb.europe-west1.firebasedatabase.app/")
 
-                        //Get reference to Score
-                        val referenceScore = database.getReference("Users/$username/Score")
+                        val referenceDB = database.getReference("NumberOfUsers")    //Take the number of users
+
+                        var idx = "1"
+
+                        //Get the number of users
+                        referenceDB.get().addOnSuccessListener {
+                            var numberOfUsers = it.value.toString().toInt()
+                            var referenceUsername: DatabaseReference
+                            var found = false
+
+                            for (i in 1..numberOfUsers) {
+                                referenceUsername = database.getReference("Users/$i/id")    //Reference to username in the Database
+
+                                referenceUsername.get().addOnSuccessListener {
+                                    if (it.value.toString() == id) {
+                                        found = true
+                                        idx = i.toString()
+                                    }
+                                }
+                                if(found == true){
+                                    break
+                                }
+                            }
+                        }
+
+                            //Get reference to Score
+                        val referenceScore = database.getReference("Users/$idx/Score")
 
                         //Get the score
                         referenceScore.get().addOnSuccessListener {
                             score = it.value.toString()
 
                             //Get reference to Username
-                            val referenceUsername = database.getReference("Users/$username/Username")
+                            val referenceUsername = database.getReference("Users/$idx/Username")
 
                             //Get the username
                             referenceUsername.get().addOnSuccessListener {
@@ -74,9 +99,9 @@ class SignInActivity : AppCompatActivity() {
 
                                 //Intent to the home page
                                 val intent = Intent(this, MainActivity::class.java)
-                                Log.i("FIRE", username.toString())
                                 intent.putExtra("Username", username)
                                 intent.putExtra("Score", score)
+                                intent.putExtra("ID", idx)
                                 startActivity(intent)
                             }
                         }

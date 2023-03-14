@@ -22,17 +22,17 @@ import android.os.Build
 import androidx.annotation.RequiresApi
 import com.google.firebase.auth.FirebaseAuth
 
-var weather = ""
-var city = ""
+var weather = ""        //Current weather variable
+var city = ""           //Current city variable
+
 @Suppress("DEPRECATED_IDENTITY_EQUALS")
-class MainActivity : AppCompatActivity(),LocationListener{
-    lateinit var locationManager : LocationManager
+class MainActivity : AppCompatActivity(), LocationListener{
+    lateinit var locationManager : LocationManager          //Define Location Manager
     private lateinit var firebaseAuth: FirebaseAuth         //Firebase Authenticatoin variable
 
     @RequiresApi(Build.VERSION_CODES.S)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-
 
         firebaseAuth = FirebaseAuth.getInstance()   //Get instance from Firebase Authentication
 
@@ -46,29 +46,31 @@ class MainActivity : AppCompatActivity(),LocationListener{
         }
 
         locationManager = getSystemService(Context.LOCATION_SERVICE) as LocationManager
-        supportActionBar?.setTitle("                     Death Planes")
+
+        supportActionBar?.setTitle("                     Death Planes")     //Define the name of the application
+
         locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 1000, 5f,this)
 
-        val username=intent.getStringExtra("Username")
-        val password=intent.getStringExtra("Password")
-        val id=intent.getStringExtra("ID")
+        //Get values from the intent
+        val username = intent.getStringExtra("Username")
+        val score = intent.getStringExtra("Score")
+        val idx = intent.getStringExtra("ID")
+        val id = firebaseAuth.uid
 
-        //Questo metodo è un if che verifica se username è null
-        username?.let {
+        //Check if the user id is null or not
+        id?.let {               //If user id is not null
             setContentView(R.layout.activity_main_signed)
-            Log.i("FIRE", firebaseAuth.currentUser.toString())
-        //firebaseAuth.currentUser.let{
+
             val usernameText: TextView = findViewById(R.id.Username) as TextView
             usernameText.text = username
 
             val settingsButton = findViewById(R.id.SettingsButton) as ImageButton
             settingsButton.setOnClickListener() {
                 intent = Intent(this, SettingsActivity::class.java)
-                intent.putExtra("Username",username)
-                intent.putExtra("Password",password)
-                intent.putExtra("ID",id)
+                intent.putExtra("Username", username)
+                intent.putExtra("ID", id)
                 intent.putExtra("Weather",weather)
-                intent.putExtra("Score","0")
+                intent.putExtra("Score", score)
                 startActivity(intent)
             }
 
@@ -86,7 +88,7 @@ class MainActivity : AppCompatActivity(),LocationListener{
                 intent.putExtra("Password",password)
                 intent.putExtra("ID",id)
                 intent.putExtra("Weather",weather)
-                intent.putExtra("Score","0")
+                intent.putExtra("Score",score)
                 startActivity(intent)
             }
             val leaderboardButton = findViewById(R.id.LeaderboardButton) as ImageButton
@@ -95,6 +97,7 @@ class MainActivity : AppCompatActivity(),LocationListener{
                 intent.putExtra("Username", username)
                 intent.putExtra("Password", password)
                 intent.putExtra("ID", id)
+                intent.putExtra("Score",score)
                 startActivity(intent)
             }
         } ?: run {
