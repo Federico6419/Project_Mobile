@@ -10,6 +10,7 @@ import android.widget.*
 import com.google.firebase.database.ktx.database
 import com.google.firebase.ktx.Firebase
 import android.util.Log
+import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.FirebaseDatabase
@@ -17,76 +18,74 @@ import com.google.firebase.database.ValueEventListener
 import com.google.firebase.database.ktx.getValue
 
 class SignInActivity : AppCompatActivity() {
+    private lateinit var firebaseAuth: FirebaseAuth         //Firebase Authenticatoin variable
+
+    //Email, username and password variables
+    private var email : String = ""
+    private var password : String = ""
+    private var username : String = ""
+    private var score : String = ""
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_sign_in)   //Display the sign in XML
 
+        firebaseAuth = FirebaseAuth.getInstance()
+
         supportActionBar?.setTitle("                     Death Planes")
 
         //Getting the references to the Views
-        var username = findViewById(R.id.Username) as EditText
-        var password = findViewById(R.id.Password) as EditText
+        var emailView = findViewById(R.id.Email) as EditText
+        var passwordView = findViewById(R.id.Password) as EditText
         var resetbutton = findViewById(R.id.ResetButton) as Button
         var submitbutton = findViewById(R.id.SubmitButton) as Button
 
         //Manage the reset button
         resetbutton.setOnClickListener {
-            username.setText("")
-            password.setText("")
+            emailView.setText("")
+            passwordView.setText("")
         }
 
         //Setting the listener of the onClick event of the submit button
         submitbutton.setOnClickListener {
-            val user = username.text.toString()
-            val pass = password.text.toString()
+            email = emailView.text.toString()
+            password = passwordView.text.toString()
 
-            val database = Firebase.database("https://mobileproject2-50486-default-rtdb.europe-west1.firebasedatabase.app/")
+            //Sign in
+            if (email.isNotEmpty() && password.isNotEmpty()) {
+                firebaseAuth.signInWithEmailAndPassword(email, password).addOnCompleteListener {
+                    if (it.isSuccessful) {
+                        //Connect to Firebase Database
+                        val database = Firebase.database("https://mobileproject2-50486-default-rtdb.europe-west1.firebasedatabase.app/")
 
-            val referenceDB = database.getReference("NumberOfUsers")
+                        //Get reference to Score
+                        val referenceScore = database.getReference("Users/$username/Score")
 
-            var res = ""
-            var numberOfUsers = 0
-            referenceDB.get().addOnSuccessListener {
-                res = it.value.toString()
-                numberOfUsers = res.toInt()
-                var existsUser = false
+                        //Get the score
+                        referenceScore.get().addOnSuccessListener {
+                            score = it.value.toString()
 
-                for(i in 1..numberOfUsers){
-                    var id = ""
-                    for(i in 1..5 - i.toString().length){
-                        id += "0"
-                    }
-                    id += i
+                            //Get reference to Username
+                            val referenceUsername = database.getReference("Users/$username/Username")
 
-                    val referenceUsername = database.getReference("Users/$id/Username")
-                    var res = ""
+                            //Get the username
+                            referenceUsername.get().addOnSuccessListener {
+                                username = it.value.toString()
 
-                    referenceUsername.get().addOnSuccessListener {
-                        //Se lo trova adesso fa la verifica della password, altrimenti continua il for
-                        res = it.value.toString()
-                        if(user == res) {
-                            val referencePassword = database.getReference("Users/$id/Password")
-
-                            res = ""
-
-                            referencePassword.get().addOnSuccessListener {
-                                res = it.value.toString()
-                                Log.i("firebase", "Got value ${it.value}")
-                                if (pass == res) {
-                                    intent = Intent(this, MainActivity::class.java)
-                                    intent.putExtra("Username", user)
-                                    intent.putExtra("Password", pass)
-                                    intent.putExtra("ID",id)
-                                    startActivity(intent)
-                                }
-                            }.addOnFailureListener {
-                                Log.e("firebase", "Error getting data", it)
+                                //Intent to the home page
+                                val intent = Intent(this, MainActivity::class.java)
+                                Log.i("FIRE", username.toString())
+                                intent.putExtra("Username", username)
+                                intent.putExtra("Score", score)
+                                startActivity(intent)
                             }
                         }
+                    } else {
+                        Toast.makeText(this, it.exception.toString(), Toast.LENGTH_SHORT).show()
                     }
                 }
-            }.addOnFailureListener {
-                Log.e("firebase", "Error getting data", it)
+            } else {
+                Toast.makeText(this, "Empty Fields Are not Allowed !!", Toast.LENGTH_SHORT).show()
             }
         }
     }

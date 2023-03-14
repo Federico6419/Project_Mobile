@@ -16,6 +16,7 @@ import androidx.camera.core.Preview
 import androidx.camera.lifecycle.ProcessCameraProvider
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
+import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.ktx.database
 import com.google.firebase.ktx.Firebase
 import kotlinx.android.synthetic.main.activity_sign_up.*
@@ -28,19 +29,32 @@ import java.util.concurrent.Executors
 
 class SignUpActivity : AppCompatActivity() {
 
+    private lateinit var firebaseAuth: FirebaseAuth         //Firebase Authenticatoin variable
+
+    //Email, username and password variables
+    private var username : String = ""
+    private var email : String = ""
+    private var password : String = ""
+
+    //CAMERA////////////
     private lateinit var binding:ActivityMainBinding
     private var imageCapture: ImageCapture? = null
     private lateinit var outputDirectory: File
     private lateinit var cameraExecutor: ExecutorService
+    ////////
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_sign_up)   //Display the sign up XML
 
-        supportActionBar?.setTitle("                     Death Planes")
+        firebaseAuth = FirebaseAuth.getInstance()   //Get instance from Firebase Authentication
 
+        supportActionBar?.setTitle("                     Death Planes")     //Decide the title of the application
+
+        //CAMERA////////////
         // Check camera permissions if all permission granted
         // start camera else ask for the permission
-        if (allPermissionsGranted()) {
+        /*if (allPermissionsGranted()) {
             startCamera()
         } else {
             ActivityCompat.requestPermissions(this, REQUIRED_PERMISSIONS, REQUEST_CODE_PERMISSIONS)
@@ -53,91 +67,102 @@ class SignUpActivity : AppCompatActivity() {
         }
         outputDirectory = getOutputDirectory()
         //outputDirectory = ""
-        cameraExecutor = Executors.newSingleThreadExecutor()
+        cameraExecutor = Executors.newSingleThreadExecutor()*/
+        /////////////////
 
         //Getting the references to the Views
-        var username = findViewById(R.id.Username) as EditText
-        var password = findViewById(R.id.Password) as EditText
+        var usernameView = (findViewById(R.id.Username) as EditText)
+        var emailView = (findViewById(R.id.Email) as EditText)
+        var passwordView = (findViewById(R.id.Password) as EditText)
         var resetbutton = findViewById(R.id.ResetButton) as Button
         var submitbutton = findViewById(R.id.SubmitButton) as Button
 
         //Manage the reset button
         resetbutton.setOnClickListener {
-            username.setText("")
-            password.setText("")
+            usernameView.setText("")
+            emailView.setText("")
+            passwordView.setText("")
         }
 
         //Setting the listener of the onClick event of the submit button
         submitbutton.setOnClickListener {
-            val user = username.text.toString()
-            val pass = password.text.toString()
+            username = usernameView.text.toString()
+            email = emailView.text.toString()
+            password = passwordView.text.toString()
+
+
+            //Creation of the user
 
             //Connecting to Firebase Database
             val database = Firebase.database("https://mobileproject2-50486-default-rtdb.europe-west1.firebasedatabase.app/")
 
-            val referenceDB = database.getReference("NumberOfUsers")
+            val referenceDB = database.getReference("NumberOfUsers")    //Take the number of users
 
-            var res = ""
-            var numberOfUsers = 0
+
+            //Get the number of users
             referenceDB.get().addOnSuccessListener {
-                res = it.value.toString()
-                numberOfUsers = res.toInt()
-                var referenceUsername = ""
+                var numberOfUsers = it.value.toString().toInt()
 
-                res = (numberOfUsers + 1).toString()
-                var id = ""
-                for(i in 1..5 - res.length){
-                    id += "0"
-                }
-                id += res
+                val referenceUsername = database.getReference("Users/$username")    //Reference to username in the Database
 
-                for(i in 1..numberOfUsers) {
-                    var sid = ""
-                    for (i in 1..5 - i.toString().length) {
-                        sid += "0"
+                //Check if the inserted username already exists
+                referenceUsername.get().addOnSuccessListener {
+                    var user = it.value.toString()
+                    Log.i("FIRE", user)
+
+                    //If username does not exist
+                    //DA METTERE L'EMPTY, CIOE: if (email.isNotEmpty() && password.isNotEmpty() && username.isNotEmpty() && user == "null") {
+                    if (user == "null") {
+                        firebaseAuth.createUserWithEmailAndPassword(email, password)
+                            .addOnCompleteListener {
+                                if (it.isSuccessful) {      //If the user is created, create its informations on Firebase Database
+                                    //Increment the number of users
+                                    numberOfUsers += 1
+                                    referenceDB.setValue(numberOfUsers)
+
+                                    //Save Username
+                                    val referenceUser = database.getReference("Users/$username/Username")
+                                    referenceUser.setValue(username)
+
+                                    //Save Email
+                                    val referenceEmail = database.getReference("Users/$username/Email")
+                                    referenceEmail.setValue(email)
+
+                                    //Save Password
+                                    val referencePassword = database.getReference("Users/$username/Password")
+                                    referencePassword.setValue(password)
+
+                                    //Save Score
+                                    val referenceScore = database.getReference("Users/$username/Score")
+                                    referenceScore.setValue("0")
+
+                                    //Execute the log in
+                                    firebaseAuth.signInWithEmailAndPassword(email, password).addOnCompleteListener {
+                                        if (it.isSuccessful) {
+                                            intent = Intent(this, MainActivity::class.java)
+                                            intent.putExtra("Username",username)
+                                            intent.putExtra("Score","0")
+                                            startActivity(intent)
+                                        } else {
+                                            Toast.makeText(this, it.exception.toString(), Toast.LENGTH_SHORT).show()
+                                        }
+                                    }
+                                }
+
+                            }.addOnFailureListener {
+                                Toast.makeText(this, "Email already used", Toast.LENGTH_SHORT).show()
+                            }
                     }
-                    sid += i
-
-                    val referenceUsername = database.getReference("Users/$sid/Username")
-                    var res = ""
-
-                    referenceUsername.get().addOnSuccessListener {
-                        res = it.value.toString()
-                        Log.i("TEST", res+user)
-                        if (res == user) {
-                            ///CAMBIA CON GESTIONE ERRORE
-                            intent = Intent(this, MainActivity::class.java)
-                            startActivity(intent)
-                        }
-                        if(i == numberOfUsers && res != user){
-                            numberOfUsers += 1
-                            referenceDB.setValue(numberOfUsers)
-                            val refUsername = database.getReference("Users/$id/Username")
-                            refUsername.setValue(user)
-
-                            val referencePassword = database.getReference("Users/$id/Password")
-                            referencePassword.setValue(pass)
-
-                            val referenceScore = database.getReference("Users/$id/Score")
-                            referenceScore.setValue("0")
-
-                            intent = Intent(this, MainActivity::class.java)
-                            intent.putExtra("Username",user)
-                            intent.putExtra("Password",pass)
-                            intent.putExtra("ID",id)
-                            intent.putExtra("Score","0")
-                            startActivity(intent)
-                        }
+                    else{       //If username already exists
+                        Toast.makeText(this, "Username already exists", Toast.LENGTH_SHORT).show()
                     }
                 }
-
-            }.addOnFailureListener{
-                Log.e("firebase", "Error getting data", it)
             }
-
         }
     }
 
+    //CAMERA
+    /*
     private fun takePhoto() {
         // Get a stable reference of the
         // modifiable image capture use case
@@ -261,7 +286,5 @@ class SignUpActivity : AppCompatActivity() {
     override fun onDestroy() {
         super.onDestroy()
         cameraExecutor.shutdown()
-    }
-
-
+    }*///////////////////
 }

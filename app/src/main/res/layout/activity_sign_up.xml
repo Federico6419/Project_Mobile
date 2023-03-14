@@ -30,6 +30,14 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"/>
         <EditText
+            android:id="@+id/Email"
+            android:hint="Email"
+            android:textColor="#6bfff7"
+            android:textColorHint="#52afaa"
+            android:textAlignment="center"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"/>
+        <EditText
             android:id="@+id/Password"
             android:hint="Password"
             android:textColor="#6bfff7"

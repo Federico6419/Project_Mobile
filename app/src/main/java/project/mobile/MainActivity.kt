@@ -20,16 +20,22 @@ import android.location.LocationListener
 import android.location.LocationManager
 import android.os.Build
 import androidx.annotation.RequiresApi
+import com.google.firebase.auth.FirebaseAuth
 
 var weather = ""
 var city = ""
 @Suppress("DEPRECATED_IDENTITY_EQUALS")
 class MainActivity : AppCompatActivity(),LocationListener{
     lateinit var locationManager : LocationManager
+    private lateinit var firebaseAuth: FirebaseAuth         //Firebase Authenticatoin variable
 
     @RequiresApi(Build.VERSION_CODES.S)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
+
+        firebaseAuth = FirebaseAuth.getInstance()   //Get instance from Firebase Authentication
+
         //Location Permission
         if (ContextCompat.checkSelfPermission(this,
                 Manifest.permission.ACCESS_FINE_LOCATION) !== PackageManager.PERMISSION_GRANTED) {
@@ -50,7 +56,8 @@ class MainActivity : AppCompatActivity(),LocationListener{
         //Questo metodo è un if che verifica se username è null
         username?.let {
             setContentView(R.layout.activity_main_signed)
-
+            Log.i("FIRE", firebaseAuth.currentUser.toString())
+        //firebaseAuth.currentUser.let{
             val usernameText: TextView = findViewById(R.id.Username) as TextView
             usernameText.text = username
 
@@ -67,6 +74,7 @@ class MainActivity : AppCompatActivity(),LocationListener{
 
             val logoutButton = findViewById(R.id.LogOutButton) as ImageButton
             logoutButton.setOnClickListener() {
+                firebaseAuth.signOut()
                 intent = Intent(this, MainActivity::class.java)
                 startActivity(intent)
             }
