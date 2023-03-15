@@ -31,17 +31,27 @@ class SettingsActivity : AppCompatActivity() {
 
         var usernameView = findViewById(R.id.Username) as EditText
         var passwordView = findViewById(R.id.Password) as EditText
+        var emailView = findViewById(R.id.Email) as EditText
         var userButton = findViewById(R.id.ChangeUsernameButton) as Button
+        var emailButton = findViewById(R.id.ChangeEmailButton) as Button
         var passButton = findViewById(R.id.ChangePasswordButton) as Button
         var deleteButton = findViewById(R.id.DeleteButton) as Button
 
         val usernameText: TextView = findViewById(R.id.Username) as TextView
         usernameText.text = intent.getStringExtra("Username")
 
-        val passwordText: TextView = findViewById(R.id.Password) as TextView
-        passwordText.text = intent.getStringExtra("Password")
+        val emailText: TextView = findViewById(R.id.Email) as TextView
+        emailText.text = firebaseAuth.currentUser?.email
 
-        // set on-click listener
+        val passwordText: TextView = findViewById(R.id.Password) as TextView
+        val database = Firebase.database("https://mobileproject2-50486-default-rtdb.europe-west1.firebasedatabase.app/")
+        val referencePassword = database.getReference("Users/$id/Password")
+        referencePassword.get().addOnSuccessListener {
+        passwordText.text = it.value.toString()
+        }
+        //firebaseAuth.currentUser?.updatePassword("ciao")
+
+        // set on-click listener to change username
         userButton.setOnClickListener {
             val user = usernameView.text.toString()
 
@@ -49,16 +59,26 @@ class SettingsActivity : AppCompatActivity() {
             val referenceUsername = database.getReference("Users/$id/Username")
 
             referenceUsername.setValue(user)
+            Toast.makeText(this, "USERNAME CHANGED CORRECTLY", Toast.LENGTH_SHORT).show()
 
-            intent = Intent(this, SettingsActivity::class.java)
-            intent.putExtra("msg", "Username changed successfully")
-            intent.putExtra("Username",user)
-            intent.putExtra("Password",passwordView.text.toString())
-            intent.putExtra("ID",id)
             startActivity(intent)
         }
 
-        // set on-click listener
+        // set on-click listener to change email
+        emailButton.setOnClickListener {
+            val email = emailView.text.toString()
+
+            val database = Firebase.database("https://mobileproject2-50486-default-rtdb.europe-west1.firebasedatabase.app/")
+            val referenceUsername = database.getReference("Users/$id/Email")
+
+            referenceUsername.setValue(email) // change email on database realtime
+            firebaseAuth.currentUser?.updateEmail(email) // change email on firebase authentication
+            Toast.makeText(this, "EMAIL CHANGED CORRECTLY", Toast.LENGTH_SHORT).show()
+
+            startActivity(intent)
+        }
+
+        // set on-click listener to the change password
         passButton.setOnClickListener {
             val pass = passwordView.text.toString()
 
@@ -67,11 +87,9 @@ class SettingsActivity : AppCompatActivity() {
 
             referencePassword.setValue(pass)
 
-            intent = Intent(this, SettingsActivity::class.java)
-            intent.putExtra("msg", "Password changed successfully")
-            intent.putExtra("Username",usernameView.text.toString())
-            intent.putExtra("Password",pass)
-            intent.putExtra("ID",id)
+            //Alert of success
+            Toast.makeText(this, "PASSWORD CHANGED CORRECTLY", Toast.LENGTH_SHORT).show()
+
             startActivity(intent)
         }
 
