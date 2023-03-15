@@ -54,11 +54,13 @@ class MainActivity : AppCompatActivity(), LocationListener{
         //Get values from the intent
         val username = intent.getStringExtra("Username")
         val score = intent.getStringExtra("Score")
-        val idx = intent.getStringExtra("ID")
-        val id = firebaseAuth.uid
+        val id = intent.getStringExtra("ID")
+        val uid = firebaseAuth.uid
+
+        Log.i("FIRE", id.toString())
 
         //Check if the user id is null or not
-        id?.let {               //If user id is not null
+        uid?.let {               //If user id is not null
             setContentView(R.layout.activity_main_signed)
 
             val usernameText: TextView = findViewById(R.id.Username) as TextView

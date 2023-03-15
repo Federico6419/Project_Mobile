@@ -53,56 +53,51 @@ class SignInActivity : AppCompatActivity() {
                 firebaseAuth.signInWithEmailAndPassword(email, password).addOnCompleteListener {
                     if (it.isSuccessful) {
                         //Take the user id
-                        var id = firebaseAuth.uid
+                        var uid = firebaseAuth.uid
 
                         //Connect to Firebase Database
                         val database = Firebase.database("https://mobileproject2-50486-default-rtdb.europe-west1.firebasedatabase.app/")
 
                         val referenceDB = database.getReference("NumberOfUsers")    //Take the number of users
 
-                        var idx = "1"
+                        var id = "1"
 
                         //Get the number of users
                         referenceDB.get().addOnSuccessListener {
                             var numberOfUsers = it.value.toString().toInt()
-                            var referenceUsername: DatabaseReference
-                            var found = false
+                            var referenceUid: DatabaseReference
 
                             for (i in 1..numberOfUsers) {
-                                referenceUsername = database.getReference("Users/$i/id")    //Reference to username in the Database
+                                referenceUid = database.getReference("Users/$i/UID")    //Reference to username in the Database
 
-                                referenceUsername.get().addOnSuccessListener {
-                                    if (it.value.toString() == id) {
-                                        found = true
-                                        idx = i.toString()
+                                referenceUid.get().addOnSuccessListener {
+                                    if (it.value.toString() == uid) {
+                                        id = i.toString()
+
+                                        //Get reference to Score
+                                        val referenceScore = database.getReference("Users/$id/Score")
+
+                                        //Get the score
+                                        referenceScore.get().addOnSuccessListener {
+                                            score = it.value.toString()
+
+                                            //Get reference to Username
+                                            val referenceUsername = database.getReference("Users/$id/Username")
+
+                                            //Get the username
+                                            referenceUsername.get().addOnSuccessListener {
+                                                username = it.value.toString()
+
+                                                //Intent to the home page
+                                                val intent = Intent(this, MainActivity::class.java)
+                                                intent.putExtra("Username", username)
+                                                intent.putExtra("Score", score)
+                                                intent.putExtra("ID", id)
+                                                startActivity(intent)
+                                            }
+                                        }
                                     }
                                 }
-                                if(found == true){
-                                    break
-                                }
-                            }
-                        }
-
-                            //Get reference to Score
-                        val referenceScore = database.getReference("Users/$idx/Score")
-
-                        //Get the score
-                        referenceScore.get().addOnSuccessListener {
-                            score = it.value.toString()
-
-                            //Get reference to Username
-                            val referenceUsername = database.getReference("Users/$idx/Username")
-
-                            //Get the username
-                            referenceUsername.get().addOnSuccessListener {
-                                username = it.value.toString()
-
-                                //Intent to the home page
-                                val intent = Intent(this, MainActivity::class.java)
-                                intent.putExtra("Username", username)
-                                intent.putExtra("Score", score)
-                                intent.putExtra("ID", idx)
-                                startActivity(intent)
                             }
                         }
                     } else {

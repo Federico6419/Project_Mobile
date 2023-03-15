@@ -145,14 +145,9 @@ class SignUpActivity : AppCompatActivity() {
                             referenceScore.setValue("0")
 
                             //Take and save the user id
-                            var id = firebaseAuth.uid
-                            val referenceId = database.getReference("Users/$numberOfUsers/ID")
-                            referenceId.setValue(id)
-
-                            /*
-                            //Save Username in the list of users
-                            val referenceUserList = database.getReference("Usernames/Username$numberOfUsers")
-                            referenceUserList.setValue(username)*/
+                            var uid = firebaseAuth.uid
+                            val referenceUid = database.getReference("Users/$numberOfUsers/UID")
+                            referenceUid.setValue(uid)
 
                             //Execute the log in
                             firebaseAuth.signInWithEmailAndPassword(email, password).addOnCompleteListener {
@@ -160,7 +155,7 @@ class SignUpActivity : AppCompatActivity() {
                                         intent = Intent(this, MainActivity::class.java)
                                         intent.putExtra("Username", username)
                                         intent.putExtra("Score", "0")
-                                        intent.putExtra("ID", numberOfUsers)
+                                        intent.putExtra("ID", numberOfUsers.toString())
                                         startActivity(intent)
                                     } else {
                                         Toast.makeText(this, it.exception.toString(), Toast.LENGTH_SHORT).show()
