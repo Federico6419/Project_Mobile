@@ -87,7 +87,6 @@ class MainActivity : AppCompatActivity(), LocationListener{
             startButton.setOnClickListener() {
                 intent = Intent(this, GameSettingsActivity::class.java)
                 intent.putExtra("Username",username)
-                intent.putExtra("Password",password)
                 intent.putExtra("ID",id)
                 intent.putExtra("Weather",weather)
                 intent.putExtra("Score",score)
@@ -97,7 +96,6 @@ class MainActivity : AppCompatActivity(), LocationListener{
             leaderboardButton.setOnClickListener() {
                 intent = Intent(this, LeaderboardActivity::class.java)
                 intent.putExtra("Username", username)
-                intent.putExtra("Password", password)
                 intent.putExtra("ID", id)
                 intent.putExtra("Score",score)
                 startActivity(intent)

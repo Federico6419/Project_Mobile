@@ -49,7 +49,6 @@ class GameActivity : AppCompatActivity() {
         GlobalScope.launch {
             getDifference(username, opponent)
         }
-        //Log.i("prova1",w.toString())
         // get the wheater to set the right layout
         setContentView(MyView(this,w,old_score,id,username,password,color,bul))
     }
