@@ -25,8 +25,6 @@ class SettingsActivity : AppCompatActivity() {
 
         supportActionBar?.setTitle("                     Death Planes")
 
-        val username = intent.getStringExtra("Username")
-        val score = intent.getStringExtra("Score")
         val id=intent.getStringExtra("ID")
 
         var usernameView = findViewById(R.id.Username) as EditText
