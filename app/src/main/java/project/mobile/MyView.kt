@@ -182,10 +182,10 @@ class MyView(context: Context?,w:String?,old_score: Int?, ID : String?,Username 
             airplane= ResourcesCompat.getDrawable(resources,R.drawable.airplane,
                 null)?.toBitmap(sizeA.toInt(),sizeA.toInt())!!
         }else if(Color == "blue"){
-            airplane= ResourcesCompat.getDrawable(resources,R.drawable.airplane,
+            airplane= ResourcesCompat.getDrawable(resources,R.drawable.airplaneblue,
                 null)?.toBitmap(sizeA.toInt(),sizeA.toInt())!!
         }else if(Color =="green"){
-            airplane= ResourcesCompat.getDrawable(resources,R.drawable.airplane,
+            airplane= ResourcesCompat.getDrawable(resources,R.drawable.airplanegreen,
                 null)?.toBitmap(sizeA.toInt(),sizeA.toInt())!!
         }
         ///// bullet

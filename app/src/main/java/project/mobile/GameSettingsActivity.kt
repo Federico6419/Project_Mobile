@@ -32,30 +32,32 @@ class GameSettingsActivity : AppCompatActivity() {
 
         //Airplane selection management
         val airplane1: ImageButton = findViewById(R.id.Airplane1) as ImageButton
-        airplane1.setImageResource(R.drawable.airplane)
+        airplane1.setImageResource(R.drawable.airplaneredsigned)
 
         val airplane2: ImageButton = findViewById(R.id.Airplane2) as ImageButton
+        airplane2.setImageResource(R.drawable.airplaneblue)
 
         val airplane3: ImageButton = findViewById(R.id.Airplane3) as ImageButton
+        airplane3.setImageResource(R.drawable.airplanegreen)
 
         airplane1.setOnClickListener() {
-            airplane1.setImageResource(R.drawable.airplane)
-            airplane2.setImageResource(R.drawable.airplane)
-            airplane3.setImageResource(R.drawable.airplane)
+            airplane1.setImageResource(R.drawable.airplaneredsigned)
+            airplane2.setImageResource(R.drawable.airplaneblue)
+            airplane3.setImageResource(R.drawable.airplanegreen)
             color = "red"
         }
 
         airplane2.setOnClickListener() {
-            airplane2.setImageResource(R.drawable.airplane)
             airplane1.setImageResource(R.drawable.airplane)
-            airplane3.setImageResource(R.drawable.airplane)
+            airplane2.setImageResource(R.drawable.airplanebluesigned)
+            airplane3.setImageResource(R.drawable.airplanegreen)
             color = "blue"
         }
 
         airplane3.setOnClickListener() {
-            airplane3.setImageResource(R.drawable.airplane)
             airplane1.setImageResource(R.drawable.airplane)
-            airplane2.setImageResource(R.drawable.airplane)
+            airplane2.setImageResource(R.drawable.airplaneblue)
+            airplane3.setImageResource(R.drawable.airplanegreensigned)
             color = "green"
         }
 
