@@ -248,8 +248,6 @@ class MyView(context: Context?,w:String?,old_score: Int?, ID : String?,Username 
                     Log.i("context",cont.toString())
                     game.gameover(cont)
                 }*/
-                //draw pause button
-                drawBitmap(pause_button,500f,1600f,null)
                 ///// manage score ////
                 calendar = Calendar.getInstance()
                 current_time = calendar.get(Calendar.SECOND)
