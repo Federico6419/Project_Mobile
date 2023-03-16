@@ -21,9 +21,11 @@ import android.location.LocationManager
 import android.os.Build
 import androidx.annotation.RequiresApi
 import com.google.firebase.auth.FirebaseAuth
+import android.media.MediaPlayer
 
 var weather = ""        //Current weather variable
 var city = ""           //Current city variable
+public var music = MusicManager()       //Music variable
 
 @Suppress("DEPRECATED_IDENTITY_EQUALS")
 class MainActivity : AppCompatActivity(), LocationListener{
@@ -35,6 +37,9 @@ class MainActivity : AppCompatActivity(), LocationListener{
         super.onCreate(savedInstanceState)
 
         firebaseAuth = FirebaseAuth.getInstance()   //Get instance from Firebase Authentication
+
+        //Music management
+        music.playSoundMenu(this)
 
         //Location Permission
         if (ContextCompat.checkSelfPermission(this,
@@ -140,6 +145,12 @@ class MainActivity : AppCompatActivity(), LocationListener{
             }
         }
 
+    }
+
+    override fun onResume() {
+        super.onResume()
+        //Music management
+        music.playSoundMenu(this)
     }
 
     //Ask Location
