@@ -69,6 +69,7 @@ class MainActivity : AppCompatActivity(), LocationListener{
             val settingsButton = findViewById(R.id.SettingsButton) as ImageButton
             settingsButton.setOnClickListener() {
                 intent = Intent(this, SettingsActivity::class.java)
+                intent.putExtra("activity", "MainActivity")
                 intent.putExtra("Username", username)
                 intent.putExtra("ID", id)
                 intent.putExtra("Weather",weather)
@@ -86,6 +87,7 @@ class MainActivity : AppCompatActivity(), LocationListener{
             val startButton = findViewById(R.id.StartButton) as ImageButton
             startButton.setOnClickListener() {
                 intent = Intent(this, GameSettingsActivity::class.java)
+                intent.putExtra("activity", "MainActivity")
                 intent.putExtra("Username",username)
                 intent.putExtra("ID",id)
                 intent.putExtra("Weather",weather)
@@ -95,8 +97,29 @@ class MainActivity : AppCompatActivity(), LocationListener{
             val leaderboardButton = findViewById(R.id.LeaderboardButton) as ImageButton
             leaderboardButton.setOnClickListener() {
                 intent = Intent(this, LeaderboardActivity::class.java)
+                intent.putExtra("activity", "MainActivity")
                 intent.putExtra("Username", username)
                 intent.putExtra("ID", id)
+                intent.putExtra("Score",score)
+                startActivity(intent)
+            }
+            val houseButton = findViewById(R.id.HouseButton) as ImageButton
+            houseButton.setOnClickListener() {
+                intent = Intent(this, MainActivity::class.java)
+                intent.putExtra("activity", "MainActivity")
+                intent.putExtra("Username",username)
+                intent.putExtra("ID",id)
+                intent.putExtra("Weather",weather)
+                intent.putExtra("Score",score)
+                startActivity(intent)
+            }
+            val backButton = findViewById(R.id.BackButton) as ImageButton
+            backButton.setOnClickListener() {
+                intent = Intent(this, MainActivity::class.java)
+                intent.putExtra("activity", "MainActivity")
+                intent.putExtra("Username",username)
+                intent.putExtra("ID",id)
+                intent.putExtra("Weather",weather)
                 intent.putExtra("Score",score)
                 startActivity(intent)
             }
@@ -122,6 +145,18 @@ class MainActivity : AppCompatActivity(), LocationListener{
             val leaderboardButton = findViewById(R.id.LeaderboardButton) as ImageButton
             leaderboardButton.setOnClickListener() {
                 intent = Intent(this, LeaderboardActivity::class.java)
+                startActivity(intent)
+            }
+            val houseButton = findViewById(R.id.HouseButton) as ImageButton
+            houseButton.setOnClickListener() {
+                intent = Intent(this, MainActivity::class.java)
+                intent.putExtra("activity", "MainActivity")
+                startActivity(intent)
+            }
+            val backButton = findViewById(R.id.BackButton) as ImageButton
+            backButton.setOnClickListener() {
+                intent = Intent(this, MainActivity::class.java)
+                intent.putExtra("activity", "MainActivity")
                 startActivity(intent)
             }
         }
