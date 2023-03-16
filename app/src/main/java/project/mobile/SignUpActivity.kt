@@ -171,6 +171,11 @@ class SignUpActivity : AppCompatActivity() {
                 }
             }
         }
+        val houseButton = findViewById(R.id.HouseButton) as ImageButton
+        houseButton.setOnClickListener() {
+            intent = Intent(this, MainActivity::class.java)
+            startActivity(intent)
+        }
     }
 
     //CAMERA

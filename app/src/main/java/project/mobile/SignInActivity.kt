@@ -108,5 +108,10 @@ class SignInActivity : AppCompatActivity() {
                 Toast.makeText(this, "Empty Fields Are not Allowed !!", Toast.LENGTH_SHORT).show()
             }
         }
+        val houseButton = findViewById(R.id.HouseButton) as ImageButton
+        houseButton.setOnClickListener() {
+            intent = Intent(this, MainActivity::class.java)
+            startActivity(intent)
+        }
     }
 }

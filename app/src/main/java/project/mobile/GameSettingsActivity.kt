@@ -24,8 +24,8 @@ class GameSettingsActivity : AppCompatActivity() {
         setContentView(R.layout.activity_game_settings)
 
         val username = intent.getStringExtra("Username")
-        val password = intent.getStringExtra("Password")
         val id = intent.getStringExtra("ID")
+        val score = intent.getStringExtra("Score")
 
         var color = "red"
         var bullet = "normal"
@@ -113,6 +113,17 @@ class GameSettingsActivity : AppCompatActivity() {
             intent.putExtra("Opponent", avversario)
             intent.putExtra("Color", color)
             intent.putExtra("Bullet", bullet)
+            intent.putExtra("Score",score)
+            startActivity(intent)
+        }
+        val houseButton = findViewById(R.id.HouseButton) as ImageButton
+        houseButton.setOnClickListener() {
+            intent = Intent(this, MainActivity::class.java)
+            intent.putExtra("activity", "MainActivity")
+            intent.putExtra("Username",username)
+            intent.putExtra("ID",id)
+            intent.putExtra("Weather",weather)
+            intent.putExtra("Score",score)
             startActivity(intent)
         }
     }

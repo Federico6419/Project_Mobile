@@ -54,17 +54,32 @@ class LeaderboardActivity : AppCompatActivity() {
         }
 
         firebaseAuth.uid?.let {
-            val returnButton = findViewById(R.id.ReturnButton) as ImageButton
+            /*val returnButton = findViewById(R.id.ReturnButton) as ImageButton
             returnButton.setOnClickListener(){
                 intent = Intent(this, MainActivity::class.java)
                 intent.putExtra("Username",username)
                 intent.putExtra("ID",id)
                 intent.putExtra("Score",score)
                 startActivity(intent)
+            }*/
+            val houseButton = findViewById(R.id.HouseButton) as ImageButton
+            houseButton.setOnClickListener() {
+                intent = Intent(this, MainActivity::class.java)
+                intent.putExtra("Username",username)
+                intent.putExtra("ID",id)
+                intent.putExtra("Weather",weather)
+                intent.putExtra("Score",score)
+                startActivity(intent)
             }
+
         } ?: run {
-            val returnButton = findViewById(R.id.ReturnButton) as ImageButton
+            /*val returnButton = findViewById(R.id.ReturnButton) as ImageButton
             returnButton.setOnClickListener() {
+                intent = Intent(this, MainActivity::class.java)
+                startActivity(intent)
+            }*/
+            val houseButton = findViewById(R.id.HouseButton) as ImageButton
+            houseButton.setOnClickListener() {
                 intent = Intent(this, MainActivity::class.java)
                 startActivity(intent)
             }

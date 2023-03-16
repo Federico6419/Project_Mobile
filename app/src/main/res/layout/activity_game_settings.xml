@@ -139,16 +139,15 @@
 
     <ImageButton
         android:id="@+id/StartButton"
-        android:layout_width="308dp"
-        android:layout_height="138dp"
+        android:layout_width="319dp"
+        android:layout_height="111dp"
         android:background="@null"
         android:src="@drawable/startbutton"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.495"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.973" />
+        app:layout_constraintVertical_bias="0.856" />
 
     <TextView
         android:layout_width="wrap_content"
@@ -160,10 +159,10 @@
         android:textSize="20dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.498"
+        app:layout_constraintHorizontal_bias="0.497"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.546"
+        app:layout_constraintVertical_bias="0.524"
         tools:ignore="MissingConstraints" />
 
     <TextView
@@ -177,17 +176,17 @@
         android:textSize="18dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.494"
+        app:layout_constraintHorizontal_bias="0.486"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.599"
+        app:layout_constraintVertical_bias="0.57"
         tools:ignore="MissingConstraints" />
 
     <EditText
         android:id="@+id/Username"
         android:layout_width="344dp"
         android:layout_height="46dp"
-        android:layout_marginTop="452dp"
+        android:layout_marginTop="432dp"
         android:hint="Insert Username"
         android:textAlignment="center"
         android:textColor="#6bfff7"
@@ -202,15 +201,28 @@
         android:id="@+id/SubmitButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="500dp"
+        android:layout_marginTop="476dp"
         android:text="Set opponent"
-        app:backgroundTint="@color/purple_700"
         android:textAllCaps="false"
+        app:backgroundTint="@color/purple_700"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.482"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         tools:ignore="MissingConstraints" />
+
+    <ImageButton
+        android:id="@+id/HouseButton"
+        android:layout_width="58dp"
+        android:layout_height="64dp"
+        android:background="@null"
+        android:src="@drawable/house_button"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.498"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.976" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>
