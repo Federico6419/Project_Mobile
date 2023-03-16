@@ -26,6 +26,7 @@ import android.media.MediaPlayer
 var weather = ""        //Current weather variable
 var city = ""           //Current city variable
 public var music = MusicManager()       //Music variable
+public var muted = false                //Mute boolean variable
 
 @Suppress("DEPRECATED_IDENTITY_EQUALS")
 class MainActivity : AppCompatActivity(), LocationListener{
@@ -79,6 +80,21 @@ class MainActivity : AppCompatActivity(), LocationListener{
                 intent.putExtra("Weather",weather)
                 intent.putExtra("Score", score)
                 startActivity(intent)
+            }
+
+            val audioButton = findViewById(R.id.AudioButton) as ImageButton
+            audioButton.setOnClickListener(){
+                if(muted) {
+                    music.setVolume(100f, 100f)
+                    audioButton.setImageResource(R.drawable.audioon)
+                    muted = false
+                    Log.i("audio", muted.toString())
+                } else{
+                    music.setVolume(0f, 0f)
+                    audioButton.setImageResource(R.drawable.audiooff)
+                    muted = true
+                    Log.i("audio", muted.toString())
+                }
             }
 
             val logoutButton = findViewById(R.id.LogOutButton) as ImageButton
@@ -142,6 +158,20 @@ class MainActivity : AppCompatActivity(), LocationListener{
             houseButton.setOnClickListener() {
                 intent = Intent(this, MainActivity::class.java)
                 startActivity(intent)
+            }
+            val audioButton = findViewById(R.id.AudioButton) as ImageButton
+            audioButton.setOnClickListener(){
+                if(muted) {
+                    music.setVolume(100f, 100f)
+                    audioButton.setImageResource(R.drawable.audioon)
+                    muted = false
+                    Log.i("audio", muted.toString())
+                } else{
+                    music.setVolume(0f, 0f)
+                    audioButton.setImageResource(R.drawable.audiooff)
+                    muted = true
+                    Log.i("audio", muted.toString())
+                }
             }
         }
 

@@ -1,7 +1,11 @@
 package project.mobile
 
 import android.content.Context
-import android.media.MediaPlayer;
+import android.content.Context.AUDIO_SERVICE
+import android.media.AudioManager
+import android.media.MediaPlayer
+import androidx.core.content.ContextCompat.getSystemService
+
 
 public class MusicManager {
 
@@ -34,5 +38,9 @@ public class MusicManager {
             mMediaPlayer!!.release()
             mMediaPlayer = null
         }
+    }
+
+    fun setVolume(left: Float, right: Float){
+        mMediaPlayer?.setVolume(left, right)
     }
 }
