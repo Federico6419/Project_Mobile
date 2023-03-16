@@ -98,7 +98,7 @@ class MyView(context: Context?,w:String?,old_score: Int?, ID : String?,Username 
     var InScreen1 = false // if bullet are still in the screen
     var InScreen2 = false
     var InScreen3 = false
-    var return_to_game = false // to avoid shot bullet when click on the restart button
+    var return_to_game = false // to avoid shot bullet when click on the resume button
 
     var size = 2f
     var sizeA = 120f
@@ -116,8 +116,8 @@ class MyView(context: Context?,w:String?,old_score: Int?, ID : String?,Username 
     var heart : Bitmap
     var explosion : Bitmap
     var pause_button : Bitmap
-    var restart_button :Bitmap
-    var return_button :Bitmap
+    var resume_button :Bitmap
+    var quit_button :Bitmap
 
     var array_position = arrayOf<Float>(0f,0f,0f,0f,0f)
     var array_type = arrayOf<Int>(1,1,1,1,1)
@@ -213,11 +213,11 @@ class MyView(context: Context?,w:String?,old_score: Int?, ID : String?,Username 
             null)?.toBitmap(sizeHeart.toInt(),sizeHeart.toInt())!!
         explosion = ResourcesCompat.getDrawable(resources,R.drawable.heart,
             null)?.toBitmap(sizeHeart.toInt(),sizeHeart.toInt())!!
-        pause_button = ResourcesCompat.getDrawable(resources,R.drawable.pause_button,
+        pause_button = ResourcesCompat.getDrawable(resources,R.drawable.pausebutton,
             null)?.toBitmap(sizeHeart.toInt(),sizeHeart.toInt())!!
-        restart_button = ResourcesCompat.getDrawable(resources,R.drawable.restart_button,
+        resume_button = ResourcesCompat.getDrawable(resources,R.drawable.resume_button,
             null)?.toBitmap(800,200)!!
-        return_button = ResourcesCompat.getDrawable(resources,R.drawable.buttonreturnmenu,
+        quit_button = ResourcesCompat.getDrawable(resources,R.drawable.quit_button,
             null)?.toBitmap(800,200)!!
         ///// first spawn of enemies /////
         GlobalScope.launch {
@@ -249,7 +249,7 @@ class MyView(context: Context?,w:String?,old_score: Int?, ID : String?,Username 
                     game.gameover(cont)
                 }*/
                 //draw pause button
-                drawBitmap(pause_button,0f,0f,null)
+                drawBitmap(pause_button,500f,1600f,null)
                 ///// manage score ////
                 calendar = Calendar.getInstance()
                 current_time = calendar.get(Calendar.SECOND)
@@ -997,31 +997,10 @@ class MyView(context: Context?,w:String?,old_score: Int?, ID : String?,Username 
                     it.strokeWidth = 100f
                     it.textSize=130f
                 }
-                val message2="Touch the button to "
-                val textPaint2 = Paint().also {
-                    it.color = Color.parseColor("#000000")
-                    it.strokeWidth = 100f
-                    it.textSize=80f
-                }
-                val message3="resume the game or"
-                val textPaint3 = Paint().also {
-                    it.color = Color.parseColor("#000000")
-                    it.strokeWidth = 100f
-                    it.textSize=80f
-                }
-                val message4="return to home page"
-                val textPaint4 = Paint().also {
-                    it.color = Color.parseColor("#000000")
-                    it.strokeWidth = 100f
-                    it.textSize=80f
-                }
                 drawBitmap(background,0f,0f,null)
-                canvas.drawBitmap(restart_button,130f,1000f,null)
-                canvas.drawBitmap(return_button,130f,1300f,null)
+                canvas.drawBitmap(resume_button,130f,1000f,null)
+                canvas.drawBitmap(quit_button,130f,1300f,null)
                 drawText(message,100f,300f,textPaint)
-                drawText(message2,130f,650f,textPaint2)
-                drawText(message3,130f,750f,textPaint3)
-                drawText(message4,130f,850f,textPaint4)
             }else if(!PAUSE and !start) {
                 ///////// gameover ////////////
                 gameover = true
