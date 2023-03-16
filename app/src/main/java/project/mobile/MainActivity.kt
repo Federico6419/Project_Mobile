@@ -85,15 +85,13 @@ class MainActivity : AppCompatActivity(), LocationListener{
             val audioButton = findViewById(R.id.AudioButton) as ImageButton
             audioButton.setOnClickListener(){
                 if(muted) {
-                    music.setVolume(100f, 100f)
+                    music.setVolume(1.0f, 1.0f)
                     audioButton.setImageResource(R.drawable.audioon)
                     muted = false
-                    Log.i("audio", muted.toString())
                 } else{
-                    music.setVolume(0f, 0f)
+                    music.setVolume(0.0f, 0.0f)
                     audioButton.setImageResource(R.drawable.audiooff)
                     muted = true
-                    Log.i("audio", muted.toString())
                 }
             }
 
@@ -162,15 +160,13 @@ class MainActivity : AppCompatActivity(), LocationListener{
             val audioButton = findViewById(R.id.AudioButton) as ImageButton
             audioButton.setOnClickListener(){
                 if(muted) {
-                    music.setVolume(100f, 100f)
+                    music.setVolume(1.0f, 1.0f)
                     audioButton.setImageResource(R.drawable.audioon)
                     muted = false
-                    Log.i("audio", muted.toString())
                 } else{
-                    music.setVolume(0f, 0f)
+                    music.setVolume(0.0f, 0.0f)
                     audioButton.setImageResource(R.drawable.audiooff)
                     muted = true
-                    Log.i("audio", muted.toString())
                 }
             }
         }

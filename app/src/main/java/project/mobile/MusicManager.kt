@@ -6,10 +6,9 @@ import android.media.AudioManager
 import android.media.MediaPlayer
 import androidx.core.content.ContextCompat.getSystemService
 
-
+//Music management class
 public class MusicManager {
 
-    //Music management
     var mMediaPlayer: MediaPlayer? = null                   //Music variable
 
     fun playSoundMenu(conxt: Context) {
