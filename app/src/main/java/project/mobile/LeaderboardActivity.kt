@@ -7,6 +7,7 @@ import android.util.Log
 import android.widget.EditText
 import android.widget.ImageButton
 import android.widget.TextView
+import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.ktx.database
 import com.google.firebase.ktx.Firebase
 import kotlinx.coroutines.*
@@ -14,8 +15,8 @@ import kotlinx.coroutines.*
 import com.google.gson.annotations.SerializedName
 
 data class Flask_Json(
-    @SerializedName("numUsers")
-    var numUsers: Int?,
+    @SerializedName("numberOfUsers")
+    var numberOfUsers: Int?,
     @SerializedName("users")
     var users: List<Users>?
 )
@@ -29,34 +30,46 @@ data class Users(
 
 var users = arrayOf<String>("","","","","","","","","","")
 var scores = arrayOf<Int>(0,0,0,0,0,0,0,0,0,0)
-var numUsers = 0
+var numberOfUsers = 0
 var username: String? = null
 var password = ""
 var id = ""
+var score = ""
 
 class LeaderboardActivity : AppCompatActivity() {
-
+    private lateinit var firebaseAuth: FirebaseAuth         //Firebase Authenticatoin variable
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_leaderboard)
 
+        firebaseAuth = FirebaseAuth.getInstance()   //Get instance from Firebase Authentication
+
         username = intent.getStringExtra("Username")
-        password = intent.getStringExtra("Password").toString()
         id = intent.getStringExtra("ID").toString()
+        score = intent.getStringExtra("Score").toString()
 
         GlobalScope.launch {
             getLeaderB()
         }
 
-        val signUpButton = findViewById(R.id.ReturnButton) as ImageButton
-        signUpButton.setOnClickListener(){
-            intent = Intent(this, MainActivity::class.java)
-            startActivity(intent)
+        firebaseAuth.uid?.let {
+            val returnButton = findViewById(R.id.ReturnButton) as ImageButton
+            returnButton.setOnClickListener(){
+                intent = Intent(this, MainActivity::class.java)
+                intent.putExtra("Username",username)
+                intent.putExtra("ID",id)
+                intent.putExtra("Score",score)
+                startActivity(intent)
+            }
+        } ?: run {
+            val returnButton = findViewById(R.id.ReturnButton) as ImageButton
+            returnButton.setOnClickListener() {
+                intent = Intent(this, MainActivity::class.java)
+                startActivity(intent)
+            }
         }
     }
-
-
 
     suspend fun getLeaderB() {
         //var retrofit = Request_Api.getInstance()
@@ -72,9 +85,9 @@ class LeaderboardActivity : AppCompatActivity() {
                     val items = response.body()
                     if (items != null) {
                         var tot = 0
-                        numUsers = items.numUsers!!
+                        numberOfUsers = items.numberOfUsers!!
                         Log.i("leader", items.toString())
-                        while((tot<10) and (tot< items.numUsers!!)) {
+                        while((tot<10) and (tot< items.numberOfUsers!!)) {
 
                             users[tot] = items.users?.get(tot)?.username.toString()
                             scores[tot] = items.users?.get(tot)?.score!!
@@ -130,9 +143,9 @@ class LeaderboardActivity : AppCompatActivity() {
                     var tot = 0
                     var myScore = ""
 
-                    username?.let {
+                    firebaseAuth.uid?.let {
                         if (items != null) {
-                            while((tot< items.numUsers!!)) {
+                            while((tot< items.numberOfUsers!!)) {
                                 if(items.users?.get(tot)?.username.toString() == username.toString()) {
                                     myScore = items.users?.get(tot)?.score.toString()!!
                                     break
@@ -140,7 +153,7 @@ class LeaderboardActivity : AppCompatActivity() {
                                 tot = tot+1
                             }
                             val rankingText: TextView = findViewById(R.id.YourRanking) as TextView
-                            rankingText.text = "Your ranking: "+tot.toString()+"°"
+                            rankingText.text = "Your ranking: "+(tot+1).toString()+"°"
 
                             val scoreText: TextView = findViewById(R.id.YourScore) as TextView
                             scoreText.text = "Your score: "+myScore
