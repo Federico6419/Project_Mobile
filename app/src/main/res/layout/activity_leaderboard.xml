@@ -10,10 +10,10 @@
         android:id="@+id/ll_main_layout"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:background="#4B5459"
         android:gravity="center"
-        android:background="#444444"
-        android:padding="25dp"
-        android:orientation="vertical">
+        android:orientation="vertical"
+        android:padding="25dp">
 
         <TableLayout
             android:layout_width="match_parent"
@@ -326,6 +326,7 @@
             android:gravity="center">
 
             <TextView
+                android:id="@+id/YourRanking"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:gravity="center"
@@ -333,10 +334,10 @@
                 android:text="Your ranking: N/D"
                 android:textColor="#6dffbf"
                 android:textSize="17dp"
-                android:id="@+id/YourRanking"
                 tools:ignore="MissingConstraints" />
 
             <TextView
+                android:id="@+id/YourScore"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:gravity="center"
@@ -344,7 +345,6 @@
                 android:text="Your score: N/D"
                 android:textColor="#6dffbf"
                 android:textSize="17dp"
-                android:id="@+id/YourScore"
                 tools:ignore="MissingConstraints" />
 
         </LinearLayout>
@@ -364,10 +364,25 @@
             android:src="@drawable/house_button"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.498"
+            app:layout_constraintHorizontal_bias="0.500"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintVertical_bias="0.976" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:fontFamily="@font/capriola"
+            android:text="Home"
+            android:textColor="@color/white"
+            android:textSize="18dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.500"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_bias="0.971"
+            tools:ignore="MissingConstraints" />
 
     </LinearLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>
