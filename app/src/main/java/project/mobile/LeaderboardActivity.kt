@@ -31,10 +31,9 @@ data class Users(
 var users = arrayOf<String>("","","","","","","","","","")
 var scores = arrayOf<Int>(0,0,0,0,0,0,0,0,0,0)
 var numberOfUsers = 0
-var username: String? = null
-var password = ""
-var id = ""
-var score = ""
+//var username: String? = null
+//var id = ""
+//var score = ""
 
 class LeaderboardActivity : AppCompatActivity() {
     private lateinit var firebaseAuth: FirebaseAuth         //Firebase Authenticatoin variable
@@ -45,9 +44,10 @@ class LeaderboardActivity : AppCompatActivity() {
 
         firebaseAuth = FirebaseAuth.getInstance()   //Get instance from Firebase Authentication
 
+        /*
         username = intent.getStringExtra("Username")
         id = intent.getStringExtra("ID").toString()
-        score = intent.getStringExtra("Score").toString()
+        score = intent.getStringExtra("Score").toString()*/
 
         GlobalScope.launch {
             getLeaderB()
@@ -65,19 +65,14 @@ class LeaderboardActivity : AppCompatActivity() {
             val houseButton = findViewById(R.id.HouseButton) as ImageButton
             houseButton.setOnClickListener() {
                 intent = Intent(this, MainActivity::class.java)
-                intent.putExtra("Username",username)
+                /*intent.putExtra("Username",username)
                 intent.putExtra("ID",id)
                 intent.putExtra("Weather",weather)
-                intent.putExtra("Score",score)
+                intent.putExtra("Score",score)*/
                 startActivity(intent)
             }
 
         } ?: run {
-            /*val returnButton = findViewById(R.id.ReturnButton) as ImageButton
-            returnButton.setOnClickListener() {
-                intent = Intent(this, MainActivity::class.java)
-                startActivity(intent)
-            }*/
             val houseButton = findViewById(R.id.HouseButton) as ImageButton
             houseButton.setOnClickListener() {
                 intent = Intent(this, MainActivity::class.java)
@@ -161,7 +156,7 @@ class LeaderboardActivity : AppCompatActivity() {
                     firebaseAuth.uid?.let {
                         if (items != null) {
                             while((tot< items.numberOfUsers!!)) {
-                                if(items.users?.get(tot)?.username.toString() == username.toString()) {
+                                if(items.users?.get(tot)?.username.toString() == current_username.toString()) {
                                     myScore = items.users?.get(tot)?.score.toString()!!
                                     break
                                 }

@@ -90,9 +90,12 @@ class SignInActivity : AppCompatActivity() {
 
                                                 //Intent to the home page
                                                 val intent = Intent(this, MainActivity::class.java)
-                                                intent.putExtra("Username", username)
+                                                /*intent.putExtra("Username", username)
                                                 intent.putExtra("Score", score)
-                                                intent.putExtra("ID", id)
+                                                intent.putExtra("ID", id)*/
+                                                current_username = username
+                                                current_id = id
+                                                current_score = score
                                                 startActivity(intent)
                                             }
                                         }

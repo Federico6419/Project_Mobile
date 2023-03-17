@@ -107,67 +107,70 @@ class SignUpActivity : AppCompatActivity() {
                 var found = false
                 var referenceUsername : DatabaseReference
 
-                for (i in 1 .. numberOfUsers){
+                for (i in 1 .. numberOfUsers) {
                     referenceUsername = database.getReference("Users/$i/Username")    //Reference to username in the Database
 
                     referenceUsername.get().addOnSuccessListener {
-                        if(it.value.toString() == username){
+                        if ((it.value.toString() == username) and !found) {
                             found = true
-                        }
-                    }
-                }
+                            //If username already exists
+                            Toast.makeText(this, "Username already exists", Toast.LENGTH_SHORT).show()
+                        } else if ((i == numberOfUsers) and !found) {
+                            //If username does not exist
+                            //DA METTERE L'EMPTY, CIOE: if (email.isNotEmpty() && password.isNotEmpty() && username.isNotEmpty() && user == "null") {
+                            firebaseAuth.createUserWithEmailAndPassword(email, password).addOnCompleteListener {
+                                if (it.isSuccessful) {      //If the user is created, create its informations on Firebase Database
+                                    //Increment the number of users
+                                    numberOfUsers += 1
+                                    referenceDB.setValue(numberOfUsers)
 
+                                    //Save Username
+                                    val referenceUser =
+                                        database.getReference("Users/$numberOfUsers/Username")
+                                    referenceUser.setValue(username)
 
-                //If username does not exist
-                //DA METTERE L'EMPTY, CIOE: if (email.isNotEmpty() && password.isNotEmpty() && username.isNotEmpty() && user == "null") {
-                if (! found) {
-                    firebaseAuth.createUserWithEmailAndPassword(email, password).addOnCompleteListener {
-                        if (it.isSuccessful) {      //If the user is created, create its informations on Firebase Database
-                            //Increment the number of users
-                            numberOfUsers += 1
-                            referenceDB.setValue(numberOfUsers)
+                                    //Save Email
+                                    val referenceEmail =
+                                        database.getReference("Users/$numberOfUsers/Email")
+                                    referenceEmail.setValue(email)
 
-                            //Save Username
-                            val referenceUser = database.getReference("Users/$numberOfUsers/Username")
-                            referenceUser.setValue(username)
+                                    //Save Password
+                                    val referencePassword =
+                                        database.getReference("Users/$numberOfUsers/Password")
+                                    referencePassword.setValue(password)
 
-                            //Save Email
-                            val referenceEmail = database.getReference("Users/$numberOfUsers/Email")
-                            referenceEmail.setValue(email)
+                                    //Save Score
+                                    val referenceScore =
+                                        database.getReference("Users/$numberOfUsers/Score")
+                                    referenceScore.setValue("0")
 
-                            //Save Password
-                            val referencePassword =
-                                database.getReference("Users/$numberOfUsers/Password")
-                            referencePassword.setValue(password)
+                                    //Take and save the user id
+                                    var uid = firebaseAuth.uid
+                                    val referenceUid =
+                                        database.getReference("Users/$numberOfUsers/UID")
+                                    referenceUid.setValue(uid)
 
-                            //Save Score
-                            val referenceScore = database.getReference("Users/$numberOfUsers/Score")
-                            referenceScore.setValue("0")
-
-                            //Take and save the user id
-                            var uid = firebaseAuth.uid
-                            val referenceUid = database.getReference("Users/$numberOfUsers/UID")
-                            referenceUid.setValue(uid)
-
-                            //Execute the log in
-                            firebaseAuth.signInWithEmailAndPassword(email, password).addOnCompleteListener {
-                                    if (it.isSuccessful) {
-                                        intent = Intent(this, MainActivity::class.java)
-                                        intent.putExtra("Username", username)
-                                        intent.putExtra("Score", "0")
-                                        intent.putExtra("ID", numberOfUsers.toString())
-                                        startActivity(intent)
-                                    } else {
-                                        Toast.makeText(this, it.exception.toString(), Toast.LENGTH_SHORT).show()
+                                    //Execute the log in
+                                    firebaseAuth.signInWithEmailAndPassword(email, password).addOnCompleteListener {
+                                        if (it.isSuccessful) {
+                                            intent = Intent(this, MainActivity::class.java)
+                                            /*intent.putExtra("Username", username)
+                                            intent.putExtra("Score", "0")
+                                            intent.putExtra("ID", numberOfUsers.toString())*/
+                                            current_username = username
+                                            current_id = numberOfUsers.toString()
+                                            current_score = "0"
+                                            startActivity(intent)
+                                        } else {
+                                            Toast.makeText(this, it.exception.toString(), Toast.LENGTH_SHORT).show()
+                                        }
                                     }
                                 }
+                            }.addOnFailureListener {
+                                Toast.makeText(this, "Email already used", Toast.LENGTH_SHORT).show()
+                            }
                         }
-                    }.addOnFailureListener {
-                        Toast.makeText(this, "Email already used", Toast.LENGTH_SHORT).show()
                     }
-                }
-                else{       //If username already exists
-                    Toast.makeText(this, "Username already exists", Toast.LENGTH_SHORT).show()
                 }
             }
         }

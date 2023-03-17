@@ -23,10 +23,18 @@ import androidx.annotation.RequiresApi
 import com.google.firebase.auth.FirebaseAuth
 import android.media.MediaPlayer
 
-var weather = ""        //Current weather variable
-var city = ""           //Current city variable
+//Public variables for current weather and city services
+public var weather = ""        //Current weather variable
+public var city = ""           //Current city variable
+
+//Public variables for music management
 public var music = MusicManager()       //Music variable
 public var muted = false                //Mute boolean variable
+
+//Public variables of the current user
+public var current_username = ""        //Username of the current user
+public var current_id = ""              //ID of the current user
+public var current_score = ""           //Score of the current user
 
 @Suppress("DEPRECATED_IDENTITY_EQUALS")
 class MainActivity : AppCompatActivity(), LocationListener{
@@ -58,31 +66,31 @@ class MainActivity : AppCompatActivity(), LocationListener{
         locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 1000, 5f,this)
 
         //Get values from the intent
-        val username = intent.getStringExtra("Username")
-        val score = intent.getStringExtra("Score")
-        val id = intent.getStringExtra("ID")
+        //val username = intent.getStringExtra("Username")
+        //val score = intent.getStringExtra("Score")
+        //val id = intent.getStringExtra("ID")
+
+        //Get the uid of the current user
         val uid = firebaseAuth.uid
 
-        Log.i("FIRE", id.toString())
-
         //Check if the user id is null or not
-        uid?.let {               //If user id is not null
+        uid?.let {               //If user id is not null, manage the listeners of the signed homepage
             setContentView(R.layout.activity_main_signed)
 
             val usernameText: TextView = findViewById(R.id.Username) as TextView
-            usernameText.text = username
+            usernameText.text = current_username
 
             val settingsButton = findViewById(R.id.SettingsButton) as ImageButton
             settingsButton.setOnClickListener() {
                 intent = Intent(this, SettingsActivity::class.java)
-                intent.putExtra("Username", username)
+                /*intent.putExtra("Username", username)
                 intent.putExtra("ID", id)
                 intent.putExtra("Weather",weather)
-                intent.putExtra("Score", score)
+                intent.putExtra("Score", score)*/
                 startActivity(intent)
             }
 
-            val audioButton = findViewById(R.id.AudioButton) as ImageButton
+            /*val audioButton = findViewById(R.id.AudioButton) as ImageButton
             audioButton.setOnClickListener(){
                 if(muted) {
                     music.setVolume(1.0f, 1.0f)
@@ -93,67 +101,85 @@ class MainActivity : AppCompatActivity(), LocationListener{
                     audioButton.setImageResource(R.drawable.audiooff)
                     muted = true
                 }
-            }
+            }*/
 
             val logoutButton = findViewById(R.id.LogOutButton) as ImageButton
             logoutButton.setOnClickListener() {
-                firebaseAuth.signOut()
+                firebaseAuth.signOut()          //Sign out from Firebase Authentication
+
+                //Reset the variables of the current user
+                current_username = ""        //Username of the current user
+                current_id = ""              //ID of the current user
+                current_score = ""           //Score of the current user
+
                 intent = Intent(this, MainActivity::class.java)
                 startActivity(intent)
             }
 
-            val startButton = findViewById(R.id.StartButton) as ImageButton
+            /*val startButton = findViewById(R.id.StartButton) as ImageButton
             startButton.setOnClickListener() {
                 intent = Intent(this, GameSettingsActivity::class.java)
-                intent.putExtra("Username",username)
+                /*intent.putExtra("Username",username)
                 intent.putExtra("ID",id)
                 intent.putExtra("Weather",weather)
-                intent.putExtra("Score",score)
+                intent.putExtra("Score",score)*/
                 startActivity(intent)
-            }
+            }*/
             val leaderboardButton = findViewById(R.id.LeaderboardButton) as ImageButton
             leaderboardButton.setOnClickListener() {
                 intent = Intent(this, LeaderboardActivity::class.java)
-                intent.putExtra("Username", username)
+                /*intent.putExtra("Username", username)
                 intent.putExtra("ID", id)
-                intent.putExtra("Score",score)
+                intent.putExtra("Score",score)*/
                 startActivity(intent)
             }
-        } ?: run {
+        } ?: run {              //If user id is null, manage the listeners of the not signed homepage
             setContentView(R.layout.activity_main)
 
-            val startButton = findViewById(R.id.StartButton) as ImageButton
-            startButton.setOnClickListener() {
-                intent = Intent(this, GameSettingsActivity::class.java)
-                intent.putExtra("Weather",weather)
-                startActivity(intent)
-            }
+            //Sign Up button listener
             val signUpButton = findViewById(R.id.SignUpButton) as ImageButton
             signUpButton.setOnClickListener(){
                 intent = Intent(this, SignUpActivity::class.java)
                 startActivity(intent)
             }
+
+            //Sign In button listener
             val signInButton = findViewById(R.id.SignInButton) as ImageButton
             signInButton.setOnClickListener(){
                 intent = Intent(this, SignInActivity::class.java)
                 startActivity(intent)
             }
-            val leaderboardButton = findViewById(R.id.LeaderboardButton) as ImageButton
-            leaderboardButton.setOnClickListener() {
-                intent = Intent(this, LeaderboardActivity::class.java)
-                startActivity(intent)
-            }
-            val audioButton = findViewById(R.id.AudioButton) as ImageButton
-            audioButton.setOnClickListener(){
-                if(muted) {
-                    music.setVolume(1.0f, 1.0f)
-                    audioButton.setImageResource(R.drawable.audioon)
-                    muted = false
-                } else{
-                    music.setVolume(0.0f, 0.0f)
-                    audioButton.setImageResource(R.drawable.audiooff)
-                    muted = true
-                }
+
+        }
+
+        //Listeners for the buttons that are both in signed and not signed homepage
+
+        //Start button listener
+        val startButton = findViewById(R.id.StartButton) as ImageButton
+        startButton.setOnClickListener() {
+            intent = Intent(this, GameSettingsActivity::class.java)
+            //intent.putExtra("Weather",weather)
+            startActivity(intent)
+        }
+
+        //Leaderboard button listener
+        val leaderboardButton = findViewById(R.id.LeaderboardButton) as ImageButton
+        leaderboardButton.setOnClickListener() {
+            intent = Intent(this, LeaderboardActivity::class.java)
+            startActivity(intent)
+        }
+
+        //Audio button listener
+        val audioButton = findViewById(R.id.AudioButton) as ImageButton
+        audioButton.setOnClickListener(){
+            if(muted) {
+                music.setVolume(1.0f, 1.0f)
+                audioButton.setImageResource(R.drawable.audioon)
+                muted = false
+            } else{
+                music.setVolume(0.0f, 0.0f)
+                audioButton.setImageResource(R.drawable.audiooff)
+                muted = true
             }
         }
 
@@ -161,11 +187,12 @@ class MainActivity : AppCompatActivity(), LocationListener{
 
     override fun onResume() {
         super.onResume()
-        //Music management
+
+        //Music management when resuming the homepage
         music.playSoundMenu(this)
     }
 
-    //Ask Location
+    //Ask current location
     override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<String>, grantResults: IntArray) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults)
         when (requestCode) {
@@ -197,8 +224,9 @@ class MainActivity : AppCompatActivity(), LocationListener{
 
                     val items = response.body()
                     if (items != null) {
-                        Log.i("weather", items.current?.condition?.text.toString())
+                        //Log.i("weather", items.current?.condition?.text.toString())
                         weather = items.current?.condition?.text.toString()
+                        Log.i("weat", weather)
                     }
 
                 } else {

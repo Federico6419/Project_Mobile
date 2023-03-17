@@ -28,12 +28,11 @@ import com.google.firebase.ktx.Firebase
 import java.util.*
 import kotlin.math.atan2
 
-class MyView(context: Context?,w:String?,old_score: Int?, ID : String?,Username :String?,Password:String?, Color :String?,Bul :String?) : View(context), View.OnTouchListener, SensorEventListener2 {
+class MyView(context: Context?, w:String?, old_score: Int?, Color :String?, Bul :String?) : View(context), View.OnTouchListener, SensorEventListener2 {
 
     val a = 0.5f //Low-pass filter parameter, higher is smoother
     var weather = ""
-    var password= ""
-    var username = ""
+    //var username = ""
 
     var mLastRotationVector = FloatArray(3) //The last value of the rotation vector
     var mRotationMatrix = FloatArray(9)
@@ -144,9 +143,9 @@ class MyView(context: Context?,w:String?,old_score: Int?, ID : String?,Username 
         if (old_score != null) {
             Old_score = old_score
         }
-        if (ID != null) {
+        /*if (ID != null) {
             id = ID
-        }
+        }*/
         //Log.i("prova",w.toString())
         if((w=="Overcast") or (w=="Partly cloudy")or(w=="Cloudy")){ // sfondo quando nuvoloso
             layout = R.drawable.rainybackground
@@ -159,15 +158,16 @@ class MyView(context: Context?,w:String?,old_score: Int?, ID : String?,Username 
         } else{//if found something we don t have
             layout = R.drawable.background_sun2
         }
-        if (w != null) {
-            weather= w
+        if (w != "") {
+            if (w != null) {
+                weather = w
+            }
         }
-        if (Password != null) {
-            password= Password
-        }
-        if (Username != null) {
-            username= Username
-        }
+        /*if (Username != "") {
+            if (Username != null) {
+                username= Username
+            }
+        }*/
 
         size*=160*resources.displayMetrics.density
         val sensorManager = context?.getSystemService(Context.SENSOR_SERVICE) as SensorManager
@@ -1022,11 +1022,11 @@ class MyView(context: Context?,w:String?,old_score: Int?, ID : String?,Username 
                 Score = 0
                 hearts = 3
                 val intent = Intent(context, GameoverActivity::class.java)
-                intent.putExtra("Username",username)
+                /*intent.putExtra("Username",username)
                 intent.putExtra("Password",password)
                 intent.putExtra("ID",id)
                 intent.putExtra("Weather",weather)
-                intent.putExtra("Score",Old_score)
+                intent.putExtra("Score",Old_score)*/
                 music.stopSound()
                 startActivity(context, intent, null)
             }
@@ -1079,11 +1079,11 @@ class MyView(context: Context?,w:String?,old_score: Int?, ID : String?,Username 
                     PAUSE = false
                     music.stopSound()
                     val intent = Intent(context, MainActivity::class.java)
-                    intent.putExtra("Username",username)
+                    /*intent.putExtra("Username",username)
                     intent.putExtra("Password",password)
                     intent.putExtra("ID",id)
                     intent.putExtra("Weather",weather)
-                    intent.putExtra("Score",Old_score)
+                    intent.putExtra("Score",Old_score)*/
                     startActivity(context, intent, null)
                 }
                 if(start and !return_to_game){

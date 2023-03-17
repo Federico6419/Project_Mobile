@@ -23,9 +23,11 @@ class GameSettingsActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_game_settings)
 
-        val username = intent.getStringExtra("Username")
+        supportActionBar?.setTitle("                     Death Planes")     //Define the name of the application
+
+        /*val username = intent.getStringExtra("Username")
         val id = intent.getStringExtra("ID")
-        val score = intent.getStringExtra("Score")
+        val score = intent.getStringExtra("Score")*/
 
         var color = "red"
         var bullet = "normal"
@@ -107,23 +109,22 @@ class GameSettingsActivity : AppCompatActivity() {
         startButton.setOnClickListener() {
 
             intent = Intent(this, GameActivity::class.java)
-            intent.putExtra("Username", username)
-            intent.putExtra("Password", password)
-            intent.putExtra("ID", id)
+            /*intent.putExtra("Username", username)
+            intent.putExtra("Score",score)
+            intent.putExtra("ID", id)*/
             intent.putExtra("Opponent", avversario)
             intent.putExtra("Color", color)
             intent.putExtra("Bullet", bullet)
-            intent.putExtra("Score",score)
             startActivity(intent)
         }
         val houseButton = findViewById(R.id.HouseButton) as ImageButton
         houseButton.setOnClickListener() {
             intent = Intent(this, MainActivity::class.java)
-            intent.putExtra("activity", "MainActivity")
+            /*intent.putExtra("activity", "MainActivity")
             intent.putExtra("Username",username)
             intent.putExtra("ID",id)
             intent.putExtra("Weather",weather)
-            intent.putExtra("Score",score)
+            intent.putExtra("Score",score)*/
             startActivity(intent)
         }
     }

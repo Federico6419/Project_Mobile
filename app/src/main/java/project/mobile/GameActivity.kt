@@ -32,23 +32,23 @@ import kotlin.math.atan2
 
 class GameActivity : AppCompatActivity() {
 
-    var w = ""
     @SuppressLint("WrongThread")
     @RequiresApi(Build.VERSION_CODES.P)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        val username=intent.getStringExtra("Username")
+        /*val username=intent.getStringExtra("Username")
         val password=intent.getStringExtra("Password")
-        val w = intent.getStringExtra("Weather")
-        val old_score = intent.getStringExtra("Score")?.toInt()
         val id = intent.getStringExtra("ID")
+        val w = intent.getStringExtra("Weather")
+        val old_score = intent.getStringExtra("Score")?.toInt()*/
+
         val opponent = intent.getStringExtra("Opponent")
         val color = intent.getStringExtra("Color")
         val bul = intent.getStringExtra("Bullet")
 
 
         GlobalScope.launch {
-            getDifference(username, opponent)
+            getDifference(current_username, opponent)
         }
 
         //Music management
@@ -56,7 +56,8 @@ class GameActivity : AppCompatActivity() {
         music.playSoundGame(this)
 
         // get the wheater to set the right layout
-        setContentView(MyView(this,w,old_score,id,username,password,color,bul))
+        Log.i("USER", current_username)
+        setContentView(MyView(this, weather, current_score.toInt(), color, bul))
     }
 
     override fun onPause() {

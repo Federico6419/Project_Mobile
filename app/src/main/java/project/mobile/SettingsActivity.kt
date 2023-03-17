@@ -22,7 +22,7 @@ class SettingsActivity : AppCompatActivity() {
 
         supportActionBar?.setTitle("                     Death Planes")
 
-        val id=intent.getStringExtra("ID")
+        //val id=intent.getStringExtra("ID")
 
         var usernameView = findViewById(R.id.Username) as EditText
         var passwordView = findViewById(R.id.Password) as EditText
@@ -33,32 +33,39 @@ class SettingsActivity : AppCompatActivity() {
         var deleteButton = findViewById(R.id.DeleteButton) as Button
 
         val usernameText: TextView = findViewById(R.id.Username) as TextView
-        usernameText.text = intent.getStringExtra("Username")
+        usernameText.text = current_username
 
         val emailText: TextView = findViewById(R.id.Email) as TextView
-        emailText.text = firebaseAuth.currentUser?.email
+        val int = intent.getStringExtra("Email")
+        if(int != null){
+            emailText.text = intent.getStringExtra("Email")
+        } else{
+            emailText.text = firebaseAuth.currentUser?.email
+        }
 
         val passwordText: TextView = findViewById(R.id.Password) as TextView
         val database = Firebase.database("https://mobileproject2-50486-default-rtdb.europe-west1.firebasedatabase.app/")
-        val referencePassword = database.getReference("Users/$id/Password")
+        val referencePassword = database.getReference("Users/$current_id/Password")
         referencePassword.get().addOnSuccessListener {
-        passwordText.text = it.value.toString()
+            passwordText.text = it.value.toString()
         }
-        //firebaseAuth.currentUser?.updatePassword("ciao")
 
         // set on-click listener to change username
         userButton.setOnClickListener {
             val user = usernameView.text.toString()
 
             val database = Firebase.database("https://mobileproject2-50486-default-rtdb.europe-west1.firebasedatabase.app/")
-            val referenceUsername = database.getReference("Users/$id/Username")
+            val referenceUsername = database.getReference("Users/$current_id/Username")
 
             referenceUsername.setValue(user)
             Toast.makeText(this, "USERNAME CHANGED CORRECTLY", Toast.LENGTH_SHORT).show()
 
-            intent.putExtra("Username", user)
+            //Change the value of the public variable of the current user
+            current_username = user
+
+            /*intent.putExtra("Username", user)
             intent.putExtra("Score", score)
-            intent.putExtra("ID", id)
+            intent.putExtra("ID", id)*/
             startActivity(intent)
         }
 
@@ -67,15 +74,16 @@ class SettingsActivity : AppCompatActivity() {
             val email = emailView.text.toString()
 
             val database = Firebase.database("https://mobileproject2-50486-default-rtdb.europe-west1.firebasedatabase.app/")
-            val referenceUsername = database.getReference("Users/$id/Email")
+            val referenceUsername = database.getReference("Users/$current_id/Email")
 
             referenceUsername.setValue(email) // change email on database realtime
             firebaseAuth.currentUser?.updateEmail(email) // change email on firebase authentication
             Toast.makeText(this, "EMAIL CHANGED CORRECTLY", Toast.LENGTH_SHORT).show()
 
-            intent.putExtra("Username", username)
+            /*intent.putExtra("Username", username)
             intent.putExtra("Score", score)
-            intent.putExtra("ID", id)
+            intent.putExtra("ID", id)*/
+            intent.putExtra("Email", email)
             startActivity(intent)
         }
 
@@ -84,16 +92,16 @@ class SettingsActivity : AppCompatActivity() {
             val pass = passwordView.text.toString()
 
             val database = Firebase.database("https://mobileproject2-50486-default-rtdb.europe-west1.firebasedatabase.app/")
-            val referencePassword = database.getReference("Users/$id/Password")
+            val referencePassword = database.getReference("Users/$current_id/Password")
 
             referencePassword.setValue(pass)
 
             //Alert of success
             Toast.makeText(this, "PASSWORD CHANGED CORRECTLY", Toast.LENGTH_SHORT).show()
 
-            intent.putExtra("Username", username)
+            /*intent.putExtra("Username", username)
             intent.putExtra("Score", score)
-            intent.putExtra("ID", id)
+            intent.putExtra("ID", id)*/
             startActivity(intent)
         }
 
@@ -107,10 +115,10 @@ class SettingsActivity : AppCompatActivity() {
             referenceNumUsers.get().addOnSuccessListener {
                 var numberOfUsers = it.value.toString().toInt()
 
-                val referenceID = database.getReference("Users/$id")
+                val referenceID = database.getReference("Users/$current_id")
 
                 //If this is the last id, delete it
-                if (numberOfUsers == id?.toInt()) {
+                if (numberOfUsers == current_id?.toInt()) {
                     referenceID.removeValue()
 
                     numberOfUsers -= 1
@@ -134,7 +142,7 @@ class SettingsActivity : AppCompatActivity() {
                         var newUsername = it.value.toString()
 
                         //Set Username
-                        val referenceNewUser = database.getReference("Users/$id/Username")
+                        val referenceNewUser = database.getReference("Users/$current_id/Username")
                         referenceNewUser.setValue(newUsername)
 
                         //Get Email
@@ -143,7 +151,7 @@ class SettingsActivity : AppCompatActivity() {
                             var newEmail = it.value.toString()
 
                             //Set Email
-                            val referenceNewEmail = database.getReference("Users/$id/Email")
+                            val referenceNewEmail = database.getReference("Users/$current_id/Email")
                             referenceNewEmail.setValue(newEmail)
 
                             //Save Password
@@ -154,7 +162,7 @@ class SettingsActivity : AppCompatActivity() {
 
                                 //Set Password
                                 val referenceNewPassword =
-                                    database.getReference("Users/$id/Password")
+                                    database.getReference("Users/$current_id/Password")
                                 referenceNewPassword.setValue(newPassword)
 
                                 //Save Score
@@ -164,7 +172,7 @@ class SettingsActivity : AppCompatActivity() {
                                     var newScore = it.value.toString()
 
                                     //Set Score
-                                    val referenceNewScore = database.getReference("Users/$id/Score")
+                                    val referenceNewScore = database.getReference("Users/$current_id/Score")
                                     referenceNewScore.setValue(newScore)
 
                                     //Take and save the user id
@@ -173,7 +181,7 @@ class SettingsActivity : AppCompatActivity() {
                                         var newUID = it.value.toString()
 
                                         //Set UID
-                                        val referenceNewUID = database.getReference("Users/$id/UID")
+                                        val referenceNewUID = database.getReference("Users/$current_id/UID")
                                         referenceNewUID.setValue(newUID)
 
                                         Log.i("FIRE", numberOfUsers.toString())
@@ -208,8 +216,8 @@ class SettingsActivity : AppCompatActivity() {
         val houseButton = findViewById(R.id.HouseButton) as ImageButton
         houseButton.setOnClickListener() {
             intent = Intent(this, MainActivity::class.java)
-            intent.putExtra("Username",username)
-            intent.putExtra("ID",id)
+            /*intent.putExtra("Username",username)
+            intent.putExtra("ID",id)*/
             startActivity(intent)
         }
     }
