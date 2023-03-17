@@ -65,11 +65,6 @@ class MainActivity : AppCompatActivity(), LocationListener{
 
         locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 1000, 5f,this)
 
-        //Get values from the intent
-        //val username = intent.getStringExtra("Username")
-        //val score = intent.getStringExtra("Score")
-        //val id = intent.getStringExtra("ID")
-
         //Get the uid of the current user
         val uid = firebaseAuth.uid
 
@@ -83,25 +78,8 @@ class MainActivity : AppCompatActivity(), LocationListener{
             val settingsButton = findViewById(R.id.SettingsButton) as ImageButton
             settingsButton.setOnClickListener() {
                 intent = Intent(this, SettingsActivity::class.java)
-                /*intent.putExtra("Username", username)
-                intent.putExtra("ID", id)
-                intent.putExtra("Weather",weather)
-                intent.putExtra("Score", score)*/
                 startActivity(intent)
             }
-
-            /*val audioButton = findViewById(R.id.AudioButton) as ImageButton
-            audioButton.setOnClickListener(){
-                if(muted) {
-                    music.setVolume(1.0f, 1.0f)
-                    audioButton.setImageResource(R.drawable.audioon)
-                    muted = false
-                } else{
-                    music.setVolume(0.0f, 0.0f)
-                    audioButton.setImageResource(R.drawable.audiooff)
-                    muted = true
-                }
-            }*/
 
             val logoutButton = findViewById(R.id.LogOutButton) as ImageButton
             logoutButton.setOnClickListener() {
@@ -116,21 +94,9 @@ class MainActivity : AppCompatActivity(), LocationListener{
                 startActivity(intent)
             }
 
-            /*val startButton = findViewById(R.id.StartButton) as ImageButton
-            startButton.setOnClickListener() {
-                intent = Intent(this, GameSettingsActivity::class.java)
-                /*intent.putExtra("Username",username)
-                intent.putExtra("ID",id)
-                intent.putExtra("Weather",weather)
-                intent.putExtra("Score",score)*/
-                startActivity(intent)
-            }*/
             val leaderboardButton = findViewById(R.id.LeaderboardButton) as ImageButton
             leaderboardButton.setOnClickListener() {
                 intent = Intent(this, LeaderboardActivity::class.java)
-                /*intent.putExtra("Username", username)
-                intent.putExtra("ID", id)
-                intent.putExtra("Score",score)*/
                 startActivity(intent)
             }
         } ?: run {              //If user id is null, manage the listeners of the not signed homepage

@@ -28,7 +28,7 @@ import com.google.firebase.ktx.Firebase
 import java.util.*
 import kotlin.math.atan2
 
-class MyView(context: Context?, w:String?, old_score: Int?, Color :String?, Bul :String?) : View(context), View.OnTouchListener, SensorEventListener2 {
+class MyView(context: Context?, weat:String?, old_score: String?, Color :String?, Bul :String?) : View(context), View.OnTouchListener, SensorEventListener2 {
 
     val a = 0.5f //Low-pass filter parameter, higher is smoother
     var weather = ""
@@ -140,27 +140,29 @@ class MyView(context: Context?, w:String?, old_score: Int?, Color :String?, Bul 
 
     init{
         var layout = R.drawable.background_sun2
-        if (old_score != null) {
-            Old_score = old_score
+        if (old_score != "") {
+            if (old_score != null) {
+                Old_score = old_score.toInt()
+            }
         }
         /*if (ID != null) {
             id = ID
         }*/
-        //Log.i("prova",w.toString())
-        if((w=="Overcast") or (w=="Partly cloudy")or(w=="Cloudy")){ // sfondo quando nuvoloso
+        Log.i("prova",weat.toString())
+        if((weat=="Overcast") or (weat=="Partly cloudy")or(weat=="Cloudy")){ // sfondo quando nuvoloso
             layout = R.drawable.rainybackground
-        } else if((w=="Sunny")or(w=="Clear")) {//sfondo soleggiato
+        } else if((weat=="Sunny")or(weat=="Clear")) {//sfondo soleggiato
             layout = R.drawable.background_sun2
-        } else if((w=="Patchy rain possible") or (w=="Light rain") or(w=="Patchy light rain") or(w=="Moderate rain at times") or (w=="Moderate rain") or(w=="Heavy rain at times")  or(w=="Heavy rain") or (w=="Light freezing rain") or (w=="Torrential rain shower") or(w=="Moderate or heavy rain with thunder") or(w=="Patchy light rain with thunder")){//sfondo piovoso
+        } else if((weat=="Patchy rain possible") or (weat=="Light rain") or(weat=="Patchy light rain") or (weat=="Moderate rain at times") or (weat=="Moderate rain") or (weat=="Heavy rain at times")  or (weat=="Heavy rain") or (weat=="Light freezing rain") or (weat=="Torrential rain shower") or(weat=="Moderate or heavy rain with thunder") or(weat=="Patchy light rain with thunder")){//sfondo piovoso
             layout = R.drawable.rainybackground
-        }else if((w=="Heavy snow") or(w=="Patchy heavy snow")or(w=="Moderate or heavy snow with thunder")or(w=="Patchy light snow with thunder")){
+        }else if((weat=="Heavy snow") or(weat=="Patchy heavy snow")or(weat=="Moderate or heavy snow with thunder")or(weat=="Patchy light snow with thunder")){
             layout = R.drawable.snowybackground
         } else{//if found something we don t have
             layout = R.drawable.background_sun2
         }
-        if (w != "") {
-            if (w != null) {
-                weather = w
+        if (weat != "") {
+            if (weat != null) {
+                weather = weat
             }
         }
         /*if (Username != "") {
@@ -1014,7 +1016,7 @@ class MyView(context: Context?, w:String?, old_score: Int?, Color :String?, Bul 
                     //Connecting to Firebase Database
                     val database = Firebase.database("https://mobileproject2-50486-default-rtdb.europe-west1.firebasedatabase.app/")
 
-                    val referenceOldScore = database.getReference("Users/$id/Score")
+                    val referenceOldScore = database.getReference("Users/$current_id/Score")
                     referenceOldScore.setValue(Score.toString())
                     Old_score = Score
                 }

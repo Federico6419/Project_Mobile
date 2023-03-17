@@ -36,11 +36,6 @@ class GameActivity : AppCompatActivity() {
     @RequiresApi(Build.VERSION_CODES.P)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        /*val username=intent.getStringExtra("Username")
-        val password=intent.getStringExtra("Password")
-        val id = intent.getStringExtra("ID")
-        val w = intent.getStringExtra("Weather")
-        val old_score = intent.getStringExtra("Score")?.toInt()*/
 
         val opponent = intent.getStringExtra("Opponent")
         val color = intent.getStringExtra("Color")
@@ -56,8 +51,9 @@ class GameActivity : AppCompatActivity() {
         music.playSoundGame(this)
 
         // get the wheater to set the right layout
-        Log.i("USER", current_username)
-        setContentView(MyView(this, weather, current_score.toInt(), color, bul))
+        Log.i("USER", current_score)
+        Log.i("USER", weather)
+        setContentView(MyView(this, weather, current_score, color, bul))
     }
 
     override fun onPause() {

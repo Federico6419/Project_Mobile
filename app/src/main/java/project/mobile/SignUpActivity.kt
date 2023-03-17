@@ -154,9 +154,6 @@ class SignUpActivity : AppCompatActivity() {
                                     firebaseAuth.signInWithEmailAndPassword(email, password).addOnCompleteListener {
                                         if (it.isSuccessful) {
                                             intent = Intent(this, MainActivity::class.java)
-                                            /*intent.putExtra("Username", username)
-                                            intent.putExtra("Score", "0")
-                                            intent.putExtra("ID", numberOfUsers.toString())*/
                                             current_username = username
                                             current_id = numberOfUsers.toString()
                                             current_score = "0"

@@ -44,31 +44,15 @@ class LeaderboardActivity : AppCompatActivity() {
 
         firebaseAuth = FirebaseAuth.getInstance()   //Get instance from Firebase Authentication
 
-        /*
-        username = intent.getStringExtra("Username")
-        id = intent.getStringExtra("ID").toString()
-        score = intent.getStringExtra("Score").toString()*/
 
         GlobalScope.launch {
             getLeaderB()
         }
 
         firebaseAuth.uid?.let {
-            /*val returnButton = findViewById(R.id.ReturnButton) as ImageButton
-            returnButton.setOnClickListener(){
-                intent = Intent(this, MainActivity::class.java)
-                intent.putExtra("Username",username)
-                intent.putExtra("ID",id)
-                intent.putExtra("Score",score)
-                startActivity(intent)
-            }*/
             val houseButton = findViewById(R.id.HouseButton) as ImageButton
             houseButton.setOnClickListener() {
                 intent = Intent(this, MainActivity::class.java)
-                /*intent.putExtra("Username",username)
-                intent.putExtra("ID",id)
-                intent.putExtra("Weather",weather)
-                intent.putExtra("Score",score)*/
                 startActivity(intent)
             }
 
@@ -178,147 +162,3 @@ class LeaderboardActivity : AppCompatActivity() {
         }
     }
 }
-
-
-
-/*
-        val database = Firebase.database("https://mobileproject2-50486-default-rtdb.europe-west1.firebasedatabase.app/")
-
-        val referenceDB = database.getReference("NumberOfUsers")
-
-        var res = ""
-        var numberOfUsers = 0
-        referenceDB.get().addOnSuccessListener {
-            res = it.value.toString()
-            numberOfUsers = res.toInt()
-
-            for(i in 1..numberOfUsers){
-                var id = ""
-                for(i in 1..5 - i.toString().length){
-                    id += "0"
-                }
-                id += i
-
-                val referenceUsername = database.getReference("Users/$id/Username")
-                var res = ""
-
-                referenceUsername.get().addOnSuccessListener {
-                    //Se lo trova adesso fa la verifica della password, altrimenti continua il for
-                    res = it.value.toString()
-                    if(user == res) {
-                        val referencePassword = database.getReference("Users/$id/Password")
-
-                        res = ""
-
-                        referencePassword.get().addOnSuccessListener {
-                            res = it.value.toString()
-                            Log.i("firebase", "Got value ${it.value}")
-                            if (pass == res) {
-                                intent = Intent(this, MainActivity::class.java)
-                                intent.putExtra("Username", user)
-                                intent.putExtra("Password", pass)
-                                intent.putExtra("ID",id)
-                                startActivity(intent)
-                            }
-                        }.addOnFailureListener {
-                            Log.e("firebase", "Error getting data", it)
-                        }
-                    }
-                }
-            }
-        }.addOnFailureListener {
-            Log.e("firebase", "Error getting data", it)
-        }*/
-
-/*
-val returnMenuButton = findViewById(R.id.ReturnButton) as ImageButton
-returnMenuButton.setOnClickListener() {
-    username?.let {
-        intent = Intent(this, MainActivity::class.java)
-        intent.putExtra("Username", username)
-        intent.putExtra("Password", password)
-        intent.putExtra("ID", id)
-        startActivity(intent)
-    } ?: run {
-        intent = Intent(this, MainActivity::class.java)
-        startActivity(intent)
-    }
-}
-}
-
-suspend fun getLeaderB() {
-
-val flaskApi = Request_Flask().retrofit.create(FlaskInterface::class.java)
-CoroutineScope(Dispatchers.IO).launch {
-
-    // Do the GET request and get response
-    var response = flaskApi.getLeaderboard()
-
-    withContext(Dispatchers.Main) {
-
-        if (response.isSuccessful) {
-
-            val items = response.body().toString()
-
-            var graph = false
-            var i = 0
-            var j = 0
-            var tot=0
-            var str = ""
-            var sco = ""
-            var found = false
-
-            var ids = arrayOf<String>("","","","","","","","","","")
-            var scores = arrayOf<Float>(0f,0f,0f,0f,0f,0f,0f,0f,0f,0f)
-
-
-            while((items.get(i).toString() != "}") and (tot <= 9)) {
-
-                //Save the current username
-                if (items.get(i).toString() == "'") {
-                    str = ""
-                    j = i + 1
-                    while (items.get(j).toString() != "'") {
-                        str = str + items.get(j).toString()
-                        j = j + 1
-                    }
-                    i = j
-
-                    ids[tot] = str
-
-                    i = i + 3
-
-                    sco = ""
-                    j = i
-                    while ((items.get(j).toString() != ",") and (items.get(j).toString() != "}")) {
-                        sco = sco + items.get(j).toString()
-                        j = j + 1
-                    }
-                    i = j
-
-                    scores[tot] = sco.toFloat()
-                    tot = tot + 1
-                }
-
-                if(items.get(i).toString() != "}") {
-                    i = i + 1
-                }
-            }
-
-            for (i in tot .. 9){
-                ids[i] = "..."
-            }
-
-            for (i in tot .. 9){
-                scores[i] = 0f
-            }
-
-            /*for (element in ids) {
-                Log.i("leader",(element))
-            }
-
-            for (element in scores) {
-                Log.i("leader",(element.toString()))
-            }*/
-
- */

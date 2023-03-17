@@ -62,10 +62,6 @@ class SettingsActivity : AppCompatActivity() {
 
             //Change the value of the public variable of the current user
             current_username = user
-
-            /*intent.putExtra("Username", user)
-            intent.putExtra("Score", score)
-            intent.putExtra("ID", id)*/
             startActivity(intent)
         }
 
@@ -80,9 +76,6 @@ class SettingsActivity : AppCompatActivity() {
             firebaseAuth.currentUser?.updateEmail(email) // change email on firebase authentication
             Toast.makeText(this, "EMAIL CHANGED CORRECTLY", Toast.LENGTH_SHORT).show()
 
-            /*intent.putExtra("Username", username)
-            intent.putExtra("Score", score)
-            intent.putExtra("ID", id)*/
             intent.putExtra("Email", email)
             startActivity(intent)
         }
@@ -99,9 +92,6 @@ class SettingsActivity : AppCompatActivity() {
             //Alert of success
             Toast.makeText(this, "PASSWORD CHANGED CORRECTLY", Toast.LENGTH_SHORT).show()
 
-            /*intent.putExtra("Username", username)
-            intent.putExtra("Score", score)
-            intent.putExtra("ID", id)*/
             startActivity(intent)
         }
 
@@ -216,8 +206,6 @@ class SettingsActivity : AppCompatActivity() {
         val houseButton = findViewById(R.id.HouseButton) as ImageButton
         houseButton.setOnClickListener() {
             intent = Intent(this, MainActivity::class.java)
-            /*intent.putExtra("Username",username)
-            intent.putExtra("ID",id)*/
             startActivity(intent)
         }
     }
