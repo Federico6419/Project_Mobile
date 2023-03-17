@@ -1,10 +1,7 @@
 package project.mobile
 
 import android.content.Context
-import android.content.Context.AUDIO_SERVICE
-import android.media.AudioManager
 import android.media.MediaPlayer
-import androidx.core.content.ContextCompat.getSystemService
 
 //Music management class
 public class MusicManager {
@@ -21,7 +18,7 @@ public class MusicManager {
 
     fun playSoundGame(conxt: Context) {
         if (mMediaPlayer == null) {
-            mMediaPlayer = MediaPlayer.create(conxt, R.raw.gamemusic)
+            mMediaPlayer = MediaPlayer.create(conxt, R.raw.mask)
             mMediaPlayer!!.isLooping = true
             mMediaPlayer!!.start()
         } else mMediaPlayer!!.start()
