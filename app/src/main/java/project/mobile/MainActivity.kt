@@ -119,15 +119,6 @@ class MainActivity : AppCompatActivity(), LocationListener{
                 intent.putExtra("Score",score)
                 startActivity(intent)
             }
-            val houseButton = findViewById(R.id.HouseButton) as ImageButton
-            houseButton.setOnClickListener() {
-                intent = Intent(this, MainActivity::class.java)
-                intent.putExtra("Username",username)
-                intent.putExtra("ID",id)
-                intent.putExtra("Weather",weather)
-                intent.putExtra("Score",score)
-                startActivity(intent)
-            }
         } ?: run {
             setContentView(R.layout.activity_main)
 
@@ -150,11 +141,6 @@ class MainActivity : AppCompatActivity(), LocationListener{
             val leaderboardButton = findViewById(R.id.LeaderboardButton) as ImageButton
             leaderboardButton.setOnClickListener() {
                 intent = Intent(this, LeaderboardActivity::class.java)
-                startActivity(intent)
-            }
-            val houseButton = findViewById(R.id.HouseButton) as ImageButton
-            houseButton.setOnClickListener() {
-                intent = Intent(this, MainActivity::class.java)
                 startActivity(intent)
             }
             val audioButton = findViewById(R.id.AudioButton) as ImageButton
