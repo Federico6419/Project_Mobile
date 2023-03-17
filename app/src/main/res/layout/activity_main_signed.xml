@@ -27,14 +27,13 @@
         android:layout_width="308dp"
         android:layout_height="138dp"
         android:background="@null"
-        android:onClick="startGame"
         android:src="@drawable/startbutton"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.495"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.591" />
+        app:layout_constraintVertical_bias="0.499" />
 
     <ImageButton
         android:id="@+id/LeaderboardButton"
@@ -58,10 +57,9 @@
         android:src="@drawable/settingsbutton"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.852"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.97" />
+        app:layout_constraintVertical_bias="0.961" />
 
     <TextView
         android:id="@+id/Username"
@@ -69,7 +67,7 @@
         android:layout_height="128dp"
         android:padding="30dp"
         android:textColor="@color/white"
-        android:text="Ciaooooo"
+        android:text=""
         android:textSize="25dp"
         tools:ignore="MissingConstraints"
         tools:layout_editor_absoluteX="16dp"
@@ -102,5 +100,18 @@
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="0.97" />
 
+    <ImageButton
+        android:id="@+id/AudioButton"
+        android:layout_width="73dp"
+        android:layout_height="65dp"
+        android:background="@null"
+        android:scaleType="fitXY"
+        android:src="@drawable/audioon"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.917"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.969" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

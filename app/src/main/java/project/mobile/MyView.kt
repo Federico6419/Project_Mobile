@@ -116,8 +116,9 @@ class MyView(context: Context?,w:String?,old_score: Int?, ID : String?,Username 
     var heart : Bitmap
     var explosion : Bitmap
     var pause_button : Bitmap
-    var resume_button :Bitmap
-    var quit_button :Bitmap
+    var resume_button : Bitmap
+    var quit_button : Bitmap
+    var pause_label : Bitmap
 
     var array_position = arrayOf<Float>(0f,0f,0f,0f,0f)
     var array_type = arrayOf<Int>(1,1,1,1,1)
@@ -214,10 +215,12 @@ class MyView(context: Context?,w:String?,old_score: Int?, ID : String?,Username 
         explosion = ResourcesCompat.getDrawable(resources,R.drawable.heart,
             null)?.toBitmap(sizeHeart.toInt(),sizeHeart.toInt())!!
         pause_button = ResourcesCompat.getDrawable(resources,R.drawable.pausebutton,
-            null)?.toBitmap(sizeHeart.toInt(),sizeHeart.toInt())!!
+            null)?.toBitmap(200, 200)!!
         resume_button = ResourcesCompat.getDrawable(resources,R.drawable.resume_button,
             null)?.toBitmap(800,200)!!
         quit_button = ResourcesCompat.getDrawable(resources,R.drawable.quit_button,
+            null)?.toBitmap(800,200)!!
+        pause_label = ResourcesCompat.getDrawable(resources,R.drawable.pauselabel,
             null)?.toBitmap(800,200)!!
         ///// first spawn of enemies /////
         GlobalScope.launch {
@@ -261,6 +264,10 @@ class MyView(context: Context?,w:String?,old_score: Int?, ID : String?,Username 
                 }
                 Log.i("TIME",current_time.toString())
                 drawBitmap(background,0f,0f,null)
+
+                //draw pause button
+                drawBitmap(pause_button,860f,1700f,null)
+
                 val message= "Score: $Score"
                 val textPaint = Paint().also {
                     it.color = Color.parseColor("#000000")
@@ -996,6 +1003,7 @@ class MyView(context: Context?,w:String?,old_score: Int?, ID : String?,Username 
                     it.textSize=130f
                 }
                 drawBitmap(background,0f,0f,null)
+                canvas.drawBitmap(pause_label,130f,300f,null)
                 canvas.drawBitmap(resume_button,130f,1000f,null)
                 canvas.drawBitmap(quit_button,130f,1300f,null)
                 drawText(message,100f,300f,textPaint)
@@ -1019,6 +1027,7 @@ class MyView(context: Context?,w:String?,old_score: Int?, ID : String?,Username 
                 intent.putExtra("ID",id)
                 intent.putExtra("Weather",weather)
                 intent.putExtra("Score",Old_score)
+                music.stopSound()
                 startActivity(context, intent, null)
             }
             if(!gameover){
@@ -1057,15 +1066,18 @@ class MyView(context: Context?,w:String?,old_score: Int?, ID : String?,Username 
             MotionEvent.ACTION_DOWN -> {
                 //Log.i("BUTTON",event.getRawX().toString())
                 ///when touch the pause button start the onPause of the activity
-                if((!PAUSE) and((event.getX()>970f)and (event.getY()>1700f))){
+                if((!PAUSE) and (((event.getX()>860f) and (event.getX()<1060)) and ((event.getY()>1700f) and (event.getY()<1900)))){
                     PAUSE = true
+                    music.pauseSound()
                     start = false
                 }else if(PAUSE and ((event.getX()>130f)and (event.getX()<930f)and (event.getY()>1000f)and (event.getY()<1200f))){
                     start = true
+                    music.playSoundGame(context)
                     PAUSE = false
                     return_to_game = true
                 }else if(PAUSE and((event.getX()>130f)and (event.getX()<930f)and (event.getY()>1300f)and (event.getY()<1500f))){
                     PAUSE = false
+                    music.stopSound()
                     val intent = Intent(context, MainActivity::class.java)
                     intent.putExtra("Username",username)
                     intent.putExtra("Password",password)
@@ -1116,19 +1128,21 @@ class MyView(context: Context?,w:String?,old_score: Int?, ID : String?,Username 
     }
     ///////////////////// ONTOUCH FINISH ///////////////////
     suspend fun spawn_enemy(n:Int){
-        ex_array[n]= false
-        var delay_enemy = (3000L..8000L).random()
-        delay(delay_enemy)
-        //Log.i("Prova", "si la fa")
-        var type = (0..2).random()
-        var position = ((60..940).random())
-        //Log.i("Prova", position.toString())
-        for (i in (0..4)) {
-            if (!enemy_visible[i]) {
-                enemy_visible[i] = true
-                array_type[i] = type
-                array_position[i] = position.toFloat()
-                break
+        if(!PAUSE) {
+            ex_array[n] = false
+            var delay_enemy = (3000L..8000L).random()
+            delay(delay_enemy)
+            //Log.i("Prova", "si la fa")
+            var type = (0..2).random()
+            var position = ((60..940).random())
+            //Log.i("Prova", position.toString())
+            for (i in (0..4)) {
+                if (!enemy_visible[i]) {
+                    enemy_visible[i] = true
+                    array_type[i] = type
+                    array_position[i] = position.toFloat()
+                    break
+                }
             }
         }
     }

@@ -21,9 +21,12 @@ import android.location.LocationManager
 import android.os.Build
 import androidx.annotation.RequiresApi
 import com.google.firebase.auth.FirebaseAuth
+import android.media.MediaPlayer
 
 var weather = ""        //Current weather variable
 var city = ""           //Current city variable
+public var music = MusicManager()       //Music variable
+public var muted = false                //Mute boolean variable
 
 @Suppress("DEPRECATED_IDENTITY_EQUALS")
 class MainActivity : AppCompatActivity(), LocationListener{
@@ -35,6 +38,9 @@ class MainActivity : AppCompatActivity(), LocationListener{
         super.onCreate(savedInstanceState)
 
         firebaseAuth = FirebaseAuth.getInstance()   //Get instance from Firebase Authentication
+
+        //Music management
+        music.playSoundMenu(this)
 
         //Location Permission
         if (ContextCompat.checkSelfPermission(this,
@@ -74,6 +80,19 @@ class MainActivity : AppCompatActivity(), LocationListener{
                 intent.putExtra("Weather",weather)
                 intent.putExtra("Score", score)
                 startActivity(intent)
+            }
+
+            val audioButton = findViewById(R.id.AudioButton) as ImageButton
+            audioButton.setOnClickListener(){
+                if(muted) {
+                    music.setVolume(1.0f, 1.0f)
+                    audioButton.setImageResource(R.drawable.audioon)
+                    muted = false
+                } else{
+                    music.setVolume(0.0f, 0.0f)
+                    audioButton.setImageResource(R.drawable.audiooff)
+                    muted = true
+                }
             }
 
             val logoutButton = findViewById(R.id.LogOutButton) as ImageButton
@@ -138,8 +157,26 @@ class MainActivity : AppCompatActivity(), LocationListener{
                 intent = Intent(this, MainActivity::class.java)
                 startActivity(intent)
             }
+            val audioButton = findViewById(R.id.AudioButton) as ImageButton
+            audioButton.setOnClickListener(){
+                if(muted) {
+                    music.setVolume(1.0f, 1.0f)
+                    audioButton.setImageResource(R.drawable.audioon)
+                    muted = false
+                } else{
+                    music.setVolume(0.0f, 0.0f)
+                    audioButton.setImageResource(R.drawable.audiooff)
+                    muted = true
+                }
+            }
         }
 
+    }
+
+    override fun onResume() {
+        super.onResume()
+        //Music management
+        music.playSoundMenu(this)
     }
 
     //Ask Location

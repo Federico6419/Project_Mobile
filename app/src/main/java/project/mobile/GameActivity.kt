@@ -12,6 +12,7 @@ import androidx.annotation.RequiresApi
 import com.bumptech.glide.Glide
 import android.widget.Toast
 import kotlinx.coroutines.*
+import android.media.MediaPlayer
 
 
 import android.graphics.*
@@ -49,6 +50,11 @@ class GameActivity : AppCompatActivity() {
         GlobalScope.launch {
             getDifference(username, opponent)
         }
+
+        //Music management
+        music.stopSound()
+        music.playSoundGame(this)
+
         // get the wheater to set the right layout
         setContentView(MyView(this,w,old_score,id,username,password,color,bul))
     }
