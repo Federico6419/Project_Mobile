@@ -47,7 +47,7 @@
         android:src="@drawable/bullet"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.320"
+        app:layout_constraintHorizontal_bias="0.333"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="0.435" />
@@ -61,29 +61,14 @@
         android:src="@drawable/laser_bullet2"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.698"
+        app:layout_constraintHorizontal_bias="0.664"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="0.435" />
-    <!--
-    <ImageButton
-        android:id="@+id/Bullet3"
-        android:layout_width="30dp"
-        android:layout_height="30dp"
-        android:background="@null"
-        android:scaleType="fitXY"
-        android:src="@drawable/bullet"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.774"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.435" />
-    -->
+
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-
         android:text="Choose the bullet"
         android:textColor="#6dffbf"
         android:textSize="20dp"
@@ -137,22 +122,9 @@
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="0.217" />
 
-    <ImageButton
-        android:id="@+id/StartButton"
-        android:layout_width="319dp"
-        android:layout_height="100dp"
-        android:background="@null"
-        android:src="@drawable/startbutton"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.856" />
-
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-
         android:fontFamily="sans-serif-black"
         android:text="Choose your opponent"
         android:textColor="#6dffbf"
@@ -162,13 +134,12 @@
         app:layout_constraintHorizontal_bias="0.497"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.524"
+        app:layout_constraintVertical_bias="0.517"
         tools:ignore="MissingConstraints" />
 
     <TextView
         android:id="@+id/Opponent"
         android:layout_width="wrap_content"
-
         android:layout_height="wrap_content"
         android:fontFamily="sans-serif-light"
         android:text="Current opponent: None"
@@ -186,30 +157,43 @@
         android:id="@+id/Username"
         android:layout_width="344dp"
         android:layout_height="46dp"
-        android:layout_marginTop="432dp"
         android:hint="Insert Username"
         android:textAlignment="center"
         android:textColor="#6bfff7"
         android:textColorHint="#52afaa"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.492"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        tools:ignore="MissingConstraints" />
+        app:layout_constraintVertical_bias="0.63" />
 
     <Button
         android:id="@+id/SubmitButton"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="476dp"
+        android:layout_width="150dp"
+        android:layout_height="40dp"
         android:text="Set opponent"
         android:textAllCaps="false"
         app:backgroundTint="@color/purple_700"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.482"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        tools:ignore="MissingConstraints" />
+        app:layout_constraintHorizontal_bias="0.500"
+        app:layout_constraintVertical_bias="0.69" />
+
+
+    <ImageButton
+        android:id="@+id/StartButton"
+        android:layout_width="319dp"
+        android:layout_height="100dp"
+        android:background="@null"
+        android:src="@drawable/startbutton"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.843" />
 
     <ImageButton
         android:id="@+id/HouseButton"
@@ -219,7 +203,7 @@
         android:src="@drawable/house_button"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.501"
+        app:layout_constraintHorizontal_bias="0.500"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="0.962" />
