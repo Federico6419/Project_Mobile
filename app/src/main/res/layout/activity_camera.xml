@@ -11,6 +11,7 @@
         android:id="@+id/viewFinder"
         android:layout_width="411dp"
         android:layout_height="600dp"
+        android:visibility="visible"
         tools:layout_editor_absoluteX="0dp"
         tools:layout_editor_absoluteY="0dp"
         app:layout_constraintBottom_toBottomOf="parent"
