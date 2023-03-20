@@ -44,7 +44,7 @@ class SignUpActivity : AppCompatActivity() {
 
     ////////////
 
-    private lateinit var firebaseAuth: FirebaseAuth         //Firebase Authenticatoin variable
+    private lateinit var firebaseAuth: FirebaseAuth         //Firebase Authentication variable
 
     //Email, username and password variables
     private var username : String = ""
@@ -230,8 +230,8 @@ class SignUpActivity : AppCompatActivity() {
                     it.setSurfaceProvider(viewFinder.createSurfaceProvider())
                 }
 
-            // Select back camera as a default
-            val cameraSelector = CameraSelector.DEFAULT_BACK_CAMERA
+            // Select front camera as a default
+            val cameraSelector = CameraSelector.DEFAULT_FRONT_CAMERA
 
             try {
                 // Unbind use cases before rebinding
