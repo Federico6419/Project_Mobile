@@ -32,7 +32,7 @@
         app:layout_constraintVertical_bias="0"/>
 
     <ImageButton
-        android:id="@+id/CameraButton"
+        android:id="@+id/PhotoButton"
         android:layout_width="100dp"
         android:layout_height="100dp"
         android:background="@null"
