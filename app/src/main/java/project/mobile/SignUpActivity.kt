@@ -105,8 +105,7 @@ class SignUpActivity : AppCompatActivity() {
                         } else if ((i == numberOfUsers) and !found) {
                             //If username does not exist
                             //DA METTERE L'EMPTY, CIOE: if (email.isNotEmpty() && password.isNotEmpty() && username.isNotEmpty() && user == "null") {
-                            firebaseAuth.createUserWithEmailAndPassword(email, password)
-                                .addOnCompleteListener {
+                            firebaseAuth.createUserWithEmailAndPassword(email, password).addOnCompleteListener {
                                     if (it.isSuccessful) {      //If the user is created, create its informations on Firebase Database
                                         //Increment the number of users
                                         numberOfUsers += 1

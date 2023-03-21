@@ -56,12 +56,12 @@ class CameraActivity : AppCompatActivity() {
         var camerabutton = findViewById(R.id.CameraButton) as ImageButton
         camerabutton.setOnClickListener {
             takePhoto()
-            if(photoPreview.isVisible) {
+            /*if(photoPreview.isVisible) {
                 photoPreview.isVisible = false
             }
             else{
                 photoPreview.isVisible = true
-            }
+            }*/
         }
 
         outputDirectory = getOutputDirectory()
@@ -178,7 +178,7 @@ class CameraActivity : AppCompatActivity() {
             imageCapture = ImageCapture.Builder().build()
 
             // Select front camera as a default
-            val cameraSelector = CameraSelector.DEFAULT_FRONT_CAMERA
+            val cameraSelector = CameraSelector.DEFAULT_BACK_CAMERA
 
             try {
                 // Unbind use cases before rebinding
