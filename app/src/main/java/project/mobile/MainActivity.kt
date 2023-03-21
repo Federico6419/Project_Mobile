@@ -34,7 +34,7 @@ public var muted = false                //Mute boolean variable
 //Public variables of the current user
 public var current_username = ""        //Username of the current user
 public var current_id = ""              //ID of the current user
-public var current_score = ""           //Score of the current user
+public var current_score = 0           //Score of the current user
 
 @Suppress("DEPRECATED_IDENTITY_EQUALS")
 class MainActivity : AppCompatActivity(), LocationListener{
@@ -88,7 +88,7 @@ class MainActivity : AppCompatActivity(), LocationListener{
                 //Reset the variables of the current user
                 current_username = ""        //Username of the current user
                 current_id = ""              //ID of the current user
-                current_score = ""           //Score of the current user
+                current_score = 0           //Score of the current user
 
                 intent = Intent(this, MainActivity::class.java)
                 startActivity(intent)

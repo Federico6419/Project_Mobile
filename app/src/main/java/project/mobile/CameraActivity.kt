@@ -5,7 +5,9 @@ import android.app.Activity
 import android.content.ContentValues
 import android.content.Intent
 import android.content.pm.PackageManager
+import android.graphics.Bitmap
 import android.graphics.BitmapFactory
+import android.graphics.drawable.BitmapDrawable
 import android.media.Image
 import android.net.Uri
 import android.os.Build
@@ -32,11 +34,14 @@ import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.core.content.FileProvider
 import androidx.core.view.isVisible
+import com.google.firebase.ktx.Firebase
+import com.google.firebase.storage.ktx.storage
 import project.mobile.databinding.ActivityMainBinding
 import java.util.concurrent.ExecutorService
 import java.util.concurrent.Executors
 import kotlinx.android.synthetic.main.activity_camera.*
 import project.mobile.databinding.ActivityCameraBinding
+import java.io.ByteArrayOutputStream
 import java.io.File
 import java.text.SimpleDateFormat
 import java.util.*
@@ -52,6 +57,8 @@ class CameraActivity : AppCompatActivity() {
     //Define camera variables
     private var imageCapture: ImageCapture? = null
     private lateinit var cameraExecutor: ExecutorService
+
+    val storage = Firebase.storage
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -92,8 +99,7 @@ class CameraActivity : AppCompatActivity() {
         val imageCapture = imageCapture ?: return
 
         // Create time stamped name and MediaStore entry.
-        val name = SimpleDateFormat(FILENAME_FORMAT, Locale.US)
-            .format(System.currentTimeMillis())
+        val name = SimpleDateFormat(FILENAME_FORMAT, Locale.US).format(System.currentTimeMillis())
         val contentValues = ContentValues().apply {
             put(MediaStore.MediaColumns.DISPLAY_NAME, name)
             put(MediaStore.MediaColumns.MIME_TYPE, "image/jpeg")
@@ -118,11 +124,54 @@ class CameraActivity : AppCompatActivity() {
                     Log.e(TAG, "Photo capture failed: ${exc.message}", exc)
                 }
 
-                override fun
-                        onImageSaved(output: ImageCapture.OutputFileResults){
+                override fun onImageSaved(output: ImageCapture.OutputFileResults){
                     val msg = "Photo capture succeeded: ${output.savedUri}"
                     Toast.makeText(baseContext, msg, Toast.LENGTH_SHORT).show()
                     Log.d(TAG, msg)
+
+                    var imageView = findViewById(R.id.iv_capture) as ImageView
+                    imageView.visibility = View.VISIBLE
+                    imageView.setImageURI(output.savedUri)
+
+                    var previewView = findViewById(R.id.viewFinder) as PreviewView
+                    previewView.visibility = View.INVISIBLE
+
+                    //Show Yes Button
+                    var yesButton = findViewById(R.id.YesButton) as ImageButton
+                    yesButton.visibility = View.VISIBLE
+                    yesButton.isClickable = true
+                    yesButton.setOnClickListener{
+                        //intent = Intent(CameraActivity, SignUpActivity::class.java)
+                        //PASS PARAMETERS
+                        startActivity(intent)
+                    }
+
+                    //Show No Button
+                    var noButton = findViewById(R.id.NoButton) as ImageButton
+                    noButton.visibility = View.VISIBLE
+                    noButton.isClickable = true
+
+                    //Hide Photo Button
+                    var photoButton = findViewById(R.id.PhotoButton) as ImageButton
+                    photoButton.visibility = View.INVISIBLE
+                    photoButton.isClickable = false
+
+                    // Create a storage reference from our app
+                    var storageRef = storage.reference
+
+                    var file = output.savedUri
+                    val imageRef = storageRef.child("Images/${file?.lastPathSegment}")
+                    var uploadTask = file?.let { imageRef.putFile(it) }
+
+                    // Register observers to listen for when the download is done or if it fails
+                    if (uploadTask != null) {
+                        uploadTask.addOnFailureListener {
+                            Log.i("STORAGE", "Failed")
+                        }.addOnSuccessListener { taskSnapshot ->
+                            Log.i("STORAGE", "Success")
+                        }
+                    }
+
                 }
             }
         )

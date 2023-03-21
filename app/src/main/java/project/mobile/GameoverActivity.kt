@@ -20,16 +20,17 @@ class GameoverActivity : AppCompatActivity() {
 
         val uid = firebaseAuth.uid
 
+        val opponent = intent.getStringExtra("Opponent")
+        val color = intent.getStringExtra("Color")
+        val bul = intent.getStringExtra("Bullet")
 
         val playAgainButton = findViewById(R.id.PlayAgainButton) as ImageButton
         playAgainButton.setOnClickListener() {
-            uid?.let {
-                intent = Intent(this, GameActivity::class.java)
-                startActivity(intent)
-            } ?: run {
-                intent = Intent(this, GameActivity::class.java)
-                startActivity(intent)
-            }
+            intent = Intent(this, GameActivity::class.java)
+            intent.putExtra("Opponent", opponent)
+            intent.putExtra("Color", color)
+            intent.putExtra("Bullet", bul)
+            startActivity(intent)
         }
 
         val returnMenuButton = findViewById(R.id.ReturnButton) as ImageButton

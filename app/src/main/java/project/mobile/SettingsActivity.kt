@@ -44,13 +44,6 @@ class SettingsActivity : AppCompatActivity() {
             emailText.text = firebaseAuth.currentUser?.email
         }
 
-        val passwordText: TextView = findViewById(R.id.Password) as TextView
-        val database = Firebase.database("https://mobileproject2-50486-default-rtdb.europe-west1.firebasedatabase.app/")
-        val referencePassword = database.getReference("Users/$current_id/Password")
-        referencePassword.get().addOnSuccessListener {
-            passwordText.text = it.value.toString()
-        }
-
         // set on-click listener to change username
         userButton.setOnClickListener {
             /*val user = usernameView.text.toString()
@@ -121,12 +114,17 @@ class SettingsActivity : AppCompatActivity() {
             val database = Firebase.database("https://mobileproject2-50486-default-rtdb.europe-west1.firebasedatabase.app/")
             val referencePassword = database.getReference("Users/$current_id/Password")
 
-            referencePassword.setValue(pass)
+            var hash = PasswordHashManager()
+            referencePassword.setValue(hash.encryptSHA256(pass))
 
-            //Alert of success
-            Toast.makeText(this, "PASSWORD CHANGED CORRECTLY", Toast.LENGTH_SHORT).show()
+            firebaseAuth.currentUser?.updatePassword(pass)?.addOnSuccessListener{
+                //Alert of success
+                Toast.makeText(this, "PASSWORD CHANGED CORRECTLY", Toast.LENGTH_SHORT).show()
 
-            startActivity(intent)
+                startActivity(intent)
+            }?.addOnFailureListener{
+                Toast.makeText(this, "PASSWORD TOO SHORT", Toast.LENGTH_SHORT).show()
+            }
         }
 
         //Set on-click listener for delete button
