@@ -75,6 +75,17 @@ class CameraActivity : AppCompatActivity() {
             takePhoto()
         }
 
+        //Listener for No button
+        var noButton = findViewById(R.id.NoButton) as ImageButton
+        noButton.setOnClickListener{
+            intent = Intent(this, SignUpActivity::class.java)
+            intent.putExtra("Prova", "ciaone")
+            //PASS PARAMETERS
+            //startActivity(intent)
+            setResult(RESULT_OK, intent)
+            finish()
+        }
+
         //Get the output directory
         outputDirectory = getOutputDirectory()
 
@@ -125,7 +136,7 @@ class CameraActivity : AppCompatActivity() {
                 }
 
                 override fun onImageSaved(output: ImageCapture.OutputFileResults){
-                    val msg = "Photo capture succeeded: ${output.savedUri}"
+                    val msg = "Photo saved in gallery"
                     Toast.makeText(baseContext, msg, Toast.LENGTH_SHORT).show()
                     Log.d(TAG, msg)
 

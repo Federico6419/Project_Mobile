@@ -1,6 +1,7 @@
 package project.mobile
 
 import android.Manifest
+import android.app.Activity
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.net.Uri
@@ -10,6 +11,8 @@ import android.os.Bundle
 import android.util.Log
 import android.view.View
 import android.widget.*
+import androidx.activity.result.ActivityResult
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.camera.core.CameraSelector
 import androidx.camera.core.ImageCapture
 import androidx.camera.core.ImageCaptureException
@@ -64,9 +67,51 @@ class SignUpActivity : AppCompatActivity() {
 
         val photoButton = findViewById(R.id.PhotoButton) as Button
         photoButton.setOnClickListener {
-            intent = Intent(this, CameraActivity::class.java)
+            /*intent = Intent(this, CameraActivity::class.java)
             //PASS PARAMETERS
-            startActivity(intent)
+            startActivity(intent)*/
+
+            /*val startForResult = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) {
+                    result: ActivityResult ->
+                if (result.resultCode == Activity.RESULT_OK) {
+                    val intent = result.data
+                    if (intent != null) {
+                        Log.i("Prova", intent.data.toString())
+                    }
+                }
+            }
+
+            fun openActivityForResult() {
+                startForResult.launch(Intent(this, CameraActivity::class.java))
+            }
+
+            openActivityForResult()*/
+
+            /*var resultLauncher = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
+                if (result.resultCode == Activity.RESULT_OK) {
+                    // There are no request codes
+                    val data: Intent? = result.data
+                }
+            }
+
+            fun openSomeActivityForResult() {
+                val intent = Intent(this, CameraActivity::class.java)
+                resultLauncher.launch(intent)
+            }
+
+            openSomeActivityForResult()*/
+
+            val previewRequest =
+                registerForActivityResult(ActivityResultContracts.StartActivityForResult()) {
+                    if (it.resultCode == RESULT_OK) {
+                        val list = it.data
+                        // do whatever with the data in the callback
+                    }
+                }
+
+            val intent = Intent(this, CameraActivity::class.java)
+            previewRequest.launch(intent)
+
         }
 
 
