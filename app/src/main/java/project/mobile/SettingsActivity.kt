@@ -7,6 +7,7 @@ import android.widget.*
 import androidx.appcompat.app.AppCompatActivity
 import com.google.android.gms.tasks.OnCompleteListener
 import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.database.DatabaseReference
 import com.google.firebase.database.ktx.database
 import com.google.firebase.ktx.Firebase
 
@@ -43,16 +44,9 @@ class SettingsActivity : AppCompatActivity() {
             emailText.text = firebaseAuth.currentUser?.email
         }
 
-        val passwordText: TextView = findViewById(R.id.Password) as TextView
-        val database = Firebase.database("https://mobileproject2-50486-default-rtdb.europe-west1.firebasedatabase.app/")
-        val referencePassword = database.getReference("Users/$current_id/Password")
-        referencePassword.get().addOnSuccessListener {
-            passwordText.text = it.value.toString()
-        }
-
         // set on-click listener to change username
         userButton.setOnClickListener {
-            val user = usernameView.text.toString()
+            /*val user = usernameView.text.toString()
 
             val database = Firebase.database("https://mobileproject2-50486-default-rtdb.europe-west1.firebasedatabase.app/")
             val referenceUsername = database.getReference("Users/$current_id/Username")
@@ -62,7 +56,40 @@ class SettingsActivity : AppCompatActivity() {
 
             //Change the value of the public variable of the current user
             current_username = user
-            startActivity(intent)
+            startActivity(intent)*/
+
+            val user = usernameView.text.toString()
+
+            //Connecting to Firebase Database
+            val database = Firebase.database("https://mobileproject2-50486-default-rtdb.europe-west1.firebasedatabase.app/")
+
+            val referenceDB = database.getReference("NumberOfUsers")    //Take the number of users
+
+            //Get the number of users
+            referenceDB.get().addOnSuccessListener {
+                var numberOfUsers = it.value.toString().toInt()
+
+                var found = false
+                var referenceUsername: DatabaseReference
+
+                for (i in 1..numberOfUsers) {
+                    referenceUsername = database.getReference("Users/$i/Username")    //Reference to username in the Database
+
+                    referenceUsername.get().addOnSuccessListener {
+                        if ((it.value.toString() == user) and !found) {
+                            found = true
+                            //If username already exists
+                            Toast.makeText(this, "Username already exists", Toast.LENGTH_SHORT).show()
+                        } else if ((i == numberOfUsers) and !found) {
+                            //Save Username
+                            val referenceUser = database.getReference("Users/$current_id/Username")
+                            referenceUser.setValue(user)
+                            current_username = user
+                            startActivity(intent)
+                        }
+                    }
+                }
+            }
         }
 
         // set on-click listener to change email
@@ -87,12 +114,17 @@ class SettingsActivity : AppCompatActivity() {
             val database = Firebase.database("https://mobileproject2-50486-default-rtdb.europe-west1.firebasedatabase.app/")
             val referencePassword = database.getReference("Users/$current_id/Password")
 
-            referencePassword.setValue(pass)
+            var hash = PasswordHashManager()
+            referencePassword.setValue(hash.encryptSHA256(pass))
 
-            //Alert of success
-            Toast.makeText(this, "PASSWORD CHANGED CORRECTLY", Toast.LENGTH_SHORT).show()
+            firebaseAuth.currentUser?.updatePassword(pass)?.addOnSuccessListener{
+                //Alert of success
+                Toast.makeText(this, "PASSWORD CHANGED CORRECTLY", Toast.LENGTH_SHORT).show()
 
-            startActivity(intent)
+                startActivity(intent)
+            }?.addOnFailureListener{
+                Toast.makeText(this, "PASSWORD TOO SHORT", Toast.LENGTH_SHORT).show()
+            }
         }
 
         //Set on-click listener for delete button

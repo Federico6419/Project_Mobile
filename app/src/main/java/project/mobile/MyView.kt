@@ -28,11 +28,9 @@ import com.google.firebase.ktx.Firebase
 import java.util.*
 import kotlin.math.atan2
 
-class MyView(context: Context?, weat:String?, old_score: String?, Color :String?, Bul :String?) : View(context), View.OnTouchListener, SensorEventListener2 {
+class MyView(context: Context?, weat:String?, Color :String?, Bul :String?, Logged : Boolean?) : View(context), View.OnTouchListener, SensorEventListener2 {
 
-    val a = 0.5f //Low-pass filter parameter, higher is smoother
-    var weather = ""
-    //var username = ""
+    val a = 0.9f //Low-pass filter parameter, higher is smoother
 
     var mLastRotationVector = FloatArray(3) //The last value of the rotation vector
     var mRotationMatrix = FloatArray(9)
@@ -132,24 +130,30 @@ class MyView(context: Context?, weat:String?, old_score: String?, Color :String?
     var current_time = 0
     var change_score = true
     var old_time = 0
-    var Old_score = 0
+    var Old_score = current_score
     var id = ""
     var PAUSE = false
     var gameover = false
 
+    var col = ""
+    var bul = ""
+    var logged = false
 
     init{
-        var layout = R.drawable.background_sun2
-        if (old_score != "") {
-            if (old_score != null) {
-                Old_score = old_score.toInt()
-            }
+        if (Color != null) {
+            col = Color
         }
-        /*if (ID != null) {
-            id = ID
-        }*/
+        if (Bul != null) {
+            bul = Bul
+        }
+        if (Logged != null) {
+            logged = Logged
+        }
+
+        var layout = R.drawable.background_sun2
+
         Log.i("prova",weat.toString())
-        if((weat=="Overcast") or (weat=="Partly cloudy")or(weat=="Cloudy")){ // sfondo quando nuvoloso
+        if((weat=="Overcast") or (weat=="Partly cloudy")or(weat=="Cloudy")){ // Background when cloudy
             layout = R.drawable.rainybackground
         } else if((weat=="Sunny")or(weat=="Clear")) {//sfondo soleggiato
             layout = R.drawable.background_sun2
@@ -160,16 +164,6 @@ class MyView(context: Context?, weat:String?, old_score: String?, Color :String?
         } else{//if found something we don t have
             layout = R.drawable.background_sun2
         }
-        if (weat != "") {
-            if (weat != null) {
-                weather = weat
-            }
-        }
-        /*if (Username != "") {
-            if (Username != null) {
-                username= Username
-            }
-        }*/
 
         size*=160*resources.displayMetrics.density
         val sensorManager = context?.getSystemService(Context.SENSOR_SERVICE) as SensorManager
@@ -1012,7 +1006,7 @@ class MyView(context: Context?, weat:String?, old_score: String?, Color :String?
             }else if(!PAUSE and !start) {
                 ///////// gameover ////////////
                 gameover = true
-                if(Score >Old_score){
+                if((Score > Old_score) and (logged)){
                     //Connecting to Firebase Database
                     val database = Firebase.database("https://mobileproject2-50486-default-rtdb.europe-west1.firebasedatabase.app/")
 
@@ -1024,11 +1018,9 @@ class MyView(context: Context?, weat:String?, old_score: String?, Color :String?
                 Score = 0
                 hearts = 3
                 val intent = Intent(context, GameoverActivity::class.java)
-                /*intent.putExtra("Username",username)
-                intent.putExtra("Password",password)
-                intent.putExtra("ID",id)
-                intent.putExtra("Weather",weather)
-                intent.putExtra("Score",Old_score)*/
+                //intent.putExtra("Opponent", opponent)
+                intent.putExtra("Color", col)
+                intent.putExtra("Bullet", bul)
                 music.stopSound()
                 startActivity(context, intent, null)
             }
@@ -1081,11 +1073,6 @@ class MyView(context: Context?, weat:String?, old_score: String?, Color :String?
                     PAUSE = false
                     music.stopSound()
                     val intent = Intent(context, MainActivity::class.java)
-                    /*intent.putExtra("Username",username)
-                    intent.putExtra("Password",password)
-                    intent.putExtra("ID",id)
-                    intent.putExtra("Weather",weather)
-                    intent.putExtra("Score",Old_score)*/
                     startActivity(context, intent, null)
                 }
                 if(start and !return_to_game){

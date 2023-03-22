@@ -92,7 +92,7 @@ class SignInActivity : AppCompatActivity() {
                                                 val intent = Intent(this, MainActivity::class.java)
                                                 current_username = username
                                                 current_id = id
-                                                current_score = score
+                                                current_score = score.toInt()
                                                 startActivity(intent)
                                             }
                                         }

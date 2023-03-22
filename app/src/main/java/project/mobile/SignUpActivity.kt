@@ -1,6 +1,7 @@
 package project.mobile
 
 import android.Manifest
+import android.app.Activity
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.net.Uri
@@ -10,6 +11,8 @@ import android.os.Bundle
 import android.util.Log
 import android.view.View
 import android.widget.*
+import androidx.activity.result.ActivityResult
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.camera.core.CameraSelector
 import androidx.camera.core.ImageCapture
 import androidx.camera.core.ImageCaptureException
@@ -64,8 +67,51 @@ class SignUpActivity : AppCompatActivity() {
 
         val photoButton = findViewById(R.id.PhotoButton) as Button
         photoButton.setOnClickListener {
-            intent = Intent(this, CameraActivity::class.java)
-            startActivity(intent)
+            /*intent = Intent(this, CameraActivity::class.java)
+            //PASS PARAMETERS
+            startActivity(intent)*/
+
+            /*val startForResult = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) {
+                    result: ActivityResult ->
+                if (result.resultCode == Activity.RESULT_OK) {
+                    val intent = result.data
+                    if (intent != null) {
+                        Log.i("Prova", intent.data.toString())
+                    }
+                }
+            }
+
+            fun openActivityForResult() {
+                startForResult.launch(Intent(this, CameraActivity::class.java))
+            }
+
+            openActivityForResult()*/
+
+            /*var resultLauncher = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
+                if (result.resultCode == Activity.RESULT_OK) {
+                    // There are no request codes
+                    val data: Intent? = result.data
+                }
+            }
+
+            fun openSomeActivityForResult() {
+                val intent = Intent(this, CameraActivity::class.java)
+                resultLauncher.launch(intent)
+            }
+
+            openSomeActivityForResult()*/
+
+            val previewRequest =
+                registerForActivityResult(ActivityResultContracts.StartActivityForResult()) {
+                    if (it.resultCode == RESULT_OK) {
+                        val list = it.data
+                        // do whatever with the data in the callback
+                    }
+                }
+
+            val intent = Intent(this, CameraActivity::class.java)
+            previewRequest.launch(intent)
+
         }
 
 
@@ -105,59 +151,51 @@ class SignUpActivity : AppCompatActivity() {
                         } else if ((i == numberOfUsers) and !found) {
                             //If username does not exist
                             //DA METTERE L'EMPTY, CIOE: if (email.isNotEmpty() && password.isNotEmpty() && username.isNotEmpty() && user == "null") {
-                            firebaseAuth.createUserWithEmailAndPassword(email, password).addOnCompleteListener {
-                                    if (it.isSuccessful) {      //If the user is created, create its informations on Firebase Database
-                                        //Increment the number of users
-                                        numberOfUsers += 1
-                                        referenceDB.setValue(numberOfUsers)
+                            firebaseAuth.createUserWithEmailAndPassword(email, password).addOnSuccessListener {
+                                //Increment the number of users
+                                numberOfUsers += 1
+                                referenceDB.setValue(numberOfUsers)
 
-                                        //Save Username
-                                        val referenceUser =
-                                            database.getReference("Users/$numberOfUsers/Username")
-                                        referenceUser.setValue(username)
+                                //Save Username
+                                val referenceUser =
+                                    database.getReference("Users/$numberOfUsers/Username")
+                                referenceUser.setValue(username)
 
-                                        //Save Email
-                                        val referenceEmail =
-                                            database.getReference("Users/$numberOfUsers/Email")
-                                        referenceEmail.setValue(email)
+                                //Save Email
+                                val referenceEmail = database.getReference("Users/$numberOfUsers/Email")
+                                referenceEmail.setValue(email)
 
-                                        //Save Password
-                                        val referencePassword =
-                                            database.getReference("Users/$numberOfUsers/Password")
-                                        referencePassword.setValue(password)
+                                //Save Password
+                                val referencePassword = database.getReference("Users/$numberOfUsers/Password")
+                                //Create the Password Hash Manager variable and save the hashed password with sha256
+                                var hash = PasswordHashManager()
+                                referencePassword.setValue(hash.encryptSHA256(password))
 
-                                        //Save Score
-                                        val referenceScore =
-                                            database.getReference("Users/$numberOfUsers/Score")
-                                        referenceScore.setValue("0")
+                                //Save Score
+                                val referenceScore =
+                                    database.getReference("Users/$numberOfUsers/Score")
+                                referenceScore.setValue("0")
 
-                                        //Take and save the user id
-                                        var uid = firebaseAuth.uid
-                                        val referenceUid =
-                                            database.getReference("Users/$numberOfUsers/UID")
-                                        referenceUid.setValue(uid)
+                                //Take and save the user id
+                                var uid = firebaseAuth.uid
+                                val referenceUid =
+                                    database.getReference("Users/$numberOfUsers/UID")
+                                referenceUid.setValue(uid)
 
-                                        //Execute the log in
-                                        firebaseAuth.signInWithEmailAndPassword(email, password)
-                                            .addOnCompleteListener {
-                                                if (it.isSuccessful) {
-                                                    intent = Intent(this, MainActivity::class.java)
-                                                    current_username = username
-                                                    current_id = numberOfUsers.toString()
-                                                    current_score = "0"
-                                                    startActivity(intent)
-                                                } else {
-                                                    Toast.makeText(
-                                                        this,
-                                                        it.exception.toString(),
-                                                        Toast.LENGTH_SHORT
-                                                    ).show()
-                                                }
-                                            }
+                                //Execute the log in
+                                firebaseAuth.signInWithEmailAndPassword(email, password).addOnCompleteListener {
+                                    if (it.isSuccessful) {
+                                        intent = Intent(this, MainActivity::class.java)
+                                        current_username = username
+                                        current_id = numberOfUsers.toString()
+                                        current_score = 0
+                                        startActivity(intent)
+                                    } else {
+                                        Toast.makeText(this, it.exception.toString(), Toast.LENGTH_SHORT).show()
                                     }
-                                }.addOnFailureListener {
-                                Toast.makeText(this, "Email already used", Toast.LENGTH_SHORT)
-                                    .show()
+                                }
+                            }.addOnFailureListener {
+                                Toast.makeText(this, "ERROR", Toast.LENGTH_SHORT).show()
                             }
                         }
                     }

@@ -82,12 +82,6 @@ class GameSettingsActivity : AppCompatActivity() {
             bullet = "laser"
         }
 
-        /*bullet3.setOnClickListener() {
-            bullet3.setImageResource(R.drawable.airplane)
-            bullet1.setImageResource(R.drawable.bullet)
-            bullet2.setImageResource(R.drawable.bullet)
-        }*/
-
 
         //Opponent management
         val opponentButton = findViewById(R.id.SubmitButton) as Button

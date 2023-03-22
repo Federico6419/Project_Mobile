@@ -26,16 +26,20 @@ import android.hardware.SensorEventListener2
 import android.hardware.SensorManager
 import android.util.Log
 import androidx.core.graphics.withTranslation
+import com.google.firebase.auth.FirebaseAuth
 import java.util.*
 import kotlin.math.atan2
 
 
 class GameActivity : AppCompatActivity() {
+    private lateinit var firebaseAuth: FirebaseAuth         //Firebase Authenticatoin variable
 
     @SuppressLint("WrongThread")
     @RequiresApi(Build.VERSION_CODES.P)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
+        firebaseAuth = FirebaseAuth.getInstance()   //Get instance from Firebase Authentication
 
         val opponent = intent.getStringExtra("Opponent")
         val color = intent.getStringExtra("Color")
@@ -51,9 +55,20 @@ class GameActivity : AppCompatActivity() {
         music.playSoundGame(this)
 
         // get the wheater to set the right layout
-        Log.i("USER", current_score)
+        Log.i("USER", current_score.toString())
         Log.i("USER", weather)
-        setContentView(MyView(this, weather, current_score, color, bul))
+
+        //
+        val uid = firebaseAuth.currentUser?.uid
+        var logged = false
+
+        uid?.let {
+            logged = true
+        } ?: run {
+            logged = false
+        }
+
+        setContentView(MyView(this, weather, color, bul, logged))
     }
 
     override fun onPause() {
@@ -64,8 +79,6 @@ class GameActivity : AppCompatActivity() {
     override fun onResume() {
         super.onResume()
     }
-
-
 }
 
 suspend fun getDifference(username1: String?, username2: String?) {
