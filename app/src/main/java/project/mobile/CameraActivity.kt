@@ -58,7 +58,9 @@ class CameraActivity : AppCompatActivity() {
     private var imageCapture: ImageCapture? = null
     private lateinit var cameraExecutor: ExecutorService
 
-    val storage = Firebase.storage
+    public lateinit var yesButton: ImageButton
+
+    var context = this
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -78,12 +80,24 @@ class CameraActivity : AppCompatActivity() {
         //Listener for No button
         var noButton = findViewById(R.id.NoButton) as ImageButton
         noButton.setOnClickListener{
-            intent = Intent(this, SignUpActivity::class.java)
-            intent.putExtra("Prova", "ciaone")
-            //PASS PARAMETERS
-            //startActivity(intent)
-            setResult(RESULT_OK, intent)
-            finish()
+            //Hide Yes Button
+            var yesButton = findViewById(R.id.YesButton) as ImageButton
+            yesButton.visibility = View.INVISIBLE
+            yesButton.isClickable = false
+
+            //Show No Button
+            var noButton = findViewById(R.id.NoButton) as ImageButton
+            noButton.visibility = View.INVISIBLE
+            noButton.isClickable = false
+
+            //Show preview
+            var previewView = findViewById(R.id.viewFinder) as PreviewView
+            previewView.visibility = View.VISIBLE
+
+            //Show Photo Button
+            var photoButton = findViewById(R.id.PhotoButton) as ImageButton
+            photoButton.visibility = View.VISIBLE
+            photoButton.isClickable = true
         }
 
         //Get the output directory
@@ -151,11 +165,6 @@ class CameraActivity : AppCompatActivity() {
                     var yesButton = findViewById(R.id.YesButton) as ImageButton
                     yesButton.visibility = View.VISIBLE
                     yesButton.isClickable = true
-                    yesButton.setOnClickListener{
-                        //intent = Intent(CameraActivity, SignUpActivity::class.java)
-                        //PASS PARAMETERS
-                        startActivity(intent)
-                    }
 
                     //Show No Button
                     var noButton = findViewById(R.id.NoButton) as ImageButton
@@ -167,22 +176,15 @@ class CameraActivity : AppCompatActivity() {
                     photoButton.visibility = View.INVISIBLE
                     photoButton.isClickable = false
 
-                    // Create a storage reference from our app
-                    var storageRef = storage.reference
-
-                    var file = output.savedUri
-                    val imageRef = storageRef.child("Images/${file?.lastPathSegment}")
-                    var uploadTask = file?.let { imageRef.putFile(it) }
-
-                    // Register observers to listen for when the download is done or if it fails
-                    if (uploadTask != null) {
-                        uploadTask.addOnFailureListener {
-                            Log.i("STORAGE", "Failed")
-                        }.addOnSuccessListener { taskSnapshot ->
-                            Log.i("STORAGE", "Success")
-                        }
+                    //Listener for Yes Button
+                    yesButton = findViewById(R.id.YesButton) as ImageButton
+                    yesButton.setOnClickListener{
+                        //Intent to Sign Up activity
+                        intent = Intent(context, SignUpActivity::class.java)
+                        intent.putExtra("Image", output.savedUri.toString())
+                        setResult(RESULT_OK, intent)
+                        finish()
                     }
-
                 }
             }
         )

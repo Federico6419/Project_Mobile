@@ -21,10 +21,12 @@ import androidx.camera.lifecycle.ProcessCameraProvider
 import androidx.camera.view.PreviewView
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
+import androidx.core.net.toUri
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.DatabaseReference
 import com.google.firebase.database.ktx.database
 import com.google.firebase.ktx.Firebase
+import com.google.firebase.storage.ktx.storage
 import kotlinx.android.synthetic.main.activity_sign_up.*
 import project.mobile.databinding.ActivityMainBinding
 import java.io.File
@@ -42,6 +44,8 @@ class SignUpActivity : AppCompatActivity() {
     private var username : String = ""
     private var email : String = ""
     private var password : String = ""
+
+    val storage = Firebase.storage      //Firebase Storage variable
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -68,8 +72,24 @@ class SignUpActivity : AppCompatActivity() {
         /// intent with new method to return photo after finish camera activity
         var resultLauncher = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
             if (result.resultCode == RESULT_OK) {
-                val data = result.data!!.getStringExtra("Prova")
-                Log.i("Prova", data.toString())
+                val data = result.data!!.getStringExtra("Image")?.toUri()
+
+                // Create a storage reference from our app
+                var storageRef = storage.reference
+
+                var file = data
+
+                val imageRef = storageRef.child("Images/${file?.lastPathSegment}")
+                var uploadTask = file?.let { imageRef.putFile(it) }
+
+                // Register observers to listen for when the download is done or if it fails
+                if (uploadTask != null) {
+                    uploadTask.addOnFailureListener {
+                        Log.i("STORAGE", "Failed")
+                    }.addOnSuccessListener { taskSnapshot ->
+                        Log.i("STORAGE", "Success")
+                    }
+                }
             }
         }
 
@@ -78,8 +98,6 @@ class SignUpActivity : AppCompatActivity() {
 
             val intent = Intent(this, CameraActivity::class.java)
             resultLauncher.launch(intent)
-
-
         }
 
 
