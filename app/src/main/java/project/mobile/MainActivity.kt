@@ -23,7 +23,7 @@ import androidx.annotation.RequiresApi
 import com.google.firebase.auth.FirebaseAuth
 import android.media.MediaPlayer
 
-//Public variables for current weather and city services//
+//Public variables for current weather and city services
 public var weather = ""        //Current weather variable
 public var city = ""           //Current city variable
 
