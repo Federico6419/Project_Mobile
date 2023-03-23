@@ -31,7 +31,7 @@ import java.util.*
 import kotlin.math.atan2
 
 
-class GameActivity : AppCompatActivity() {
+class GameActivity : AppCompatActivity() {//
     private lateinit var firebaseAuth: FirebaseAuth         //Firebase Authenticatoin variable
 
     @SuppressLint("WrongThread")
