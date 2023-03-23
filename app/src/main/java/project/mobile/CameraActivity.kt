@@ -7,6 +7,7 @@ import android.content.Intent
 import android.content.pm.PackageManager
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
+import android.graphics.Matrix
 import android.graphics.drawable.BitmapDrawable
 import android.media.Image
 import android.net.Uri
@@ -17,6 +18,7 @@ import android.os.Environment
 import android.provider.MediaStore
 import android.util.Log
 import android.view.LayoutInflater
+import android.view.Surface
 import android.view.View
 import android.widget.Button
 import android.widget.ImageButton
@@ -44,6 +46,7 @@ import kotlinx.android.synthetic.main.activity_camera.*
 import project.mobile.databinding.ActivityCameraBinding
 import java.io.ByteArrayOutputStream
 import java.io.File
+import java.io.FileInputStream
 import java.text.SimpleDateFormat
 import java.util.*
 
@@ -93,6 +96,36 @@ class CameraActivity : AppCompatActivity() {
                 previewView.visibility = View.INVISIBLE
 
                 imageView.setImageURI(imageUri)
+
+                //Show Yes Button
+                var yesButton = findViewById(R.id.YesButton) as ImageButton
+                yesButton.visibility = View.VISIBLE
+                yesButton.isClickable = true
+
+                //Show No Button
+                var noButton = findViewById(R.id.NoButton) as ImageButton
+                noButton.visibility = View.VISIBLE
+                noButton.isClickable = true
+
+                //Hide Photo Button
+                var photoButton = findViewById(R.id.PhotoButton) as ImageButton
+                photoButton.visibility = View.INVISIBLE
+                photoButton.isClickable = false
+
+                //Hide Gallery Button
+                var galleryButton = findViewById(R.id.GalleryButton) as ImageButton
+                galleryButton.visibility = View.INVISIBLE
+                galleryButton.isClickable = false
+
+                //Listener for Yes Button
+                yesButton = findViewById(R.id.YesButton) as ImageButton
+                yesButton.setOnClickListener{
+                    //Intent to Sign Up activity
+                    intent = Intent(context, SignUpActivity::class.java)
+                    intent.putExtra("Image", imageUri.toString())
+                    setResult(RESULT_OK, intent)
+                    finish()
+                }
             }
         }
         //gallery button listener
@@ -115,6 +148,11 @@ class CameraActivity : AppCompatActivity() {
             var noButton = findViewById(R.id.NoButton) as ImageButton
             noButton.visibility = View.INVISIBLE
             noButton.isClickable = false
+
+            //Show Gallery Button
+            var galleryButton = findViewById(R.id.GalleryButton) as ImageButton
+            galleryButton.visibility = View.VISIBLE
+            galleryButton.isClickable = true
 
             //Show preview
             var previewView = findViewById(R.id.viewFinder) as PreviewView
@@ -166,6 +204,9 @@ class CameraActivity : AppCompatActivity() {
             .Builder(contentResolver,
                 MediaStore.Images.Media.EXTERNAL_CONTENT_URI,
                 contentValues)
+            .setMetadata(ImageCapture.Metadata().also {
+                it.isReversedHorizontal = true
+            })
             .build()
 
         // Set up image capture listener, which is triggered after photo has been taken
