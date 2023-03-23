@@ -33,6 +33,7 @@ import androidx.camera.view.PreviewView
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.core.content.FileProvider
+import androidx.core.net.toUri
 import androidx.core.view.isVisible
 import com.google.firebase.ktx.Firebase
 import com.google.firebase.storage.ktx.storage
@@ -62,6 +63,9 @@ class CameraActivity : AppCompatActivity() {
 
     var context = this
 
+    private var imageUri: Uri? = null
+
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
@@ -76,6 +80,28 @@ class CameraActivity : AppCompatActivity() {
         photoButton.setOnClickListener {
             takePhoto()
         }
+
+        //// result launcher to get the result of the intent of take image from gallery
+        var resultLauncher = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
+            if (result.resultCode == RESULT_OK) {
+                val data = result.data
+                imageUri = data?.data
+                var imageView = findViewById(R.id.iv_capture) as ImageView
+                imageView.visibility = View.VISIBLE
+
+                var previewView = findViewById(R.id.viewFinder) as PreviewView
+                previewView.visibility = View.INVISIBLE
+
+                imageView.setImageURI(imageUri)
+            }
+        }
+        //gallery button listener
+        var galleryButton = findViewById(R.id.GalleryButton) as ImageButton
+        galleryButton.setOnClickListener {
+            val intent = Intent(Intent.ACTION_PICK, MediaStore.Images.Media.INTERNAL_CONTENT_URI)
+            resultLauncher.launch(intent)
+        }
+
 
         //Listener for No button
         var noButton = findViewById(R.id.NoButton) as ImageButton
@@ -99,6 +125,8 @@ class CameraActivity : AppCompatActivity() {
             photoButton.visibility = View.VISIBLE
             photoButton.isClickable = true
         }
+
+
 
         //Get the output directory
         outputDirectory = getOutputDirectory()
