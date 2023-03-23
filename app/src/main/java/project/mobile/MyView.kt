@@ -30,7 +30,7 @@ import kotlin.math.atan2
 
 class MyView(context: Context?, weat:String?, Color :String?, Bul :String?, Logged : Boolean?) : View(context), View.OnTouchListener, SensorEventListener2 {
 
-    val a = 0.9f //Low-pass filter parameter, higher is smoother
+    val a = 0.65f //Low-pass filter parameter, higher is smoother
 
     var mLastRotationVector = FloatArray(3) //The last value of the rotation vector
     var mRotationMatrix = FloatArray(9)
@@ -98,8 +98,8 @@ class MyView(context: Context?, weat:String?, Color :String?, Bul :String?, Logg
     var return_to_game = false // to avoid shot bullet when click on the resume button
 
     var size = 2f
-    var sizeA = 120f
-    var sizeB = 30f
+    var sizeA = 150f
+    var sizeB = 20f
     var sizeBoss = 200f
     var sizeHeart = 50f
     var background : Bitmap
