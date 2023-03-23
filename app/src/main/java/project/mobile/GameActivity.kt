@@ -53,6 +53,13 @@ class GameActivity : AppCompatActivity() {
         //Music management
         music.stopSound()
         music.playSoundGame(this)
+        //Mute management
+        if(muted) {
+            music.setVolume(0.0f, 0.0f)
+        } else{
+            music.setVolume(1.0f, 1.0f)
+        }
+
 
         // get the wheater to set the right layout
         Log.i("USER", current_score.toString())

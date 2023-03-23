@@ -30,7 +30,7 @@ import kotlin.math.atan2
 
 class MyView(context: Context?, weat:String?, Color :String?, Bul :String?, Logged : Boolean?) : View(context), View.OnTouchListener, SensorEventListener2 {
 
-    val a = 0.9f //Low-pass filter parameter, higher is smoother
+    val a = 0.7f //Low-pass filter parameter, higher is smoother
 
     var mLastRotationVector = FloatArray(3) //The last value of the rotation vector
     var mRotationMatrix = FloatArray(9)

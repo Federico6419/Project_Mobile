@@ -120,6 +120,29 @@ class MainActivity : AppCompatActivity(), LocationListener{
 
         //Listeners for the buttons that are both in signed and not signed homepage
 
+        //Mute management
+        val audioButton = findViewById(R.id.AudioButton) as ImageButton
+        if(muted) {
+            music.setVolume(0.0f, 0.0f)
+            audioButton.setImageResource(R.drawable.audiooff)
+        } else{
+            music.setVolume(1.0f, 1.0f)
+            audioButton.setImageResource(R.drawable.audioon)
+        }
+
+        //Audio button listener
+        audioButton.setOnClickListener(){
+            if(muted) {
+                music.setVolume(1.0f, 1.0f)
+                audioButton.setImageResource(R.drawable.audioon)
+                muted = false
+            } else{
+                music.setVolume(0.0f, 0.0f)
+                audioButton.setImageResource(R.drawable.audiooff)
+                muted = true
+            }
+        }
+
         //Start button listener
         val startButton = findViewById(R.id.StartButton) as ImageButton
         startButton.setOnClickListener() {
@@ -133,20 +156,6 @@ class MainActivity : AppCompatActivity(), LocationListener{
         leaderboardButton.setOnClickListener() {
             intent = Intent(this, LeaderboardActivity::class.java)
             startActivity(intent)
-        }
-
-        //Audio button listener
-        val audioButton = findViewById(R.id.AudioButton) as ImageButton
-        audioButton.setOnClickListener(){
-            if(muted) {
-                music.setVolume(1.0f, 1.0f)
-                audioButton.setImageResource(R.drawable.audioon)
-                muted = false
-            } else{
-                music.setVolume(0.0f, 0.0f)
-                audioButton.setImageResource(R.drawable.audiooff)
-                muted = true
-            }
         }
 
     }
