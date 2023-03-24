@@ -88,6 +88,7 @@ class CameraActivity : AppCompatActivity() {
             if (result.resultCode == RESULT_OK) {
                 val data = result.data
                 imageUri = data?.data
+
                 var imageView = findViewById(R.id.iv_capture) as ImageView
                 imageView.visibility = View.VISIBLE
 

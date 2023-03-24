@@ -65,6 +65,7 @@ class SignUpActivity : AppCompatActivity() {
         var submitbutton = findViewById(R.id.SubmitButton) as Button
 
         //Manage the reset button
+        //Manage the reset button
         resetbutton.setOnClickListener {
             usernameView.setText("")
             emailView.setText("")
@@ -75,7 +76,6 @@ class SignUpActivity : AppCompatActivity() {
         var resultLauncher = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
             if (result.resultCode == RESULT_OK) {
                 imageUri = result.data!!.getStringExtra("Image")?.toUri()!!
-
                 imageChosen = true
 
                 //Hide Photo Button
@@ -231,6 +231,7 @@ class SignUpActivity : AppCompatActivity() {
 
                                         //Save the photo in the Database
                                         if (imageChosen) {
+                                            Log.i("PROVA", imageUri.toString())
                                             // Create a storage reference from our app
                                             var storageRef = storage.reference
 
