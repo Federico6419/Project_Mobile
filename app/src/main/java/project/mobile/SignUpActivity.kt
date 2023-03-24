@@ -28,7 +28,6 @@ import com.google.firebase.database.ktx.database
 import com.google.firebase.ktx.Firebase
 import com.google.firebase.storage.ktx.storage
 import kotlinx.android.synthetic.main.activity_sign_up.*
-import project.mobile.databinding.ActivityMainBinding
 import java.io.File
 import java.text.SimpleDateFormat
 import java.util.*
@@ -46,6 +45,9 @@ class SignUpActivity : AppCompatActivity() {
     private var password : String = ""
 
     val storage = Firebase.storage      //Firebase Storage variable
+
+    lateinit var imageUri: Uri          //Variable that will contain the URI of the image
+    var imageChosen = false             //Variable that says if the user has chosen an image
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -72,30 +74,61 @@ class SignUpActivity : AppCompatActivity() {
         /// intent with new method to return photo after finish camera activity
         var resultLauncher = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
             if (result.resultCode == RESULT_OK) {
-                val data = result.data!!.getStringExtra("Image")?.toUri()
+                imageUri = result.data!!.getStringExtra("Image")?.toUri()!!
 
-                // Create a storage reference from our app
-                var storageRef = storage.reference
+                imageChosen = true
 
-                var file = data
+                //Hide Photo Button
+                val photoButton = findViewById(R.id.PhotoButton) as Button
+                photoButton.visibility = View.INVISIBLE
+                photoButton.isClickable = false
 
-                val imageRef = storageRef.child("Images/${file?.lastPathSegment}")
-                var uploadTask = file?.let { imageRef.putFile(it) }
+                //Show image
+                val profileImage = findViewById(R.id.ProfileImage) as ImageView
+                profileImage.setImageURI(imageUri)
 
-                // Register observers to listen for when the download is done or if it fails
-                if (uploadTask != null) {
-                    uploadTask.addOnFailureListener {
-                        Log.i("STORAGE", "Failed")
-                    }.addOnSuccessListener { taskSnapshot ->
-                        Log.i("STORAGE", "Success")
-                    }
+                //Show Change Button
+                val changeButton = findViewById(R.id.ChangeButton) as Button
+                changeButton.visibility = View.VISIBLE
+                changeButton.isClickable = true
+
+                //Show Remove Button
+                val removeButton = findViewById(R.id.RemoveButton) as Button
+                removeButton.visibility = View.VISIBLE
+                removeButton.isClickable = true
+                removeButton.setOnClickListener {
+                    //Hide Change Button
+                    changeButton.visibility = View.INVISIBLE
+                    changeButton.isClickable = false
+
+                    //Hide Remove Button
+                    removeButton.visibility = View.INVISIBLE
+                    removeButton.isClickable = false
+
+                    //Show Photo Button
+                    val photoButton = findViewById(R.id.PhotoButton) as Button
+                    photoButton.visibility = View.VISIBLE
+                    photoButton.isClickable = true
+
+                    //Set the standard profile image
+                    profileImage.setImageResource(R.drawable.profileimage)
+
+                    //Reinitialize image uri variable
+                    imageChosen = false
                 }
             }
         }
 
+        //Listener for Photo Button
         val photoButton = findViewById(R.id.PhotoButton) as Button
         photoButton.setOnClickListener {
+            val intent = Intent(this, CameraActivity::class.java)
+            resultLauncher.launch(intent)
+        }
 
+        //Listener for Change Button
+        val changeButton = findViewById(R.id.ChangeButton) as Button
+        changeButton.setOnClickListener {
             val intent = Intent(this, CameraActivity::class.java)
             resultLauncher.launch(intent)
         }
@@ -107,81 +140,135 @@ class SignUpActivity : AppCompatActivity() {
             email = emailView.text.toString()
             password = passwordView.text.toString()
 
+            //Check if the username is not empty
+            if(username.isEmpty()){
+                Toast.makeText(this, "Username not inserted", Toast.LENGTH_SHORT).show()
+            }
+            //Check if the email is not empty
+            else if(email.isEmpty()){
+                Toast.makeText(this, "Email not inserted", Toast.LENGTH_SHORT).show()
+            }
+            //Check if the password is not empty
+            else if(password.isEmpty()){
+                Toast.makeText(this, "Password not inserted", Toast.LENGTH_SHORT).show()
+            }
+            else if(password.length < 6){
+                Toast.makeText(this, "Password should contain at least 6 characters", Toast.LENGTH_SHORT).show()
+            }
+            else if(! password.contains("[0-9]".toRegex())){
+                Toast.makeText(this, "Password should contain at least a number", Toast.LENGTH_SHORT).show()
+            }
+            else if(! password.contains("[A-Z]".toRegex())){
+                Toast.makeText(this, "Password should contain at least an uppercase character", Toast.LENGTH_SHORT).show()
+            }
+            else if(! password.contains("[a-z]".toRegex())){
+                Toast.makeText(this, "Password should contain at least an lowercase character", Toast.LENGTH_SHORT).show()
+            }
+            else {
 
-            //Creation of the user
+                //Creation of the user
 
-            //Connecting to Firebase Database
-            val database =
-                Firebase.database("https://mobileproject2-50486-default-rtdb.europe-west1.firebasedatabase.app/")
+                //Connecting to Firebase Database
+                val database =
+                    Firebase.database("https://mobileproject2-50486-default-rtdb.europe-west1.firebasedatabase.app/")
 
-            val referenceDB = database.getReference("NumberOfUsers")    //Take the number of users
+                val referenceDB =
+                    database.getReference("NumberOfUsers")    //Take the number of users
 
 
-            //Get the number of users
-            referenceDB.get().addOnSuccessListener {
-                var numberOfUsers = it.value.toString().toInt()
+                //Get the number of users
+                referenceDB.get().addOnSuccessListener {
+                    var numberOfUsers = it.value.toString().toInt()
 
-                var found = false
-                var referenceUsername: DatabaseReference
+                    var found = false
+                    var referenceUsername: DatabaseReference
 
-                for (i in 1..numberOfUsers) {
-                    referenceUsername =
-                        database.getReference("Users/$i/Username")    //Reference to username in the Database
+                    for (i in 1..numberOfUsers) {
+                        referenceUsername =
+                            database.getReference("Users/$i/Username")    //Reference to username in the Database
 
-                    referenceUsername.get().addOnSuccessListener {
-                        if ((it.value.toString() == username) and !found) {
-                            found = true
-                            //If username already exists
-                            Toast.makeText(this, "Username already exists", Toast.LENGTH_SHORT)
-                                .show()
-                        } else if ((i == numberOfUsers) and !found) {
-                            //If username does not exist
-                            //DA METTERE L'EMPTY, CIOE: if (email.isNotEmpty() && password.isNotEmpty() && username.isNotEmpty() && user == "null") {
-                            firebaseAuth.createUserWithEmailAndPassword(email, password).addOnSuccessListener {
-                                //Increment the number of users
-                                numberOfUsers += 1
-                                referenceDB.setValue(numberOfUsers)
+                        referenceUsername.get().addOnSuccessListener {
+                            if ((it.value.toString() == username) and !found) {
+                                found = true
+                                //If username already exists
+                                Toast.makeText(this, "Username already exists", Toast.LENGTH_SHORT)
+                                    .show()
+                            } else if ((i == numberOfUsers) and !found) {
+                                //If username does not exist
+                                firebaseAuth.createUserWithEmailAndPassword(email, password)
+                                    .addOnSuccessListener {
+                                        //Increment the number of users
+                                        numberOfUsers += 1
+                                        referenceDB.setValue(numberOfUsers)
 
-                                //Save Username
-                                val referenceUser =
-                                    database.getReference("Users/$numberOfUsers/Username")
-                                referenceUser.setValue(username)
+                                        //Save Username
+                                        val referenceUser =
+                                            database.getReference("Users/$numberOfUsers/Username")
+                                        referenceUser.setValue(username)
 
-                                //Save Email
-                                val referenceEmail = database.getReference("Users/$numberOfUsers/Email")
-                                referenceEmail.setValue(email)
+                                        //Save Email
+                                        val referenceEmail =
+                                            database.getReference("Users/$numberOfUsers/Email")
+                                        referenceEmail.setValue(email)
 
-                                //Save Password
-                                val referencePassword = database.getReference("Users/$numberOfUsers/Password")
-                                //Create the Password Hash Manager variable and save the hashed password with sha256
-                                var hash = PasswordHashManager()
-                                referencePassword.setValue(hash.encryptSHA256(password))
+                                        //Save Password
+                                        val referencePassword =
+                                            database.getReference("Users/$numberOfUsers/Password")
+                                        //Create the Password Hash Manager variable and save the hashed password with sha256
+                                        var hash = PasswordHashManager()
+                                        referencePassword.setValue(hash.encryptSHA256(password))
 
-                                //Save Score
-                                val referenceScore =
-                                    database.getReference("Users/$numberOfUsers/Score")
-                                referenceScore.setValue("0")
+                                        //Save Score
+                                        val referenceScore =
+                                            database.getReference("Users/$numberOfUsers/Score")
+                                        referenceScore.setValue("0")
 
-                                //Take and save the user id
-                                var uid = firebaseAuth.uid
-                                val referenceUid =
-                                    database.getReference("Users/$numberOfUsers/UID")
-                                referenceUid.setValue(uid)
+                                        //Take and save the user id
+                                        var uid = firebaseAuth.uid
+                                        val referenceUid =
+                                            database.getReference("Users/$numberOfUsers/UID")
+                                        referenceUid.setValue(uid)
 
-                                //Execute the log in
-                                firebaseAuth.signInWithEmailAndPassword(email, password).addOnCompleteListener {
-                                    if (it.isSuccessful) {
-                                        intent = Intent(this, MainActivity::class.java)
-                                        current_username = username
-                                        current_id = numberOfUsers.toString()
-                                        current_score = 0
-                                        startActivity(intent)
-                                    } else {
-                                        Toast.makeText(this, it.exception.toString(), Toast.LENGTH_SHORT).show()
-                                    }
+                                        //Save the photo in the Database
+                                        if (imageChosen) {
+                                            // Create a storage reference from our app
+                                            var storageRef = storage.reference
+
+                                            var file = imageUri
+
+                                            val imageRef = storageRef.child("Images/$username")
+                                            var uploadTask = file?.let { imageRef.putFile(it) }
+
+                                            // Register observers to listen for when the download is done or if it fails
+                                            if (uploadTask != null) {
+                                                uploadTask.addOnFailureListener {
+                                                    Log.i("STORAGE", "Failed")
+                                                }.addOnSuccessListener { taskSnapshot ->
+                                                    Log.i("STORAGE", "Success")
+                                                }
+                                            }
+                                        }
+
+                                        //Execute the log in
+                                        firebaseAuth.signInWithEmailAndPassword(email, password)
+                                            .addOnCompleteListener {
+                                                if (it.isSuccessful) {
+                                                    intent = Intent(this, MainActivity::class.java)
+                                                    current_username = username
+                                                    current_id = numberOfUsers.toString()
+                                                    current_score = 0
+                                                    startActivity(intent)
+                                                } else {
+                                                    Toast.makeText(
+                                                        this,
+                                                        it.exception.toString(),
+                                                        Toast.LENGTH_SHORT
+                                                    ).show()
+                                                }
+                                            }
+                                    }.addOnFailureListener {
+                                    Toast.makeText(this, "ERROR", Toast.LENGTH_SHORT).show()
                                 }
-                            }.addOnFailureListener {
-                                Toast.makeText(this, "ERROR", Toast.LENGTH_SHORT).show()
                             }
                         }
                     }
