@@ -69,8 +69,7 @@
         app:layout_constraintHorizontal_bias="0.068"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.971"
-        tools:ignore="MissingConstraints" />
+        app:layout_constraintVertical_bias="0.971" />
 
 
     <ImageView
@@ -82,23 +81,22 @@
         app:layout_constraintHorizontal_bias="0.049"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.057" />
+        app:layout_constraintVertical_bias="0.041" />
 
     <TextView
         android:id="@+id/Username"
-        android:layout_width="121dp"
-        android:layout_height="106dp"
+        android:layout_width="188dp"
+        android:layout_height="47dp"
         android:fontFamily="sans-serif-black"
-        android:padding="40dp"
         android:text=""
         android:textColor="@color/white"
         android:textSize="25dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.556"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.059"
-        tools:ignore="MissingConstraints" />
+        app:layout_constraintVertical_bias="0.076" />
 
     <ImageButton
         android:id="@+id/LogOutButton"
