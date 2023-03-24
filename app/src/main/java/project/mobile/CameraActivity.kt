@@ -245,6 +245,11 @@ class CameraActivity : AppCompatActivity() {
                     photoButton.visibility = View.INVISIBLE
                     photoButton.isClickable = false
 
+                    //Hide Gallery Button
+                    var galleryButton = findViewById(R.id.GalleryButton) as ImageButton
+                    galleryButton.visibility = View.INVISIBLE
+                    galleryButton.isClickable = false
+
                     //Listener for Yes Button
                     yesButton = findViewById(R.id.YesButton) as ImageButton
                     yesButton.setOnClickListener{
