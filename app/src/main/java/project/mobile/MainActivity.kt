@@ -22,8 +22,12 @@ import android.os.Build
 import androidx.annotation.RequiresApi
 import com.google.firebase.auth.FirebaseAuth
 import android.media.MediaPlayer
+import android.net.Uri
 import android.view.View
 import android.widget.ImageView
+import androidx.core.net.toUri
+import com.google.firebase.storage.ktx.storage
+import java.io.File
 
 //Public variables for current weather and city services
 public var weather = ""        //Current weather variable
@@ -37,17 +41,20 @@ public var muted = false                //Mute boolean variable
 public var current_username = ""        //Username of the current user
 public var current_id = ""              //ID of the current user
 public var current_score = 0           //Score of the current user
+public var userimage: Uri? = null
 
 @Suppress("DEPRECATED_IDENTITY_EQUALS")
 class MainActivity : AppCompatActivity(), LocationListener{
     lateinit var locationManager : LocationManager          //Define Location Manager
     private lateinit var firebaseAuth: FirebaseAuth         //Firebase Authenticatoin variable
+    val storage = Firebase.storage      //Firebase Storage variable
 
     @RequiresApi(Build.VERSION_CODES.S)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
         firebaseAuth = FirebaseAuth.getInstance()   //Get instance from Firebase Authentication
+
 
         //Music management
         music.playSoundMenu(this)
@@ -73,8 +80,27 @@ class MainActivity : AppCompatActivity(), LocationListener{
         //Check if the user id is null or not
         uid?.let {               //If user id is not null, manage the listeners of the signed homepage
             setContentView(R.layout.activity_main_signed)
+
             var imageView = findViewById(R.id.iv_capture) as ImageView
-            //imageView.setImageURI()
+
+            // Create a storage reference from our app
+            var storageRef = storage.reference
+
+            // Create a reference with an initial file path and name
+            val userImageRef = storageRef.child("images/"+firebaseAuth.currentUser)
+            //val userImageRef = storageRef.child("Images/166395")
+
+            val localFile = File.createTempFile("images", "jpg")
+
+            userImageRef.getFile(localFile).addOnSuccessListener {
+                // Local temp file has been created
+                userimage = localFile.toUri()
+                imageView.setImageURI(userimage)
+                Log.i("prova",it.toString())
+            }.addOnFailureListener {
+                // Handle any errors
+                Log.i("error",it.toString())
+            }
 
             val usernameText: TextView = findViewById(R.id.Username) as TextView
             usernameText.text = current_username
