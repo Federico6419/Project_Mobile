@@ -87,7 +87,7 @@ class MainActivity : AppCompatActivity(), LocationListener{
             var storageRef = storage.reference
 
             // Create a reference with an initial file path and name
-            val userImageRef = storageRef.child("images/"+firebaseAuth.currentUser)
+            val userImageRef = storageRef.child("Images/"+ current_username)
             //val userImageRef = storageRef.child("Images/166395")
 
             val localFile = File.createTempFile("images", "jpg")
@@ -99,6 +99,7 @@ class MainActivity : AppCompatActivity(), LocationListener{
                 Log.i("prova",it.toString())
             }.addOnFailureListener {
                 // Handle any errors
+                imageView.setImageResource(R.drawable.profileimage)
                 Log.i("error",it.toString())
             }
 
