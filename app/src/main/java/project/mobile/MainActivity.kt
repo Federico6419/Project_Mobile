@@ -22,6 +22,8 @@ import android.os.Build
 import androidx.annotation.RequiresApi
 import com.google.firebase.auth.FirebaseAuth
 import android.media.MediaPlayer
+import android.view.View
+import android.widget.ImageView
 
 //Public variables for current weather and city services
 public var weather = ""        //Current weather variable
@@ -71,6 +73,8 @@ class MainActivity : AppCompatActivity(), LocationListener{
         //Check if the user id is null or not
         uid?.let {               //If user id is not null, manage the listeners of the signed homepage
             setContentView(R.layout.activity_main_signed)
+            var imageView = findViewById(R.id.iv_capture) as ImageView
+            //imageView.setImageURI()
 
             val usernameText: TextView = findViewById(R.id.Username) as TextView
             usernameText.text = current_username
