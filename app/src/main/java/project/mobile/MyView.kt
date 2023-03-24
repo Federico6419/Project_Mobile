@@ -152,7 +152,7 @@ class MyView(context: Context?, weat:String?, Color :String?, Bul :String?, Logg
 
         var layout = R.drawable.background_sun2
 
-        Log.i("prova",weat.toString())
+        Log.i("Weather",weat.toString())
         if((weat=="Overcast") or (weat=="Partly cloudy")or(weat=="Cloudy")){ // Background when cloudy
             layout = R.drawable.rainybackground
         } else if((weat=="Sunny")or(weat=="Clear")) {//sfondo soleggiato
@@ -170,7 +170,7 @@ class MyView(context: Context?, weat:String?, Color :String?, Bul :String?, Logg
         sensorManager.registerListener(
             this,  //use this since MyView implements the listener interface
             sensorManager.getDefaultSensor(Sensor.TYPE_ROTATION_VECTOR),
-            SensorManager.SENSOR_DELAY_NORMAL)
+            SensorManager.SENSOR_DELAY_FASTEST)
         setOnTouchListener(this)
         background = ResourcesCompat.getDrawable(resources,layout,
             null)?.toBitmap(size.toInt(),size.toInt())!!
@@ -286,6 +286,7 @@ class MyView(context: Context?, weat:String?, Color :String?, Bul :String?, Logg
                         drawBitmap(airplane, 500f, 1400f, null) }
                     plane_x = 500f + roll *(500f/0.701f)
                 }
+                Log.i("Roll", roll.toString())
                 ///////end draw airplane /////////
                 //-------- draw hearts -------//
                 if(hearts == 3){
@@ -1141,7 +1142,7 @@ class MyView(context: Context?, weat:String?, Color :String?, Bul :String?, Logg
         //delay(delay_enemy)
         //var type = (0..2).random()
         var position = ((100..990).random())
-        //Log.i("Prova", position.toString())
+        //Log.i("Position", position.toString())
         boss_x[n] = position.toFloat()
         if(!boss_visible[n]){
             boss_visible[n] = true
