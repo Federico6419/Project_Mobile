@@ -25,10 +25,8 @@ import android.widget.ImageButton
 import android.widget.ImageView
 import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
-import androidx.camera.core.CameraSelector
-import androidx.camera.core.ImageCapture
-import androidx.camera.core.ImageCaptureException
-import androidx.camera.core.Preview
+import androidx.camera.core.*
+import androidx.camera.core.impl.ImageCaptureConfig
 import androidx.camera.lifecycle.ProcessCameraProvider
 import androidx.camera.view.CameraView
 import androidx.camera.view.PreviewView
@@ -60,6 +58,7 @@ class CameraActivity : AppCompatActivity() {
 
     //Define camera variables
     private var imageCapture: ImageCapture? = null
+    private var imageCaptureConfig:ImageCaptureConfig?= null
     private lateinit var cameraExecutor: ExecutorService
 
     public lateinit var yesButton: ImageButton
