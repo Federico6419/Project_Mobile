@@ -103,8 +103,7 @@ class SignInActivity : AppCompatActivity() {
                                                     username = it.value.toString()
 
                                                     //Intent to the home page
-                                                    val intent =
-                                                        Intent(this, MainActivity::class.java)
+                                                    val intent = Intent(this, MainActivity::class.java)
                                                     current_username = username
                                                     current_id = id
                                                     current_score = score.toInt()
@@ -116,7 +115,7 @@ class SignInActivity : AppCompatActivity() {
                                 }
                             }
                         } else {
-                            Toast.makeText(this, it.exception.toString(), Toast.LENGTH_SHORT).show()
+                            Toast.makeText(this, it.exception?.message.toString(), Toast.LENGTH_LONG).show()
                         }
                     }
                 } else {
