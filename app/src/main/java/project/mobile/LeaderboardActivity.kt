@@ -1,18 +1,18 @@
 package project.mobile
 
+import android.app.ProgressDialog
 import android.content.Intent
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
-import android.widget.EditText
+import android.view.View
 import android.widget.ImageButton
+import android.widget.ProgressBar
 import android.widget.TextView
+import androidx.appcompat.app.AppCompatActivity
 import com.google.firebase.auth.FirebaseAuth
-import com.google.firebase.database.ktx.database
-import com.google.firebase.ktx.Firebase
+import com.google.gson.annotations.SerializedName
 import kotlinx.coroutines.*
 
-import com.google.gson.annotations.SerializedName
 
 data class Flask_Json(
     @SerializedName("numberOfUsers")
@@ -66,7 +66,9 @@ class LeaderboardActivity : AppCompatActivity() {
     }
 
     suspend fun getLeaderB() {
-        //var retrofit = Request_Api.getInstance()
+        var progressBar = findViewById(R.id.progress_loader) as ProgressBar
+        progressBar.visibility = View.VISIBLE
+
         val flaskApi = RequestLeaderboard().retrofit.create(FlaskInterface::class.java)
         CoroutineScope(Dispatchers.IO).launch {
 
@@ -158,6 +160,7 @@ class LeaderboardActivity : AppCompatActivity() {
                     Log.e("RETROFIT_ERROR", response.code().toString())
 
                 }
+                progressBar.visibility = View.INVISIBLE
             }
         }
     }
