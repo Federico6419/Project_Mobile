@@ -78,17 +78,17 @@
         app:layout_constraintVertical_bias="0.97" />
 
     <ImageButton
-        android:id="@+id/GalleryButton"
-        android:layout_width="100dp"
-        android:layout_height="100dp"
+        android:id="@+id/BackButton"
+        android:layout_width="60dp"
+        android:layout_height="60dp"
         android:background="@null"
         android:scaleType="fitXY"
-        android:src="@drawable/gallerybutton"
+        android:src="@drawable/backbutton"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.051"
+        app:layout_constraintHorizontal_bias="0.09"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.969" />
+        app:layout_constraintVertical_bias="0.94" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

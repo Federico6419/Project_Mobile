@@ -8,6 +8,7 @@ import android.net.Uri
 import android.os.Build
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.provider.MediaStore
 import android.util.Log
 import android.view.View
 import android.widget.*
@@ -70,6 +71,33 @@ class SignUpActivity : AppCompatActivity() {
             usernameView.setText("")
             emailView.setText("")
             passwordView.setText("")
+
+            //Hide Change Button
+            val changeButton = findViewById(R.id.ChangeButton) as Button
+            changeButton.visibility = View.INVISIBLE
+            changeButton.isClickable = false
+
+            //Hide Remove Button
+            val removeButton = findViewById(R.id.RemoveButton) as Button
+            removeButton.visibility = View.INVISIBLE
+            removeButton.isClickable = false
+
+            //Show Photo Button
+            val photoButton = findViewById(R.id.PhotoButton) as Button
+            photoButton.visibility = View.VISIBLE
+            photoButton.isClickable = true
+
+            //Show Gallery Button
+            val galleryButton = findViewById(R.id.GalleryButton) as Button
+            galleryButton.visibility = View.VISIBLE
+            galleryButton.isClickable = true
+
+            //Set the standard profile image
+            val profileImage = findViewById(R.id.ProfileImage) as ImageView
+            profileImage.setImageResource(R.drawable.profileimage)
+
+            //Reinitialize image uri variable
+            imageChosen = false
         }
 
         /// intent with new method to return photo after finish camera activity
@@ -82,6 +110,11 @@ class SignUpActivity : AppCompatActivity() {
                 val photoButton = findViewById(R.id.PhotoButton) as Button
                 photoButton.visibility = View.INVISIBLE
                 photoButton.isClickable = false
+
+                //Hide Gallery Button
+                val galleryButton = findViewById(R.id.GalleryButton) as Button
+                galleryButton.visibility = View.INVISIBLE
+                galleryButton.isClickable = false
 
                 //Show image
                 val profileImage = findViewById(R.id.ProfileImage) as ImageView
@@ -110,6 +143,11 @@ class SignUpActivity : AppCompatActivity() {
                     photoButton.visibility = View.VISIBLE
                     photoButton.isClickable = true
 
+                    //Show Gallery Button
+                    val galleryButton = findViewById(R.id.GalleryButton) as Button
+                    galleryButton.visibility = View.VISIBLE
+                    galleryButton.isClickable = true
+
                     //Set the standard profile image
                     profileImage.setImageResource(R.drawable.profileimage)
 
@@ -131,6 +169,71 @@ class SignUpActivity : AppCompatActivity() {
         changeButton.setOnClickListener {
             val intent = Intent(this, CameraActivity::class.java)
             resultLauncher.launch(intent)
+        }
+
+        // result launcher to get the result of the intent of take image from gallery
+        var resultLauncherGallery = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
+            if (result.resultCode == RESULT_OK) {
+                val data = result.data
+                imageUri = data?.data!!
+
+                imageChosen = true
+
+                //Hide Photo Button
+                val photoButton = findViewById(R.id.PhotoButton) as Button
+                photoButton.visibility = View.INVISIBLE
+                photoButton.isClickable = false
+
+                //Hide Gallery Button
+                val galleryButton = findViewById(R.id.GalleryButton) as Button
+                galleryButton.visibility = View.INVISIBLE
+                galleryButton.isClickable = false
+
+                //Show image
+                val profileImage = findViewById(R.id.ProfileImage) as ImageView
+                profileImage.setImageURI(imageUri)
+
+                //Show Change Button
+                val changeButton = findViewById(R.id.ChangeButton) as Button
+                changeButton.visibility = View.VISIBLE
+                changeButton.isClickable = true
+
+                //Show Remove Button
+                val removeButton = findViewById(R.id.RemoveButton) as Button
+                removeButton.visibility = View.VISIBLE
+                removeButton.isClickable = true
+                removeButton.setOnClickListener {
+                    //Hide Change Button
+                    changeButton.visibility = View.INVISIBLE
+                    changeButton.isClickable = false
+
+                    //Hide Remove Button
+                    removeButton.visibility = View.INVISIBLE
+                    removeButton.isClickable = false
+
+                    //Show Photo Button
+                    val photoButton = findViewById(R.id.PhotoButton) as Button
+                    photoButton.visibility = View.VISIBLE
+                    photoButton.isClickable = true
+
+                    //Show Gallery Button
+                    val galleryButton = findViewById(R.id.GalleryButton) as Button
+                    galleryButton.visibility = View.VISIBLE
+                    galleryButton.isClickable = true
+
+                    //Set the standard profile image
+                    profileImage.setImageResource(R.drawable.profileimage)
+
+                    //Reinitialize image uri variable
+                    imageChosen = false
+                }
+            }
+        }
+        //gallery button listener
+        var galleryButton = findViewById(R.id.GalleryButton) as Button
+        galleryButton.setOnClickListener {
+            val intent = Intent(Intent.ACTION_PICK, MediaStore.Images.Media.INTERNAL_CONTENT_URI)
+            resultLauncherGallery.launch(intent)
         }
 
 
@@ -246,27 +349,48 @@ class SignUpActivity : AppCompatActivity() {
                                                     Log.i("STORAGE", "Failed")
                                                 }.addOnSuccessListener { taskSnapshot ->
                                                     Log.i("STORAGE", "Success")
+
+                                                    //Execute the log in after success
+                                                        firebaseAuth.signInWithEmailAndPassword(email, password)
+                                                            .addOnCompleteListener {
+                                                                if (it.isSuccessful) {
+                                                                    intent =
+                                                                        Intent(this, MainActivity::class.java)
+                                                                    current_username = username
+                                                                    current_id = numberOfUsers.toString()
+                                                                    current_score = 0
+                                                                    startActivity(intent)
+                                                                } else {
+                                                                    Toast.makeText(
+                                                                        this,
+                                                                        it.exception.toString(),
+                                                                        Toast.LENGTH_SHORT
+                                                                    ).show()
+                                                                }
+                                                            }
                                                 }
                                             }
                                         }
-
-                                        //Execute the log in
-                                        firebaseAuth.signInWithEmailAndPassword(email, password)
-                                            .addOnCompleteListener {
-                                                if (it.isSuccessful) {
-                                                    intent = Intent(this, MainActivity::class.java)
-                                                    current_username = username
-                                                    current_id = numberOfUsers.toString()
-                                                    current_score = 0
-                                                    startActivity(intent)
-                                                } else {
-                                                    Toast.makeText(
-                                                        this,
-                                                        it.exception.toString(),
-                                                        Toast.LENGTH_SHORT
-                                                    ).show()
+                                        else {
+                                            //Execute the log in when the photo is not chosen
+                                            firebaseAuth.signInWithEmailAndPassword(email, password)
+                                                .addOnCompleteListener {
+                                                    if (it.isSuccessful) {
+                                                        intent =
+                                                            Intent(this, MainActivity::class.java)
+                                                        current_username = username
+                                                        current_id = numberOfUsers.toString()
+                                                        current_score = 0
+                                                        startActivity(intent)
+                                                    } else {
+                                                        Toast.makeText(
+                                                            this,
+                                                            it.exception.toString(),
+                                                            Toast.LENGTH_SHORT
+                                                        ).show()
+                                                    }
                                                 }
-                                            }
+                                        }
                                     }.addOnFailureListener {
                                     Toast.makeText(this, "ERROR", Toast.LENGTH_SHORT).show()
                                 }

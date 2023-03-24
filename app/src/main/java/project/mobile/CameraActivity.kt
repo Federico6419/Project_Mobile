@@ -83,58 +83,11 @@ class CameraActivity : AppCompatActivity() {
             takePhoto()
         }
 
-        //// result launcher to get the result of the intent of take image from gallery
-        var resultLauncher = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
-            if (result.resultCode == RESULT_OK) {
-                val data = result.data
-                imageUri = data?.data
-
-                var imageView = findViewById(R.id.iv_capture) as ImageView
-                imageView.visibility = View.VISIBLE
-
-                var previewView = findViewById(R.id.viewFinder) as PreviewView
-                previewView.visibility = View.INVISIBLE
-
-                imageView.setImageURI(imageUri)
-
-                //Show Yes Button
-                var yesButton = findViewById(R.id.YesButton) as ImageButton
-                yesButton.visibility = View.VISIBLE
-                yesButton.isClickable = true
-
-                //Show No Button
-                var noButton = findViewById(R.id.NoButton) as ImageButton
-                noButton.visibility = View.VISIBLE
-                noButton.isClickable = true
-
-                //Hide Photo Button
-                var photoButton = findViewById(R.id.PhotoButton) as ImageButton
-                photoButton.visibility = View.INVISIBLE
-                photoButton.isClickable = false
-
-                //Hide Gallery Button
-                var galleryButton = findViewById(R.id.GalleryButton) as ImageButton
-                galleryButton.visibility = View.INVISIBLE
-                galleryButton.isClickable = false
-
-                //Listener for Yes Button
-                yesButton = findViewById(R.id.YesButton) as ImageButton
-                yesButton.setOnClickListener{
-                    //Intent to Sign Up activity
-                    intent = Intent(context, SignUpActivity::class.java)
-                    intent.putExtra("Image", imageUri.toString())
-                    setResult(RESULT_OK, intent)
-                    finish()
-                }
-            }
+        //Back button listener
+        var backButton = findViewById(R.id.BackButton) as ImageButton
+        backButton.setOnClickListener {
+            finish()
         }
-        //gallery button listener
-        var galleryButton = findViewById(R.id.GalleryButton) as ImageButton
-        galleryButton.setOnClickListener {
-            val intent = Intent(Intent.ACTION_PICK, MediaStore.Images.Media.INTERNAL_CONTENT_URI)
-            resultLauncher.launch(intent)
-        }
-
 
         //Listener for No button
         var noButton = findViewById(R.id.NoButton) as ImageButton
@@ -149,10 +102,10 @@ class CameraActivity : AppCompatActivity() {
             noButton.visibility = View.INVISIBLE
             noButton.isClickable = false
 
-            //Show Gallery Button
-            var galleryButton = findViewById(R.id.GalleryButton) as ImageButton
-            galleryButton.visibility = View.VISIBLE
-            galleryButton.isClickable = true
+            //Show Back Button
+            var backButton = findViewById(R.id.BackButton) as ImageButton
+            backButton.visibility = View.VISIBLE
+            backButton.isClickable = true
 
             //Show preview
             var previewView = findViewById(R.id.viewFinder) as PreviewView
@@ -163,8 +116,6 @@ class CameraActivity : AppCompatActivity() {
             photoButton.visibility = View.VISIBLE
             photoButton.isClickable = true
         }
-
-
 
         //Get the output directory
         outputDirectory = getOutputDirectory()
@@ -245,10 +196,10 @@ class CameraActivity : AppCompatActivity() {
                     photoButton.visibility = View.INVISIBLE
                     photoButton.isClickable = false
 
-                    //Hide Gallery Button
-                    var galleryButton = findViewById(R.id.GalleryButton) as ImageButton
-                    galleryButton.visibility = View.INVISIBLE
-                    galleryButton.isClickable = false
+                    //Hide Back Button
+                    var backButton = findViewById(R.id.BackButton) as ImageButton
+                    backButton.visibility = View.INVISIBLE
+                    backButton.isClickable = false
 
                     //Listener for Yes Button
                     yesButton = findViewById(R.id.YesButton) as ImageButton
