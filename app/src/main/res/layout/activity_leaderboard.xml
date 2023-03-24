@@ -317,26 +317,18 @@
 
     </TableLayout>
 
-    <LinearLayout
-        android:layout_width="386dp"
-        android:layout_height="100dp"
-        android:gravity="center">
-
-        <ProgressBar
-            android:id="@+id/progress_loader"
-            style="?android:attr/progressBarStyle"
-            android:layout_width="50dp"
-            android:layout_height="50dp"
-            android:visibility="visible" />
-    </LinearLayout>
-
-    <!--<ImageButton
-        android:id="@+id/ReturnButton"
-        android:layout_width="319dp"
-        android:layout_height="97dp"
-        android:background="@null"
-        android:src="@drawable/buttonreturnmenu"
-        tools:ignore="MissingConstraints" /> -->
+    <ProgressBar
+        android:id="@+id/progress_loader"
+        style="?android:attr/progressBarStyle"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:visibility="visible"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.168"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.926" />
 
     <ImageButton
         android:id="@+id/HouseButton"
