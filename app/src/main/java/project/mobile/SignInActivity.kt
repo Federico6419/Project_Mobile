@@ -48,64 +48,80 @@ class SignInActivity : AppCompatActivity() {
             email = emailView.text.toString()
             password = passwordView.text.toString()
 
-            //Sign in
-            if (email.isNotEmpty() && password.isNotEmpty()) {
-                firebaseAuth.signInWithEmailAndPassword(email, password).addOnCompleteListener {
-                    if (it.isSuccessful) {
-                        //Take the user id
-                        var uid = firebaseAuth.uid
+            //Check if the email is not empty
+            if(email.isEmpty()){
+                Toast.makeText(this, "Email not inserted", Toast.LENGTH_SHORT).show()
+            }
+            //Check if the password is not empty
+            else if(password.isEmpty()){
+                Toast.makeText(this, "Password not inserted", Toast.LENGTH_SHORT).show()
+            }
+            else {
+                //Sign in
+                if (email.isNotEmpty() && password.isNotEmpty()) {
+                    firebaseAuth.signInWithEmailAndPassword(email, password).addOnCompleteListener {
+                        if (it.isSuccessful) {
+                            //Take the user id
+                            var uid = firebaseAuth.uid
 
-                        //Connect to Firebase Database
-                        val database = Firebase.database("https://mobileproject2-50486-default-rtdb.europe-west1.firebasedatabase.app/")
+                            //Connect to Firebase Database
+                            val database =
+                                Firebase.database("https://mobileproject2-50486-default-rtdb.europe-west1.firebasedatabase.app/")
 
-                        val referenceDB = database.getReference("NumberOfUsers")    //Take the number of users
+                            val referenceDB =
+                                database.getReference("NumberOfUsers")    //Take the number of users
 
-                        var id = "1"
+                            var id = "1"
 
-                        //Get the number of users
-                        referenceDB.get().addOnSuccessListener {
-                            var numberOfUsers = it.value.toString().toInt()
-                            var referenceUid: DatabaseReference
+                            //Get the number of users
+                            referenceDB.get().addOnSuccessListener {
+                                var numberOfUsers = it.value.toString().toInt()
+                                var referenceUid: DatabaseReference
 
-                            for (i in 1..numberOfUsers) {
-                                referenceUid = database.getReference("Users/$i/UID")    //Reference to username in the Database
+                                for (i in 1..numberOfUsers) {
+                                    referenceUid =
+                                        database.getReference("Users/$i/UID")    //Reference to username in the Database
 
-                                referenceUid.get().addOnSuccessListener {
-                                    if (it.value.toString() == uid) {
-                                        id = i.toString()
+                                    referenceUid.get().addOnSuccessListener {
+                                        if (it.value.toString() == uid) {
+                                            id = i.toString()
 
-                                        //Get reference to Score
-                                        val referenceScore = database.getReference("Users/$id/Score")
+                                            //Get reference to Score
+                                            val referenceScore =
+                                                database.getReference("Users/$id/Score")
 
-                                        //Get the score
-                                        referenceScore.get().addOnSuccessListener {
-                                            score = it.value.toString()
+                                            //Get the score
+                                            referenceScore.get().addOnSuccessListener {
+                                                score = it.value.toString()
 
-                                            //Get reference to Username
-                                            val referenceUsername = database.getReference("Users/$id/Username")
+                                                //Get reference to Username
+                                                val referenceUsername =
+                                                    database.getReference("Users/$id/Username")
 
-                                            //Get the username
-                                            referenceUsername.get().addOnSuccessListener {
-                                                username = it.value.toString()
+                                                //Get the username
+                                                referenceUsername.get().addOnSuccessListener {
+                                                    username = it.value.toString()
 
-                                                //Intent to the home page
-                                                val intent = Intent(this, MainActivity::class.java)
-                                                current_username = username
-                                                current_id = id
-                                                current_score = score.toInt()
-                                                startActivity(intent)
+                                                    //Intent to the home page
+                                                    val intent = Intent(this, MainActivity::class.java)
+                                                    current_username = username
+                                                    current_id = id
+                                                    current_score = score.toInt()
+                                                    startActivity(intent)
+                                                }
                                             }
                                         }
                                     }
                                 }
                             }
+                        } else {
+                            Toast.makeText(this, it.exception?.message.toString(), Toast.LENGTH_LONG).show()
                         }
-                    } else {
-                        Toast.makeText(this, it.exception.toString(), Toast.LENGTH_SHORT).show()
                     }
+                } else {
+                    Toast.makeText(this, "Empty Fields Are not Allowed !!", Toast.LENGTH_SHORT)
+                        .show()
                 }
-            } else {
-                Toast.makeText(this, "Empty Fields Are not Allowed !!", Toast.LENGTH_SHORT).show()
             }
         }
         val houseButton = findViewById(R.id.HouseButton) as ImageButton
