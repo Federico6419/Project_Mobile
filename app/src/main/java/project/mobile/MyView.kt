@@ -80,14 +80,11 @@ class MyView(context: Context?, weat:String?, Color :String?, Bul :String?, Logg
     var boss_visible = arrayOf<Boolean>(false,false,false)
 
     var ex_array = arrayOf<Boolean>(true,true,true,true,true)
-    //var enemy_visible = arrayOf<Boolean>(false,false,false,false,false)
 
     var start:Boolean = true
     ///////// posizione per la collisione /////////
     var plane_x = 500f
     var plane_y = 1400f
-    var enemy_position_x = arrayOf<Float>(0f,0f,0f,0f,0f)
-    var enemy_position_y = arrayOf<Float>(0f,0f,0f,0f,0f)
 
     var return_to_game = false // to avoid shot bullet when click on the resume button
 
@@ -112,6 +109,7 @@ class MyView(context: Context?, weat:String?, Color :String?, Bul :String?, Logg
     var pause_label : Bitmap
 
     var array_position = arrayOf<Float>(0f,0f,0f,0f,0f)
+    var enemy_position_y = arrayOf<Float>(0f,0f,0f,0f,0f)
     var array_type = arrayOf<Int>(1,1,1,1,1)
     var enemy_visible = arrayOf<Boolean>(false, false,false,false,false)
 
@@ -303,7 +301,6 @@ class MyView(context: Context?, weat:String?, Color :String?, Bul :String?, Logg
     }
 
     override fun onDraw(canvas: Canvas) {
-        Log.i("AVA", bullet_available.toString())
         super.onDraw(canvas)
         with(canvas) {
             if(start and !PAUSE){
@@ -336,6 +333,7 @@ class MyView(context: Context?, weat:String?, Color :String?, Bul :String?, Logg
                     it.textSize=70f
                 }
                 canvas.drawText(message,0,message.length,50f,80f,textPaint)
+
                 ///////draw the airplane with constraint on the x axe /////////
                 if((roll<-0.701f)){
                     withTranslation(-492f, 0f) {
@@ -488,35 +486,35 @@ class MyView(context: Context?, weat:String?, Color :String?, Bul :String?, Logg
                 }
                 ////////// increase the value of the enemy translation //////////
                 if(enemy_visible[0]) {
-                    down1 += 10
+                    down1 += 5
                     withTranslation (0f,down1) {
                         drawBitmap(array_enemy_type[array_type[0]], array_position[0], 0f, null)
 
                     }
                 }
                 if(enemy_visible[1]) {
-                    down2 += 10
+                    down2 += 5
                     withTranslation (0f,down2) {
                         drawBitmap(array_enemy_type[array_type[1]], array_position[1], 0f, null)
 
                     }
                 }
                 if(enemy_visible[2]) {
-                    down3 += 10
+                    down3 += 5
                     withTranslation (0f,down3) {
                         drawBitmap(array_enemy_type[array_type[2]], array_position[2], 0f, null)
 
                     }
                 }
                 if(enemy_visible[3]) {
-                    down4 += 10
+                    down4 += 5
                     withTranslation (0f,down4) {
                         drawBitmap(array_enemy_type[array_type[3]], array_position[3], 0f, null)
 
                     }
                 }
                 if(enemy_visible[4]) {
-                    down5 += 10
+                    down5 += 5
                     if((lateral_movement[4]+array_position[4]>900f) and (dx_if_true[4] == true)){
                         dx_if_true[4] = false
                     }else if((lateral_movement[4]+array_position[4]<100f) and (dx_if_true[4]==false)){
@@ -585,8 +583,8 @@ class MyView(context: Context?, weat:String?, Color :String?, Bul :String?, Logg
                 ////// enemy bitmap ///////
                 /////// enemy end //////////
                 if(is_visible_bul[0]) {
+                    up[0] -= 5f
                     withTranslation(0f, up[0]) {
-                        up[0] -= 20f
                         if (is_shot[0]) {
                             drawBitmap(bullet, plane_x+50f, (1400f + up[0]), null)
                             res = plane_x+50f
@@ -609,8 +607,8 @@ class MyView(context: Context?, weat:String?, Color :String?, Bul :String?, Logg
                     }
                 }
                 if(is_visible_bul[1]) {
+                    up[1] -= 5f
                     withTranslation(0f, up[1]) {
-                        up[1] -= 20f
                         if (is_shot[1]) {
                             drawBitmap(bullet, plane_x+50f, (1400f + up[1]), null)
                             res2 =plane_x+50f
@@ -633,8 +631,8 @@ class MyView(context: Context?, weat:String?, Color :String?, Bul :String?, Logg
                     }
                 }
                 if(is_visible_bul[2]){
+                    up[2] -= 5f
                     withTranslation(0f, up[2]) {
-                        up[2] -= 20f
                         if (is_shot[2]) {
                             drawBitmap(bullet, plane_x+50f, (1400f + up[2]), null)
                             res3 = plane_x+50f
@@ -643,7 +641,7 @@ class MyView(context: Context?, weat:String?, Color :String?, Bul :String?, Logg
                             bullet_position_y[2] = (1400f+up[2])
                         } else {
                             drawBitmap(bullet, res3, (1400f + up[2]), null)
-                            //Log.i("ROLL",(1400f+up[2]).toString())
+                            Log.i("SCONTRO", bullet_position_y[2].toString()+", "+(enemy_position_y[0] + 150f).toString())
                             if((up[2])<-1400f){
                                 //Log.i("ROLL","sta usando il terzo bullet")
                                 is_visible_bul[2] = false
@@ -829,144 +827,186 @@ class MyView(context: Context?, weat:String?, Color :String?, Bul :String?, Logg
 
                 /////////////////////////////// -------------- MANAGE COLLISION OF OUR PLANE BULLETS   ----------------- ///////////////////////////
                 ///////////////bullet 1
-                if((bullet_position_x[0]>=array_position[0]-35f)and(bullet_position_x[0]<=array_position[0]+115f)and(bullet_position_y[0]<=enemy_position_y[0]+120f)and(bullet_position_y[0]>=enemy_position_y[0])){
-                    if(!just_shot_bullet[0]){
-                        Score += 20
-                        down1 = 0f
-                        enemy_visible[0] = false
-                        is_visible_bul[0] = false
-                        if(bullet_available < 3) {
-                            bullet_available += 1       //Bullet retruns available
+                if(is_visible_bul[0]) {
+                    if ((bullet_position_x[0] >= array_position[0] - 35f) and (bullet_position_x[0] <= array_position[0] + 145f) and (bullet_position_y[0] <= enemy_position_y[0] + 150f) and (bullet_position_y[0] >= enemy_position_y[0])) {
+                        if (!just_shot_bullet[0]) {
+                            Score += 20
+                            down1 = 0f
+                            enemy_visible[0] = false
+                            is_visible_bul[0] = false
+                            if (bullet_available < 3) {
+                                bullet_available += 1       //Bullet retruns available
+                            }
+                            up[0] =
+                                0f                      //Put the bullet at the starting position
+                            ex_array[0] = true
+                            isExpBul1[0] = true
+                            expPos1[0][0] = array_position[0]
+                            expPos1[0][1] = enemy_position_y[0]
+                            //drawBitmap(explosion,array_position[0],enemy_position_y[0],null)/// gif for the explosion
+                            just_shot_bullet[0] = true
                         }
-                        up[0] = 0f                      //Put the bullet at the starting position
-                        ex_array[0] = true
-                        isExpBul1[0] = true
-                        expPos1[0][0] = array_position[0]
-                        expPos1[0][1] = enemy_position_y[0]
-                        //drawBitmap(explosion,array_position[0],enemy_position_y[0],null)/// gif for the explosion
-                        just_shot_bullet[0] = true
+                    }
+                    if ((bullet_position_x[0] >= array_position[1] - 35f) and (bullet_position_x[0] <= array_position[1] + 145f) and (bullet_position_y[0] <= enemy_position_y[1] + 150f) and (bullet_position_y[0] >= enemy_position_y[1])) {
+                        if (!just_shot_bullet[0]) {
+                            Score += 20
+                            down2 = 0f
+                            enemy_visible[1] = false
+                            is_visible_bul[0] = false
+                            if (bullet_available < 3) {
+                                bullet_available += 1       //Bullet retruns available
+                            }
+                            up[0] =
+                                0f                      //Put the bullet at the starting position
+                            ex_array[1] = true
+                            isExpBul1[1] = true
+                            expPos1[1][0] = array_position[1]
+                            expPos1[1][1] = enemy_position_y[1]
+                            //drawBitmap(explosion,array_position[1],enemy_position_y[1],null)
+                            just_shot_bullet[0] = true
+                        }
+                    }
+                    if ((bullet_position_x[0] >= array_position[2] - 35f) and (bullet_position_x[0] <= array_position[2] + 145f) and (bullet_position_y[0] <= enemy_position_y[2] + 150f) and (bullet_position_y[0] >= enemy_position_y[2])) {
+                        if (!just_shot_bullet[0]) {
+                            Score += 20
+                            down3 = 0f
+                            enemy_visible[2] = false
+                            is_visible_bul[0] = false
+                            if (bullet_available < 3) {
+                                bullet_available += 1       //Bullet retruns available
+                            }
+                            up[0] =
+                                0f                      //Put the bullet at the starting position
+                            ex_array[2] = true
+                            isExpBul1[2] = true
+                            expPos1[2][0] = array_position[2]
+                            expPos1[2][1] = enemy_position_y[2]
+                            //drawBitmap(explosion,array_position[2],enemy_position_y[2],null)
+                            just_shot_bullet[0] = true
+                        }
+                    }
+                    if ((bullet_position_x[0] >= array_position[3] - 35f) and (bullet_position_x[0] <= array_position[3] + 145f) and (bullet_position_y[0] <= enemy_position_y[3] + 150f) and (bullet_position_y[0] >= enemy_position_y[3])) {
+                        if (!just_shot_bullet[0]) {
+                            Score += 20
+                            down4 = 0f
+                            enemy_visible[3] = false
+                            is_visible_bul[0] = false
+                            if (bullet_available < 3) {
+                                bullet_available += 1       //Bullet retruns available
+                            }
+                            up[0] =
+                                0f                      //Put the bullet at the starting position
+                            ex_array[3] = true
+                            isExpBul1[3] = true
+                            expPos1[3][0] = array_position[3]
+                            expPos1[3][1] = enemy_position_y[3]
+                            //drawBitmap(explosion,array_position[3],enemy_position_y[3],null)
+                            just_shot_bullet[0] = true
+                        }
+                    }
+                    if ((bullet_position_x[0] >= lateral_movement[4] + array_position[4] - 35f) and (bullet_position_x[0] <= lateral_movement[4] + array_position[4] + 115f) and (bullet_position_y[0] <= enemy_position_y[4] + 120f) and (bullet_position_y[0] >= enemy_position_y[4])) {
+                        if (!just_shot_bullet[0]) {
+                            Score += 20
+                            down5 = 0f
+                            enemy_visible[4] = false
+                            is_visible_bul[0] = false
+                            if (bullet_available < 3) {
+                                bullet_available += 1       //Bullet retruns available
+                            }
+                            up[0] =
+                                0f                      //Put the bullet at the starting position
+                            ex_array[4] = true
+                            isExpBul1[4] = true
+                            expPos1[4][0] = array_position[4]
+                            expPos1[4][1] = enemy_position_y[4]
+                            //drawBitmap(explosion,array_position[4],enemy_position_y[4],null)
+                            just_shot_bullet[0] = true
+                        }
                     }
                 }
-                if((bullet_position_x[0]>=array_position[1]-35f)and(bullet_position_x[0]<=array_position[1]+115f)and(bullet_position_y[0]<=enemy_position_y[1]+120f)and(bullet_position_y[0]>=enemy_position_y[1])){
-                    if(!just_shot_bullet[0]) {
-                        Score += 20
-                        down2 = 0f
-                        enemy_visible[1] = false
-                        is_visible_bul[0] = false
-                        if(bullet_available < 3) {
-                            bullet_available += 1       //Bullet retruns available
-                        }
-                        up[0] = 0f                      //Put the bullet at the starting position
-                        ex_array[1] = true
-                        isExpBul1[1] = true
-                        expPos1[1][0] = array_position[1]
-                        expPos1[1][1] = enemy_position_y[1]
-                        //drawBitmap(explosion,array_position[1],enemy_position_y[1],null)
-                        just_shot_bullet[0] = true
-                    }
-                }
-                if((bullet_position_x[0]>=array_position[2]-35f)and(bullet_position_x[0]<=array_position[2]+115f)and(bullet_position_y[0]<=enemy_position_y[2]+120f)and(bullet_position_y[0]>=enemy_position_y[2])){
-                    if(!just_shot_bullet[0]) {
-                        Score += 20
-                        down3 = 0f
-                        enemy_visible[2] = false
-                        is_visible_bul[0] = false
-                        if(bullet_available < 3) {
-                            bullet_available += 1       //Bullet retruns available
-                        }
-                        up[0] = 0f                      //Put the bullet at the starting position
-                        ex_array[2] = true
-                        isExpBul1[2] = true
-                        expPos1[2][0] = array_position[2]
-                        expPos1[2][1] = enemy_position_y[2]
-                        //drawBitmap(explosion,array_position[2],enemy_position_y[2],null)
-                        just_shot_bullet[0] = true
-                    }
-                }
-                if((bullet_position_x[0]>=array_position[3]-35f)and(bullet_position_x[0]<=array_position[3]+115f)and(bullet_position_y[0]<=enemy_position_y[3]+120f)and(bullet_position_y[0]>=enemy_position_y[3])){
-                    if(!just_shot_bullet[0]) {
-                        Score += 20
-                        down4 = 0f
-                        enemy_visible[3] = false
-                        is_visible_bul[0] = false
-                        if(bullet_available < 3) {
-                            bullet_available += 1       //Bullet retruns available
-                        }
-                        up[0] = 0f                      //Put the bullet at the starting position
-                        ex_array[3] = true
-                        isExpBul1[3]= true
-                        expPos1[3][0] = array_position[3]
-                        expPos1[3][1] = enemy_position_y[3]
-                        //drawBitmap(explosion,array_position[3],enemy_position_y[3],null)
-                        just_shot_bullet[0] = true
-                    }
-                }
-                if((bullet_position_x[0]>=lateral_movement[4]+array_position[4]-35f)and(bullet_position_x[0]<=lateral_movement[4]+array_position[4]+115f)and(bullet_position_y[0]<=enemy_position_y[4]+120f)and(bullet_position_y[0]>=enemy_position_y[4])) {
-                    if(!just_shot_bullet[0]) {
-                        Score += 20
-                        down5 = 0f
-                        enemy_visible[4] = false
-                        is_visible_bul[0] = false
-                        if(bullet_available < 3) {
-                            bullet_available += 1       //Bullet retruns available
-                        }
-                        up[0] = 0f                      //Put the bullet at the starting position
-                        ex_array[4] = true
-                        isExpBul1[4] = true
-                        expPos1[4][0] = array_position[4]
-                        expPos1[4][1] = enemy_position_y[4]
-                        //drawBitmap(explosion,array_position[4],enemy_position_y[4],null)
-                        just_shot_bullet[0] = true
-                    }
-                }
-                
+
                 /////////////////ESPLOSIONE BULLET 1
-                if(isExpBul1[0]){
-                    if(expFrame1[0] < 18) {
-                        drawBitmap(bitmapVideo.get(expFrame1[0]/2),expPos1[0][0],expPos1[0][1],null)
+                if (isExpBul1[0]) {
+                    if (expFrame1[0] < 18) {
+                        if(expFrame1[0] == 0){
+                            just_shot_bullet[0] = false
+                        }
+                        drawBitmap(
+                            bitmapVideo.get(expFrame1[0] / 2),
+                            expPos1[0][0],
+                            expPos1[0][1],
+                            null
+                        )
                         expFrame1[0] = expFrame1[0] + 1
-                    }
-                    else{
+                    } else {
                         expFrame1[0] = 0
                         isExpBul1[0] = false
                     }
                 }
-                if(isExpBul1[1]){
-                    if(expFrame1[1] < 18) {
-                        drawBitmap(bitmapVideo.get(expFrame1[1]/2),expPos1[1][0],expPos1[1][1],null)
+                if (isExpBul1[1]) {
+                    if (expFrame1[1] < 18) {
+                        if(expFrame1[1] == 0){
+                            just_shot_bullet[0] = false
+                        }
+                        drawBitmap(
+                            bitmapVideo.get(expFrame1[1] / 2),
+                            expPos1[1][0],
+                            expPos1[1][1],
+                            null
+                        )
                         expFrame1[1] = expFrame1[1] + 1
-                    }
-                    else{
+                    } else {
                         expFrame1[1] = 0
                         isExpBul1[1] = false
                     }
                 }
-                if(isExpBul1[2]){
-                    if(expFrame1[2] < 18) {
-                        drawBitmap(bitmapVideo.get(expFrame1[2]/2),expPos1[2][0],expPos1[2][1],null)
+                if (isExpBul1[2]) {
+                    if (expFrame1[2] < 18) {
+                        if(expFrame1[2] == 0){
+                            just_shot_bullet[0] = false
+                        }
+                        drawBitmap(
+                            bitmapVideo.get(expFrame1[2] / 2),
+                            expPos1[2][0],
+                            expPos1[2][1],
+                            null
+                        )
                         expFrame1[2] = expFrame1[2] + 1
-                    }
-                    else{
+                    } else {
                         expFrame1[2] = 0
                         isExpBul1[2] = false
                     }
                 }
-                if(isExpBul1[3]){
-                    if(expFrame1[3] < 18) {
-                        drawBitmap(bitmapVideo.get(expFrame1[3]/2),expPos1[3][0],expPos1[3][1],null)
+                if (isExpBul1[3]) {
+                    if (expFrame1[3] < 18) {
+                        if(expFrame1[3] == 0){
+                            just_shot_bullet[0] = false
+                        }
+                        drawBitmap(
+                            bitmapVideo.get(expFrame1[3] / 2),
+                            expPos1[3][0],
+                            expPos1[3][1],
+                            null
+                        )
                         expFrame1[3] = expFrame1[3] + 1
-                    }
-                    else{
+                    } else {
                         expFrame1[3] = 0
                         isExpBul1[3] = false
                     }
                 }
-                if(isExpBul1[4]){
-                    if(expFrame1[4] < 18) {
-                        drawBitmap(bitmapVideo.get(expFrame1[4]/2),expPos1[4][0],expPos1[4][1],null)
+                if (isExpBul1[4]) {
+                    if (expFrame1[4] < 18) {
+                        if(expFrame1[4] == 0){
+                            just_shot_bullet[0] = false
+                        }
+                        drawBitmap(
+                            bitmapVideo.get(expFrame1[4] / 2),
+                            expPos1[4][0],
+                            expPos1[4][1],
+                            null
+                        )
                         expFrame1[4] = expFrame1[4] + 1
-                    }
-                    else{
+                    } else {
                         expFrame1[4] = 0
                         isExpBul1[4] = false
                     }
@@ -974,144 +1014,184 @@ class MyView(context: Context?, weat:String?, Color :String?, Bul :String?, Logg
                 /////////////
                 
                 //////////////bullet 2 //////////////////////////
-                if((bullet_position_x[1]>=array_position[0]-35f)and(bullet_position_x[1]<=array_position[0]+115f)and(bullet_position_y[1]<=enemy_position_y[0]+120f)and(bullet_position_y[1]>=enemy_position_y[0])){
-                    if(!just_shot_bullet[1]) {
-                        Score += 20
-                        down1 = 0f
-                        enemy_visible[0] = false
-                        is_visible_bul[1] = false
-                        if(bullet_available < 3) {
-                            bullet_available += 1       //Bullet retruns available
+                if(is_visible_bul[1]) {
+                    if ((bullet_position_x[1] >= array_position[0] - 35f) and (bullet_position_x[1] <= array_position[0] + 145f) and (bullet_position_y[1] <= enemy_position_y[0] + 150f) and (bullet_position_y[1] >= enemy_position_y[0])) {
+                        if (!just_shot_bullet[1]) {
+                            Score += 20
+                            down1 = 0f
+                            enemy_visible[0] = false
+                            is_visible_bul[1] = false
+                            if (bullet_available < 3) {
+                                bullet_available += 1       //Bullet retruns available
+                            }
+                            up[1] = 0f                      //Put the bullet at the starting position
+                            ex_array[0] = true
+                            isExpBul2[0] = true
+                            expPos2[0][0] = array_position[0]
+                            expPos2[0][1] = enemy_position_y[0]
+                            //drawBitmap(explosion,array_position[0],enemy_position_y[0],null)
+                            just_shot_bullet[1] = true
                         }
-                        up[1] = 0f                      //Put the bullet at the starting position
-                        ex_array[0] = true
-                        isExpBul2[0] = true
-                        expPos2[0][0] = array_position[0]
-                        expPos2[0][1] = enemy_position_y[0]
-                        //drawBitmap(explosion,array_position[0],enemy_position_y[0],null)
-                        just_shot_bullet[1] = true
                     }
-                }
-                if((bullet_position_x[1]>=array_position[1]-35f)and(bullet_position_x[1]<=array_position[1]+115f)and(bullet_position_y[1]<=enemy_position_y[1]+120f)and(bullet_position_y[1]>=enemy_position_y[1])){
-                    if(!just_shot_bullet[1]) {
-                        Score += 20
-                        down2 = 0f
-                        enemy_visible[1] = false
-                        is_visible_bul[1] = false
-                        if(bullet_available < 3) {
-                            bullet_available += 1       //Bullet retruns available
+                    if ((bullet_position_x[1] >= array_position[1] - 35f) and (bullet_position_x[1] <= array_position[1] + 145f) and (bullet_position_y[1] <= enemy_position_y[1] + 150f) and (bullet_position_y[1] >= enemy_position_y[1])) {
+                        if (!just_shot_bullet[1]) {
+                            Score += 20
+                            down2 = 0f
+                            enemy_visible[1] = false
+                            is_visible_bul[1] = false
+                            if (bullet_available < 3) {
+                                bullet_available += 1       //Bullet retruns available
+                            }
+                            up[1] = 0f                      //Put the bullet at the starting position
+                            ex_array[1] = true
+                            isExpBul2[1] = true
+                            expPos2[1][0] = array_position[1]
+                            expPos2[1][1] = enemy_position_y[1]
+                            //drawBitmap(explosion,array_position[1],enemy_position_y[1],null)
+                            just_shot_bullet[1] = true
                         }
-                        up[1] = 0f                      //Put the bullet at the starting position
-                        ex_array[1] = true
-                        isExpBul2[1] = true
-                        expPos2[1][0] = array_position[1]
-                        expPos2[1][1] = enemy_position_y[1]
-                        //drawBitmap(explosion,array_position[1],enemy_position_y[1],null)
-                        just_shot_bullet[1] = true
                     }
-                }
-                if((bullet_position_x[1]>=array_position[2]-35f)and(bullet_position_x[1]<=array_position[2]+115f)and(bullet_position_y[1]<=enemy_position_y[2]+120f)and(bullet_position_y[1]>=enemy_position_y[2])){
-                    if(!just_shot_bullet[1]) {
-                        Score += 20
-                        down3 = 0f
-                        enemy_visible[2] = false
-                        is_visible_bul[1] = false
-                        if(bullet_available < 3) {
-                            bullet_available += 1       //Bullet retruns available
+                    if ((bullet_position_x[1] >= array_position[2] - 35f) and (bullet_position_x[1] <= array_position[2] + 145f) and (bullet_position_y[1] <= enemy_position_y[2] + 150f) and (bullet_position_y[1] >= enemy_position_y[2])) {
+                        if (!just_shot_bullet[1]) {
+                            Score += 20
+                            down3 = 0f
+                            enemy_visible[2] = false
+                            is_visible_bul[1] = false
+                            if (bullet_available < 3) {
+                                bullet_available += 1       //Bullet retruns available
+                            }
+                            up[1] =
+                                0f                      //Put the bullet at the starting position
+                            ex_array[2] = true
+                            isExpBul2[2] = true
+                            expPos2[2][0] = array_position[2]
+                            expPos2[2][1] = enemy_position_y[2]
+                            //drawBitmap(explosion,array_position[2],enemy_position_y[2],null)
+                            just_shot_bullet[1] = true
                         }
-                        up[1] = 0f                      //Put the bullet at the starting position
-                        ex_array[2] = true
-                        isExpBul2[2] = true
-                        expPos2[2][0] = array_position[2]
-                        expPos2[2][1] = enemy_position_y[2]
-                        //drawBitmap(explosion,array_position[2],enemy_position_y[2],null)
-                        just_shot_bullet[1] = true
                     }
-                }
-                if((bullet_position_x[1]>=array_position[3]-35f)and(bullet_position_x[1]<=array_position[3]+115f)and(bullet_position_y[1]<=enemy_position_y[3]+120f)and(bullet_position_y[1]>=enemy_position_y[3])){
-                    if(!just_shot_bullet[1]) {
-                        Score += 20
-                        down4 = 0f
-                        enemy_visible[3] = false
-                        is_visible_bul[1] = false
-                        if(bullet_available < 3) {
-                            bullet_available += 1       //Bullet retruns available
+                    if ((bullet_position_x[1] >= array_position[3] - 35f) and (bullet_position_x[1] <= array_position[3] + 145f) and (bullet_position_y[1] <= enemy_position_y[3] + 150f) and (bullet_position_y[1] >= enemy_position_y[3])) {
+                        if (!just_shot_bullet[1]) {
+                            Score += 20
+                            down4 = 0f
+                            enemy_visible[3] = false
+                            is_visible_bul[1] = false
+                            if (bullet_available < 3) {
+                                bullet_available += 1       //Bullet retruns available
+                            }
+                            up[1] =
+                                0f                      //Put the bullet at the starting position
+                            ex_array[3] = true
+                            isExpBul2[3] = true
+                            expPos2[3][0] = array_position[3]
+                            expPos2[3][1] = enemy_position_y[3]
+                            //drawBitmap(explosion,array_position[3],enemy_position_y[3],null)
+                            just_shot_bullet[1] = true
                         }
-                        up[1] = 0f                      //Put the bullet at the starting position
-                        ex_array[3] = true
-                        isExpBul2[3] = true
-                        expPos2[3][0] = array_position[3]
-                        expPos2[3][1] = enemy_position_y[3]
-                        //drawBitmap(explosion,array_position[3],enemy_position_y[3],null)
-                        just_shot_bullet[1] = true
                     }
-                }
-                if((bullet_position_x[1]>=lateral_movement[4]+array_position[4]-35f)and(bullet_position_x[1]<=lateral_movement[4]+array_position[4]+115f)and(bullet_position_y[1]<=enemy_position_y[4]+120f)and(bullet_position_y[1]>=enemy_position_y[4])) {
-                    if(!just_shot_bullet[1]) {
-                        Score += 20
-                        down5 = 0f
-                        enemy_visible[4] = false
-                        is_visible_bul[1] = false
-                        if(bullet_available < 3) {
-                            bullet_available += 1       //Bullet retruns available
+                    if ((bullet_position_x[1] >= lateral_movement[4] + array_position[4] - 35f) and (bullet_position_x[1] <= lateral_movement[4] + array_position[4] + 115f) and (bullet_position_y[1] <= enemy_position_y[4] + 120f) and (bullet_position_y[1] >= enemy_position_y[4])) {
+                        if (!just_shot_bullet[1]) {
+                            Score += 20
+                            down5 = 0f
+                            enemy_visible[4] = false
+                            is_visible_bul[1] = false
+                            if (bullet_available < 3) {
+                                bullet_available += 1       //Bullet retruns available
+                            }
+                            up[1] =
+                                0f                      //Put the bullet at the starting position
+                            ex_array[4] = true
+                            isExpBul2[4] = true
+                            expPos2[4][0] = array_position[4]
+                            expPos2[4][1] = enemy_position_y[4]
+                            //drawBitmap(explosion,array_position[4],enemy_position_y[4],null)
+                            just_shot_bullet[1] = true
                         }
-                        up[1] = 0f                      //Put the bullet at the starting position
-                        ex_array[4] = true
-                        isExpBul2[4] = true
-                        expPos2[4][0] = array_position[4]
-                        expPos2[4][1] = enemy_position_y[4]
-                        //drawBitmap(explosion,array_position[4],enemy_position_y[4],null)
-                        just_shot_bullet[1] = true
                     }
                 }
 
                 /////////////////ESPLOSIONE BULLET 2
-                if(isExpBul2[0]){
-                    if(expFrame2[0] < 18) {
-                        drawBitmap(bitmapVideo.get(expFrame2[0]/2),expPos2[0][0],expPos2[0][1],null)
+                if (isExpBul2[0]) {
+                    if (expFrame2[0] < 18) {
+                        if(expFrame2[0] == 0){
+                            just_shot_bullet[1] = false
+                        }
+                        drawBitmap(
+                            bitmapVideo.get(expFrame2[0] / 2),
+                            expPos2[0][0],
+                            expPos2[0][1],
+                            null
+                        )
                         expFrame2[0] = expFrame2[0] + 1
-                    }
-                    else{
+                    } else {
                         expFrame2[0] = 0
                         isExpBul2[0] = false
                     }
                 }
-                if(isExpBul2[1]){
-                    if(expFrame2[1] < 18) {
-                        drawBitmap(bitmapVideo.get(expFrame2[1]/2),expPos2[1][0],expPos2[1][1],null)
+                if (isExpBul2[1]) {
+                    if (expFrame2[1] < 18) {
+                        if(expFrame2[1] == 0){
+                            just_shot_bullet[1] = false
+                        }
+                        drawBitmap(
+                            bitmapVideo.get(expFrame2[1] / 2),
+                            expPos2[1][0],
+                            expPos2[1][1],
+                            null
+                        )
                         expFrame2[1] = expFrame2[1] + 1
-                    }
-                    else{
+                    } else {
                         expFrame2[1] = 0
                         isExpBul2[1] = false
                     }
                 }
-                if(isExpBul2[2]){
-                    if(expFrame2[2] < 18) {
-                        drawBitmap(bitmapVideo.get(expFrame2[2]/2),expPos2[2][0],expPos2[2][1],null)
+                if (isExpBul2[2]) {
+                    if (expFrame2[2] < 18) {
+                        if(expFrame2[2] == 0){
+                            just_shot_bullet[1] = false
+                        }
+                        drawBitmap(
+                            bitmapVideo.get(expFrame2[2] / 2),
+                            expPos2[2][0],
+                            expPos2[2][1],
+                            null
+                        )
                         expFrame2[2] = expFrame2[2] + 1
-                    }
-                    else{
+                    } else {
                         expFrame2[2] = 0
                         isExpBul2[2] = false
                     }
                 }
-                if(isExpBul2[3]){
-                    if(expFrame2[3] < 18) {
-                        drawBitmap(bitmapVideo.get(expFrame2[3]/2),expPos2[3][0],expPos2[3][1],null)
+                if (isExpBul2[3]) {
+                    if (expFrame2[3] < 18) {
+                        if(expFrame2[3] == 0){
+                            just_shot_bullet[1] = false
+                        }
+                        drawBitmap(
+                            bitmapVideo.get(expFrame2[3] / 2),
+                            expPos2[3][0],
+                            expPos2[3][1],
+                            null
+                        )
                         expFrame2[3] = expFrame2[3] + 1
-                    }
-                    else{
+                    } else {
                         expFrame2[3] = 0
                         isExpBul2[3] = false
                     }
                 }
-                if(isExpBul2[4]){
-                    if(expFrame2[4] < 18) {
-                        drawBitmap(bitmapVideo.get(expFrame2[4]/2),expPos2[4][0],expPos2[4][1],null)
+                if (isExpBul2[4]) {
+                    if (expFrame2[4] < 18) {
+                        if(expFrame2[4] == 0){
+                            just_shot_bullet[1] = false
+                        }
+                        drawBitmap(
+                            bitmapVideo.get(expFrame2[4] / 2),
+                            expPos2[4][0],
+                            expPos2[4][1],
+                            null
+                        )
                         expFrame1[4] = expFrame1[4] + 1
-                    }
-                    else{
+                    } else {
                         expFrame2[4] = 0
                         isExpBul2[4] = false
                     }
@@ -1119,144 +1199,190 @@ class MyView(context: Context?, weat:String?, Color :String?, Bul :String?, Logg
                 ////////////////
 
                 //////////////////////bullet 3 ////////////////////////////
-                if((bullet_position_x[2]>=array_position[0]-35f)and(bullet_position_x[2]<=array_position[0]+145f)and(bullet_position_y[2]<=enemy_position_y[0]+150f)and(bullet_position_y[2]>=enemy_position_y[0])){
-                    if(!just_shot_bullet[2]) {
-                        Score += 20
-                        down1 = 0f
-                        enemy_visible[0] = false
-                        is_visible_bul[2] = false
-                        if(bullet_available < 3) {
-                            bullet_available += 1       //Bullet retruns available
+                if(is_visible_bul[2]) {
+                    if ((bullet_position_x[2] >= array_position[0] - 35f) and (bullet_position_x[2] <= array_position[0] + 145f) and (bullet_position_y[2] <= enemy_position_y[0] + 150f) and (bullet_position_y[2] >= enemy_position_y[0])) {
+                        if (!just_shot_bullet[2]) {
+                            Log.i("COLLISIONE", "AEREO 1")
+                            Score += 20
+                            down1 = 0f
+                            enemy_visible[0] = false
+                            is_visible_bul[2] = false
+                            if (bullet_available < 3) {
+                                bullet_available += 1       //Bullet retruns available
+                            }
+                            up[2] = 0f                      //Put the bullet at the starting position
+                            ex_array[0] = true
+                            isExpBul3[0] = true
+                            expPos3[0][0] = array_position[0]
+                            expPos3[0][1] = enemy_position_y[0]
+                            //drawBitmap(explosion,array_position[0],enemy_position_y[0],null)
+                            just_shot_bullet[2] = true
                         }
-                        up[2] = 0f                      //Put the bullet at the starting position
-                        ex_array[0] = true
-                        isExpBul3[0] = true
-                        expPos3[0][0] = array_position[0]
-                        expPos3[0][1] = enemy_position_y[0]
-                        //drawBitmap(explosion,array_position[0],enemy_position_y[0],null)
-                        just_shot_bullet[2] = true
                     }
-                }
-                if((bullet_position_x[2]>=array_position[1]-35f)and(bullet_position_x[2]<=array_position[1]+145f)and(bullet_position_y[2]<=enemy_position_y[1]+150f)and(bullet_position_y[2]>=enemy_position_y[1])){
-                    if(!just_shot_bullet[2]) {
-                        Score += 20
-                        down2 = 0f
-                        enemy_visible[1] = false
-                        is_visible_bul[2] = false
-                        if(bullet_available < 3) {
-                            bullet_available += 1       //Bullet retruns available
+                    if ((bullet_position_x[2] >= array_position[1] - 35f) and (bullet_position_x[2] <= array_position[1] + 145f) and (bullet_position_y[2] <= enemy_position_y[1] + 150f) and (bullet_position_y[2] >= enemy_position_y[1])) {
+                        if (!just_shot_bullet[2]) {
+                            Log.i("COLLISIONE", "AEREO 2")
+                            Score += 20
+                            down2 = 0f
+                            enemy_visible[1] = false
+                            is_visible_bul[2] = false
+                            if (bullet_available < 3) {
+                                bullet_available += 1       //Bullet retruns available
+                            }
+                            up[2] =
+                                0f                      //Put the bullet at the starting position
+                            ex_array[1] = true
+                            isExpBul3[1] = true
+                            expPos3[1][0] = array_position[1]
+                            expPos3[1][1] = enemy_position_y[1]
+                            //drawBitmap(explosion,array_position[1],enemy_position_y[1],null)
+                            just_shot_bullet[2] = true
                         }
-                        up[2] = 0f                      //Put the bullet at the starting position
-                        ex_array[1] = true
-                        isExpBul3[1] = true
-                        expPos3[1][0] = array_position[1]
-                        expPos3[1][1] = enemy_position_y[1]
-                        //drawBitmap(explosion,array_position[1],enemy_position_y[1],null)
-                        just_shot_bullet[2] = true
                     }
-                }
-                if((bullet_position_x[2]>=array_position[2]-35f)and(bullet_position_x[2]<=array_position[2]+145f)and(bullet_position_y[2]<=enemy_position_y[2]+150f)and(bullet_position_y[2]>=enemy_position_y[2])){
-                    if(!just_shot_bullet[2]) {
-                        Score += 20
-                        down3 = 0f
-                        enemy_visible[2] = false
-                        is_visible_bul[2] = false
-                        if(bullet_available < 3) {
-                            bullet_available += 1       //Bullet retruns available
+                    if ((bullet_position_x[2] >= array_position[2] - 35f) and (bullet_position_x[2] <= array_position[2] + 145f) and (bullet_position_y[2] <= enemy_position_y[2] + 150f) and (bullet_position_y[2] >= enemy_position_y[2])) {
+                        if (!just_shot_bullet[2]) {
+                            Log.i("COLLISIONE", "AEREO 3")
+                            Score += 20
+                            down3 = 0f
+                            enemy_visible[2] = false
+                            is_visible_bul[2] = false
+                            if (bullet_available < 3) {
+                                bullet_available += 1       //Bullet retruns available
+                            }
+                            up[2] =
+                                0f                      //Put the bullet at the starting position
+                            ex_array[2] = true
+                            isExpBul3[2] = true
+                            expPos3[2][0] = array_position[2]
+                            expPos3[2][1] = enemy_position_y[2]
+                            //drawBitmap(explosion,array_position[2],enemy_position_y[2],null)
+                            just_shot_bullet[2] = true
                         }
-                        up[2] = 0f                      //Put the bullet at the starting position
-                        ex_array[2] = true
-                        isExpBul3[2] = true
-                        expPos3[2][0] = array_position[2]
-                        expPos3[2][1] = enemy_position_y[2]
-                        //drawBitmap(explosion,array_position[2],enemy_position_y[2],null)
-                        just_shot_bullet[2] = true
                     }
-                }
-                if((bullet_position_x[2]>=array_position[3]-35f)and(bullet_position_x[2]<=array_position[3]+145f)and(bullet_position_y[2]<=enemy_position_y[3]+150f)and(bullet_position_y[2]>=enemy_position_y[3])){
-                    if(!just_shot_bullet[2]) {
-                        Score += 20
-                        down4 = 0f
-                        enemy_visible[3] = false
-                        is_visible_bul[2] = false
-                        if(bullet_available < 3) {
-                            bullet_available += 1       //Bullet retruns available
+                    if ((bullet_position_x[2] >= array_position[3] - 35f) and (bullet_position_x[2] <= array_position[3] + 145f) and (bullet_position_y[2] <= enemy_position_y[3] + 150f) and (bullet_position_y[2] >= enemy_position_y[3])) {
+                        if (!just_shot_bullet[2]) {
+                            Log.i("COLLISIONE", "AEREO 4")
+                            Score += 20
+                            down4 = 0f
+                            enemy_visible[3] = false
+                            is_visible_bul[2] = false
+                            if (bullet_available < 3) {
+                                bullet_available += 1       //Bullet retruns available
+                            }
+                            up[2] =
+                                0f                      //Put the bullet at the starting position
+                            ex_array[3] = true
+                            isExpBul3[3] = true
+                            expPos3[3][0] = array_position[3]
+                            expPos3[3][1] = enemy_position_y[3]
+                            //drawBitmap(explosion,array_position[3],enemy_position_y[3],null)
+                            just_shot_bullet[2] = true
                         }
-                        up[2] = 0f                      //Put the bullet at the starting position
-                        ex_array[3] = true
-                        isExpBul3[3] = true
-                        expPos3[3][0] = array_position[3]
-                        expPos3[3][1] = enemy_position_y[3]
-                        //drawBitmap(explosion,array_position[3],enemy_position_y[3],null)
-                        just_shot_bullet[2] = true
                     }
-                }
-                if((bullet_position_x[2]>=lateral_movement[4]+array_position[4]-35f)and(bullet_position_x[2]<=lateral_movement[4]+array_position[4]+115f)and(bullet_position_y[2]<=enemy_position_y[4]+120f)and(bullet_position_y[2]>=enemy_position_y[4])) {
-                    if(!just_shot_bullet[2]) {
-                        Score += 20
-                        down5 = 0f
-                        enemy_visible[4] = false
-                        is_visible_bul[2] = false
-                        if(bullet_available < 3) {
-                            bullet_available += 1       //Bullet retruns available
+                    if ((bullet_position_x[2] >= lateral_movement[4] + array_position[4] - 35f) and (bullet_position_x[2] <= lateral_movement[4] + array_position[4] + 115f) and (bullet_position_y[2] <= enemy_position_y[4] + 120f) and (bullet_position_y[2] >= enemy_position_y[4])) {
+                        if (!just_shot_bullet[2]) {
+                            Log.i("COLLISIONE", "AEREO 5")
+                            Score += 20
+                            down5 = 0f
+                            enemy_visible[4] = false
+                            is_visible_bul[2] = false
+                            if (bullet_available < 3) {
+                                bullet_available += 1       //Bullet retruns available
+                            }
+                            up[2] =
+                                0f                      //Put the bullet at the starting position
+                            ex_array[4] = true
+                            isExpBul3[4] = true
+                            expPos3[4][0] = array_position[4]
+                            expPos3[4][1] = enemy_position_y[4]
+                            //drawBitmap(explosion,array_position[4],enemy_position_y[4],null)
+                            just_shot_bullet[2] = true
                         }
-                        up[2] = 0f                      //Put the bullet at the starting position
-                        ex_array[4] = true
-                        isExpBul3[4] = true
-                        expPos3[4][0] = array_position[4]
-                        expPos3[4][1] = enemy_position_y[4]
-                        //drawBitmap(explosion,array_position[4],enemy_position_y[4],null)
-                        just_shot_bullet[2] = true
                     }
                 }
 
                 /////////////////ESPLOSIONE BULLET 3
-                if(isExpBul3[0]){
-                    if(expFrame3[0] < 18) {
-                        drawBitmap(bitmapVideo.get(expFrame3[0]/2),expPos3[0][0],expPos3[0][1],null)
+                if (isExpBul3[0]) {
+                    if (expFrame3[0] < 18) {
+                        if(expFrame3[0] == 0){
+                            just_shot_bullet[2] = false
+                        }
+                        drawBitmap(
+                            bitmapVideo.get(expFrame3[0] / 2),
+                            expPos3[0][0],
+                            expPos3[0][1],
+                            null
+                        )
                         expFrame3[0] = expFrame3[0] + 1
-                    }
-                    else{
+                    } else {
                         expFrame3[0] = 0
                         isExpBul3[0] = false
                     }
                 }
-                if(isExpBul3[1]){
-                    if(expFrame3[1] < 18) {
-                        drawBitmap(bitmapVideo.get(expFrame3[1]/2),expPos3[1][0],expPos3[1][1],null)
+                if (isExpBul3[1]) {
+                    if (expFrame3[1] < 18) {
+                        if(expFrame3[1] == 0){
+                            just_shot_bullet[2] = false
+                        }
+                        drawBitmap(
+                            bitmapVideo.get(expFrame3[1] / 2),
+                            expPos3[1][0],
+                            expPos3[1][1],
+                            null
+                        )
                         expFrame3[1] = expFrame3[1] + 1
-                    }
-                    else{
+                    } else {
                         expFrame3[1] = 0
                         isExpBul3[1] = false
                     }
                 }
-                if(isExpBul3[2]){
-                    if(expFrame3[2] < 18) {
-                        drawBitmap(bitmapVideo.get(expFrame3[2]/2),expPos3[2][0],expPos3[2][1],null)
+                if (isExpBul3[2]) {
+                    if (expFrame3[2] < 18) {
+                        if(expFrame3[2] == 0){
+                            just_shot_bullet[2] = false
+                        }
+                        drawBitmap(
+                            bitmapVideo.get(expFrame3[2] / 2),
+                            expPos3[2][0],
+                            expPos3[2][1],
+                            null
+                        )
                         expFrame3[2] = expFrame3[2] + 1
-                    }
-                    else{
+                    } else {
                         expFrame3[2] = 0
                         isExpBul3[2] = false
                     }
                 }
-                if(isExpBul3[3]){
-                    if(expFrame3[3] < 18) {
-                        drawBitmap(bitmapVideo.get(expFrame3[3]/2),expPos3[3][0],expPos3[3][1],null)
+                if (isExpBul3[3]) {
+                    if (expFrame3[3] < 18) {
+                        if(expFrame3[3] == 0){
+                            just_shot_bullet[2] = false
+                        }
+                        drawBitmap(
+                            bitmapVideo.get(expFrame3[3] / 2),
+                            expPos3[3][0],
+                            expPos3[3][1],
+                            null
+                        )
                         expFrame3[3] = expFrame3[3] + 1
-                    }
-                    else{
+                    } else {
                         expFrame3[3] = 0
                         isExpBul3[3] = false
                     }
                 }
-                if(isExpBul3[4]){
-                    if(expFrame3[4] < 18) {
-                        drawBitmap(bitmapVideo.get(expFrame3[4]/2),expPos3[4][0],expPos3[4][1],null)
+                if (isExpBul3[4]) {
+                    if (expFrame3[4] < 18) {
+                        if(expFrame3[4] == 0){
+                            just_shot_bullet[2] = false
+                        }
+                        drawBitmap(
+                            bitmapVideo.get(expFrame3[4] / 2),
+                            expPos3[4][0],
+                            expPos3[4][1],
+                            null
+                        )
                         expFrame3[4] = expFrame3[4] + 1
-                    }
-                    else{
+                    } else {
                         expFrame3[4] = 0
                         isExpBul3[4] = false
                     }
@@ -1378,7 +1504,7 @@ class MyView(context: Context?, weat:String?, Color :String?, Bul :String?, Logg
                 //intent.putExtra("Opponent", opponent)
                 intent.putExtra("Color", col)
                 intent.putExtra("Bullet", bul)
-                //music.stopSound()
+                music.stopSound()
                 startActivity(context, intent, null)
             }
             if(!gameover){
@@ -1419,16 +1545,16 @@ class MyView(context: Context?, weat:String?, Color :String?, Bul :String?, Logg
                 ///when touch the pause button start the onPause of the activity
                 if((!PAUSE) and (((event.getX()>860f) and (event.getX()<1060)) and ((event.getY()>1700f) and (event.getY()<1900)))){
                     PAUSE = true
-                    //music.pauseSound()
+                    music.pauseSound()
                     start = false
                 }else if(PAUSE and ((event.getX()>130f)and (event.getX()<930f)and (event.getY()>1000f)and (event.getY()<1200f))){
                     start = true
-                    //music.playSoundGame(context)
+                    music.playSoundGame(context)
                     PAUSE = false
                     return_to_game = true
                 }else if(PAUSE and((event.getX()>130f)and (event.getX()<930f)and (event.getY()>1300f)and (event.getY()<1500f))){
                     PAUSE = false
-                    //music.stopSound()
+                    music.stopSound()
                     val intent = Intent(context, MainActivity::class.java)
                     startActivity(context, intent, null)
                 }
@@ -1480,7 +1606,6 @@ class MyView(context: Context?, weat:String?, Color :String?, Bul :String?, Logg
             ex_array[n] = false
             var delay_enemy = (3000L..8000L).random()
             delay(delay_enemy)
-            //Log.i("Prova", "si la fa")
             var type = (0..2).random()
             var position = ((60..940).random())
             //Log.i("Prova", position.toString())
