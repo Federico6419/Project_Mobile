@@ -52,9 +52,9 @@ class GameActivity : AppCompatActivity() {
 
         //Music management
         music.stopSound()
-        music.releasePlayer()
+        /*music.releasePlayer()
         music = MusicManager()       //Music variable(I've restarted music to avoid crashes
-        music.playSoundGame(this)
+        music.playSoundGame(this)*/
         //Mute management
         if(muted) {
             music.setVolume(0.0f, 0.0f)
