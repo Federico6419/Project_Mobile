@@ -30,9 +30,10 @@ class MyView(context: Context?, weat:String?, Color :String?, Bul :String?, Logg
     var mLastRotationVector = FloatArray(3) //The last value of the rotation vector
     var mRotationMatrix = FloatArray(9)
     var roll = 0f
-    var up = 0f
-    var up2 = 0f
-    var up3 = 0f
+
+    //Bullet positions with respect to y axis
+    var up = arrayOf<Float>(0f, 0f, 0f)
+
     var upboss = arrayOf<Float>(0f,0f)
     var shotboss = arrayOf<Boolean>(false,false)
     var boss_bullet_position_x=arrayOf<Float>(0f,0f,0f)
@@ -302,6 +303,7 @@ class MyView(context: Context?, weat:String?, Color :String?, Bul :String?, Logg
     }
 
     override fun onDraw(canvas: Canvas) {
+        Log.i("AVA", bullet_available.toString())
         super.onDraw(canvas)
         with(canvas) {
             if(start and !PAUSE){
@@ -583,70 +585,76 @@ class MyView(context: Context?, weat:String?, Color :String?, Bul :String?, Logg
                 ////// enemy bitmap ///////
                 /////// enemy end //////////
                 if(is_visible_bul[0]) {
-                    withTranslation(0f, up) {
-                        up -= 20f
+                    withTranslation(0f, up[0]) {
+                        up[0] -= 20f
                         if (is_shot[0]) {
-                            drawBitmap(bullet, plane_x+50f, (1400f + up), null)
+                            drawBitmap(bullet, plane_x+50f, (1400f + up[0]), null)
                             res = plane_x+50f
                             is_shot[0] = false
                             bullet_position_x[0] = res
-                            bullet_position_y[0] = (1400f+up)
+                            bullet_position_y[0] = (1400f+up[0])
                         } else {
-                            drawBitmap(bullet, res, (1400f + up), null)
-                            if((up)<-1400f){
+                            drawBitmap(bullet, res, (1400f + up[0]), null)
+                            if((up[0])<-1400f){
                                 is_visible_bul[0] = false
-                                up = 0f
-                                bullet_available +=1
+                                up[0] = 0f
+                                if(bullet_available < 3) {
+                                    bullet_available += 1
+                                }
                                 just_shot_bullet[0] = false
                             }
                             bullet_position_x[0] = (res)
-                            bullet_position_y[0] = (1400f + up)
+                            bullet_position_y[0] = (1400f + up[0])
                         }
                     }
                 }
                 if(is_visible_bul[1]) {
-                    withTranslation(0f, up2) {
-                        up2 -= 20f
+                    withTranslation(0f, up[1]) {
+                        up[1] -= 20f
                         if (is_shot[1]) {
-                            drawBitmap(bullet, plane_x+50f, (1400f + up2), null)
+                            drawBitmap(bullet, plane_x+50f, (1400f + up[1]), null)
                             res2 =plane_x+50f
                             is_shot[1] = false
                             bullet_position_x[1] =res2
-                            bullet_position_y[1] = (1400f+up2)
+                            bullet_position_y[1] = (1400f+up[1])
                         } else {
-                            drawBitmap(bullet, res2, (1400f + up2), null)
-                            if((up2)<-1400f){
+                            drawBitmap(bullet, res2, (1400f + up[1]), null)
+                            if((up[1])<-1400f){
                                 is_visible_bul[1] = false
-                                up2 = 0f
-                                bullet_available +=1
+                                up[1] = 0f
+                                if(bullet_available < 3) {
+                                    bullet_available += 1
+                                }
                                 just_shot_bullet[1] = false
                             }
                             bullet_position_x[1] = (res2)
-                            bullet_position_y[1] = (1400f+up2)
+                            bullet_position_y[1] = (1400f+up[1])
                         }
                     }
                 }
                 if(is_visible_bul[2]){
-                    withTranslation(0f, up3) {
-                        up3 -= 20f
+                    withTranslation(0f, up[2]) {
+                        up[2] -= 20f
                         if (is_shot[2]) {
-                            drawBitmap(bullet, plane_x+50f, (1400f + up3), null)
+                            drawBitmap(bullet, plane_x+50f, (1400f + up[2]), null)
                             res3 = plane_x+50f
                             is_shot[2] = false
                             bullet_position_x[2] = res3
-                            bullet_position_y[2] = (1400f+up3)
+                            bullet_position_y[2] = (1400f+up[2])
                         } else {
-                            drawBitmap(bullet, res3, (1400f + up3), null)
-                            //Log.i("ROLL",(1400f+up3).toString())
-                            if((up3)<-1400f){
+                            drawBitmap(bullet, res3, (1400f + up[2]), null)
+                            //Log.i("ROLL",(1400f+up[2]).toString())
+                            if((up[2])<-1400f){
                                 //Log.i("ROLL","sta usando il terzo bullet")
                                 is_visible_bul[2] = false
-                                up3 = 0f
-                                bullet_available +=1
+                                up[2] = 0f
+                                if(bullet_available < 3) {
+                                    bullet_available += 1
+                                }
                                 just_shot_bullet[2] = false
                             }
                             bullet_position_x[2] = (res3)
-                            bullet_position_y[2] = (1400f+up3)
+                            bullet_position_y[2] = (1400f+up[2])
                         }
                     }
                 }
@@ -827,7 +835,10 @@ class MyView(context: Context?, weat:String?, Color :String?, Bul :String?, Logg
                         down1 = 0f
                         enemy_visible[0] = false
                         is_visible_bul[0] = false
-                        bullet_available += 1       //Bullet retruns available
+                        if(bullet_available < 3) {
+                            bullet_available += 1       //Bullet retruns available
+                        }
+                        up[0] = 0f                      //Put the bullet at the starting position
                         ex_array[0] = true
                         isExpBul1[0] = true
                         expPos1[0][0] = array_position[0]
@@ -842,7 +853,10 @@ class MyView(context: Context?, weat:String?, Color :String?, Bul :String?, Logg
                         down2 = 0f
                         enemy_visible[1] = false
                         is_visible_bul[0] = false
-                        bullet_available += 1       //Bullet retruns available
+                        if(bullet_available < 3) {
+                            bullet_available += 1       //Bullet retruns available
+                        }
+                        up[0] = 0f                      //Put the bullet at the starting position
                         ex_array[1] = true
                         isExpBul1[1] = true
                         expPos1[1][0] = array_position[1]
@@ -857,7 +871,10 @@ class MyView(context: Context?, weat:String?, Color :String?, Bul :String?, Logg
                         down3 = 0f
                         enemy_visible[2] = false
                         is_visible_bul[0] = false
-                        bullet_available += 1       //Bullet retruns available
+                        if(bullet_available < 3) {
+                            bullet_available += 1       //Bullet retruns available
+                        }
+                        up[0] = 0f                      //Put the bullet at the starting position
                         ex_array[2] = true
                         isExpBul1[2] = true
                         expPos1[2][0] = array_position[2]
@@ -872,7 +889,10 @@ class MyView(context: Context?, weat:String?, Color :String?, Bul :String?, Logg
                         down4 = 0f
                         enemy_visible[3] = false
                         is_visible_bul[0] = false
-                        bullet_available += 1       //Bullet retruns available
+                        if(bullet_available < 3) {
+                            bullet_available += 1       //Bullet retruns available
+                        }
+                        up[0] = 0f                      //Put the bullet at the starting position
                         ex_array[3] = true
                         isExpBul1[3]= true
                         expPos1[3][0] = array_position[3]
@@ -887,7 +907,10 @@ class MyView(context: Context?, weat:String?, Color :String?, Bul :String?, Logg
                         down5 = 0f
                         enemy_visible[4] = false
                         is_visible_bul[0] = false
-                        bullet_available += 1       //Bullet retruns available
+                        if(bullet_available < 3) {
+                            bullet_available += 1       //Bullet retruns available
+                        }
+                        up[0] = 0f                      //Put the bullet at the starting position
                         ex_array[4] = true
                         isExpBul1[4] = true
                         expPos1[4][0] = array_position[4]
@@ -957,7 +980,10 @@ class MyView(context: Context?, weat:String?, Color :String?, Bul :String?, Logg
                         down1 = 0f
                         enemy_visible[0] = false
                         is_visible_bul[1] = false
-                        bullet_available += 1       //Bullet retruns available
+                        if(bullet_available < 3) {
+                            bullet_available += 1       //Bullet retruns available
+                        }
+                        up[1] = 0f                      //Put the bullet at the starting position
                         ex_array[0] = true
                         isExpBul2[0] = true
                         expPos2[0][0] = array_position[0]
@@ -972,7 +998,10 @@ class MyView(context: Context?, weat:String?, Color :String?, Bul :String?, Logg
                         down2 = 0f
                         enemy_visible[1] = false
                         is_visible_bul[1] = false
-                        bullet_available += 1       //Bullet retruns available
+                        if(bullet_available < 3) {
+                            bullet_available += 1       //Bullet retruns available
+                        }
+                        up[1] = 0f                      //Put the bullet at the starting position
                         ex_array[1] = true
                         isExpBul2[1] = true
                         expPos2[1][0] = array_position[1]
@@ -987,7 +1016,10 @@ class MyView(context: Context?, weat:String?, Color :String?, Bul :String?, Logg
                         down3 = 0f
                         enemy_visible[2] = false
                         is_visible_bul[1] = false
-                        bullet_available += 1       //Bullet retruns available
+                        if(bullet_available < 3) {
+                            bullet_available += 1       //Bullet retruns available
+                        }
+                        up[1] = 0f                      //Put the bullet at the starting position
                         ex_array[2] = true
                         isExpBul2[2] = true
                         expPos2[2][0] = array_position[2]
@@ -1002,7 +1034,10 @@ class MyView(context: Context?, weat:String?, Color :String?, Bul :String?, Logg
                         down4 = 0f
                         enemy_visible[3] = false
                         is_visible_bul[1] = false
-                        bullet_available += 1       //Bullet retruns available
+                        if(bullet_available < 3) {
+                            bullet_available += 1       //Bullet retruns available
+                        }
+                        up[1] = 0f                      //Put the bullet at the starting position
                         ex_array[3] = true
                         isExpBul2[3] = true
                         expPos2[3][0] = array_position[3]
@@ -1017,7 +1052,10 @@ class MyView(context: Context?, weat:String?, Color :String?, Bul :String?, Logg
                         down5 = 0f
                         enemy_visible[4] = false
                         is_visible_bul[1] = false
-                        bullet_available += 1       //Bullet retruns available
+                        if(bullet_available < 3) {
+                            bullet_available += 1       //Bullet retruns available
+                        }
+                        up[1] = 0f                      //Put the bullet at the starting position
                         ex_array[4] = true
                         isExpBul2[4] = true
                         expPos2[4][0] = array_position[4]
@@ -1087,7 +1125,10 @@ class MyView(context: Context?, weat:String?, Color :String?, Bul :String?, Logg
                         down1 = 0f
                         enemy_visible[0] = false
                         is_visible_bul[2] = false
-                        bullet_available += 1       //Bullet retruns available
+                        if(bullet_available < 3) {
+                            bullet_available += 1       //Bullet retruns available
+                        }
+                        up[2] = 0f                      //Put the bullet at the starting position
                         ex_array[0] = true
                         isExpBul3[0] = true
                         expPos3[0][0] = array_position[0]
@@ -1102,7 +1143,10 @@ class MyView(context: Context?, weat:String?, Color :String?, Bul :String?, Logg
                         down2 = 0f
                         enemy_visible[1] = false
                         is_visible_bul[2] = false
-                        bullet_available += 1       //Bullet retruns available
+                        if(bullet_available < 3) {
+                            bullet_available += 1       //Bullet retruns available
+                        }
+                        up[2] = 0f                      //Put the bullet at the starting position
                         ex_array[1] = true
                         isExpBul3[1] = true
                         expPos3[1][0] = array_position[1]
@@ -1117,7 +1161,10 @@ class MyView(context: Context?, weat:String?, Color :String?, Bul :String?, Logg
                         down3 = 0f
                         enemy_visible[2] = false
                         is_visible_bul[2] = false
-                        bullet_available += 1       //Bullet retruns available
+                        if(bullet_available < 3) {
+                            bullet_available += 1       //Bullet retruns available
+                        }
+                        up[2] = 0f                      //Put the bullet at the starting position
                         ex_array[2] = true
                         isExpBul3[2] = true
                         expPos3[2][0] = array_position[2]
@@ -1132,7 +1179,10 @@ class MyView(context: Context?, weat:String?, Color :String?, Bul :String?, Logg
                         down4 = 0f
                         enemy_visible[3] = false
                         is_visible_bul[2] = false
-                        bullet_available += 1       //Bullet retruns available
+                        if(bullet_available < 3) {
+                            bullet_available += 1       //Bullet retruns available
+                        }
+                        up[2] = 0f                      //Put the bullet at the starting position
                         ex_array[3] = true
                         isExpBul3[3] = true
                         expPos3[3][0] = array_position[3]
@@ -1147,7 +1197,10 @@ class MyView(context: Context?, weat:String?, Color :String?, Bul :String?, Logg
                         down5 = 0f
                         enemy_visible[4] = false
                         is_visible_bul[2] = false
-                        bullet_available += 1       //Bullet retruns available
+                        if(bullet_available < 3) {
+                            bullet_available += 1       //Bullet retruns available
+                        }
+                        up[2] = 0f                      //Put the bullet at the starting position
                         ex_array[4] = true
                         isExpBul3[4] = true
                         expPos3[4][0] = array_position[4]
@@ -1389,7 +1442,7 @@ class MyView(context: Context?, weat:String?, Color :String?, Bul :String?, Logg
                             is_shot[1] = true
                             is_visible_bul[1] = true
                             bullet_available -=1
-                        }else if(is_visible_bul[1] == false){
+                        }else if(is_visible_bul[0] == false){
                             is_shot[0] = true
                             is_visible_bul[0] = true
                             bullet_available -=1
@@ -1408,7 +1461,9 @@ class MyView(context: Context?, weat:String?, Color :String?, Bul :String?, Logg
                     for(i in (0..4)){
                         array_position[i]= 0f
                     }
-                    up = 0f
+                    up[0] = 0f
+                    up[1] = 0f
+                    up[2] = 0f
                 }
 
                 if(!gameover){
