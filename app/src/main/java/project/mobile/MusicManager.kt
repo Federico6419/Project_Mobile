@@ -39,4 +39,8 @@ public class MusicManager {
     fun setVolume(left: Float, right: Float){
         mMediaPlayer?.setVolume(left, right)
     }
+
+    fun releasePlayer(){
+        mMediaPlayer?.release()
+    }
 }

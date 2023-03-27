@@ -52,6 +52,8 @@ class GameActivity : AppCompatActivity() {
 
         //Music management
         music.stopSound()
+        music.releasePlayer()
+        music = MusicManager()       //Music variable(I've restarted music to avoid crashes
         music.playSoundGame(this)
         //Mute management
         if(muted) {
@@ -75,7 +77,7 @@ class GameActivity : AppCompatActivity() {
             logged = false
         }
 
-        setContentView(MyView(this, weather, color, bul, logged))
+        setContentView(MyView(this, weather, color, bul, logged, packageName))
     }
 
     override fun onPause() {

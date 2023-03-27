@@ -2,33 +2,28 @@ package project.mobile
 
 import android.content.Context
 import android.content.Intent
-import android.graphics.Bitmap
-import android.graphics.Canvas
-import android.graphics.Color
-import android.view.View
-import android.view.MotionEvent
-import androidx.core.content.res.ResourcesCompat
-import androidx.core.graphics.drawable.toBitmap
-import android.util.Log
-import kotlinx.coroutines.*
 import android.graphics.*
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.GlobalScope
-import kotlinx.coroutines.delay
-import kotlinx.coroutines.launch
 import android.hardware.Sensor
 import android.hardware.SensorEvent
 import android.hardware.SensorEventListener2
 import android.hardware.SensorManager
-import androidx.appcompat.app.AppCompatActivity
+import android.media.MediaMetadataRetriever
+import android.net.Uri
+import android.util.Log
+import android.view.MotionEvent
+import android.view.View
 import androidx.core.content.ContextCompat.startActivity
+import androidx.core.content.res.ResourcesCompat
+import androidx.core.graphics.drawable.toBitmap
 import androidx.core.graphics.withTranslation
 import com.google.firebase.database.ktx.database
 import com.google.firebase.ktx.Firebase
+import kotlinx.coroutines.*
 import java.util.*
 import kotlin.math.atan2
 
-class MyView(context: Context?, weat:String?, Color :String?, Bul :String?, Logged : Boolean?) : View(context), View.OnTouchListener, SensorEventListener2 {
+
+class MyView(context: Context?, weat:String?, Color :String?, Bul :String?, Logged : Boolean?, packagename: String) : View(context), View.OnTouchListener, SensorEventListener2 {
 
     val a = 0.65f //Low-pass filter parameter, higher is smoother
 
@@ -139,7 +134,74 @@ class MyView(context: Context?, weat:String?, Color :String?, Bul :String?, Logg
     var bul = ""
     var logged = false
 
+    ///////////////ESPLOSIONE
+    lateinit var retreiver: MediaMetadataRetriever
+    var idx = 0
+    var bitmapVideo = ArrayList<Bitmap>()
+
+
+    //EXPLOSION BULLET 1
+    //Array that says for the bullet 1 if one of the 5 planes is exploding
+    var isExpBul1 = arrayOf<Boolean>(false, false, false, false, false)
+
+    //Array that contains the frame to show for the explosions with bullet 1
+    var expFrame1 = arrayOf<Int>(0, 0, 0, 0, 0)
+
+    //Array that contains the positions of the explosions with bullet 1
+    var expPos1 = arrayOf(floatArrayOf(0f, 0f), floatArrayOf(0f, 0f), floatArrayOf(0f, 0f), floatArrayOf(0f, 0f), floatArrayOf(0f, 0f))
+
+
+    //EXPLOSION BULLET 2
+    //Array that says for the bullet 2 if one of the 5 planes is exploding
+    var isExpBul2 = arrayOf<Boolean>(false, false, false, false, false)
+
+    //Array that contains the frame to show for the explosions with bullet 2
+    var expFrame2 = arrayOf<Int>(0, 0, 0, 0, 0)
+
+    //Array that contains the positions of the explosions with bullet 2
+    var expPos2 = arrayOf(floatArrayOf(0f, 0f), floatArrayOf(0f, 0f), floatArrayOf(0f, 0f), floatArrayOf(0f, 0f), floatArrayOf(0f, 0f))
+
+    //EXPLOSION BULLET 3
+    //Array that says for the bullet 3 if one of the 5 planes is exploding
+    var isExpBul3 = arrayOf<Boolean>(false, false, false, false, false)
+
+    //Array that contains the frame to show for the explosions with bullet 3
+    var expFrame3 = arrayOf<Int>(0, 0, 0, 0, 0)
+
+    //Array that contains the positions of the explosions with bullet 3
+    var expPos3 = arrayOf(floatArrayOf(0f, 0f), floatArrayOf(0f, 0f), floatArrayOf(0f, 0f), floatArrayOf(0f, 0f), floatArrayOf(0f, 0f))
+    /////////////
+    /////////////
+
+
     init{
+        ////////////////ESPLOSIONE
+        retreiver = MediaMetadataRetriever()
+
+        retreiver.setDataSource(context, Uri.parse("android.resource://"
+                + packagename + "/" + R.raw.explosion))
+
+        var i = 0
+
+        while (i < 1000000) {
+            var bitmap = retreiver.getFrameAtTime(i.toLong(), MediaMetadataRetriever.OPTION_CLOSEST)!!
+
+            //Add transparent background
+            val width: Int = bitmap.getWidth()
+            val height: Int = bitmap.getHeight()
+            val pixels = IntArray(width * height)
+            bitmap.getPixels(pixels, 0, 1 * width, 0, 0, width, height)
+            for (x in pixels.indices) {
+                if (pixels[x] == -1) pixels[x] = 0
+            }
+            bitmap = Bitmap.createBitmap(pixels, width, height, Bitmap.Config.ARGB_8888)
+
+
+            bitmapVideo.add(Bitmap.createScaledBitmap(bitmap, 150, 150, true))
+            i += 100000
+        }
+
+        /////////////7
         if (Color != null) {
             col = Color
         }
@@ -762,7 +824,10 @@ class MyView(context: Context?, weat:String?, Color :String?, Bul :String?, Logg
                         down1 = 0f
                         enemy_visible[0] = false
                         ex_array[0] = true
-                        drawBitmap(explosion,array_position[0],enemy_position_y[0],null)/// gif for the explosion
+                        isExpBul1[0] = true
+                        expPos1[0][0] = array_position[0]
+                        expPos1[0][1] = enemy_position_y[0]
+                        //drawBitmap(explosion,array_position[0],enemy_position_y[0],null)/// gif for the explosion
                         just_shot_bullet[0] = true
                     }
                 }
@@ -772,7 +837,10 @@ class MyView(context: Context?, weat:String?, Color :String?, Bul :String?, Logg
                         down2 = 0f
                         enemy_visible[1] = false
                         ex_array[1] = true
-                        drawBitmap(explosion,array_position[1],enemy_position_y[1],null)
+                        isExpBul1[1] = true
+                        expPos1[1][0] = array_position[1]
+                        expPos1[1][1] = enemy_position_y[1]
+                        //drawBitmap(explosion,array_position[1],enemy_position_y[1],null)
                         just_shot_bullet[0] = true
                     }
                 }
@@ -782,7 +850,10 @@ class MyView(context: Context?, weat:String?, Color :String?, Bul :String?, Logg
                         down3 = 0f
                         enemy_visible[2] = false
                         ex_array[2] = true
-                        drawBitmap(explosion,array_position[2],enemy_position_y[2],null)
+                        isExpBul1[2] = true
+                        expPos1[2][0] = array_position[2]
+                        expPos1[2][1] = enemy_position_y[2]
+                        //drawBitmap(explosion,array_position[2],enemy_position_y[2],null)
                         just_shot_bullet[0] = true
                     }
                 }
@@ -792,7 +863,10 @@ class MyView(context: Context?, weat:String?, Color :String?, Bul :String?, Logg
                         down4 = 0f
                         enemy_visible[3] = false
                         ex_array[3] = true
-                        drawBitmap(explosion,array_position[3],enemy_position_y[3],null)
+                        isExpBul1[3]= true
+                        expPos1[3][0] = array_position[3]
+                        expPos1[3][1] = enemy_position_y[3]
+                        //drawBitmap(explosion,array_position[3],enemy_position_y[3],null)
                         just_shot_bullet[0] = true
                     }
                 }
@@ -802,10 +876,67 @@ class MyView(context: Context?, weat:String?, Color :String?, Bul :String?, Logg
                         down5 = 0f
                         enemy_visible[4] = false
                         ex_array[4] = true
-                        drawBitmap(explosion,array_position[4],enemy_position_y[4],null)
+                        isExpBul1[4] = true
+                        expPos1[4][0] = array_position[4]
+                        expPos1[4][1] = enemy_position_y[4]
+                        //drawBitmap(explosion,array_position[4],enemy_position_y[4],null)
                         just_shot_bullet[0] = true
                     }
                 }
+                
+                /////////////////ESPLOSIONE BULLET 1
+                if(isExpBul1[0]){
+                    if(expFrame1[0] < 18) {
+                        drawBitmap(bitmapVideo.get(expFrame1[0]/2),expPos1[0][0],expPos1[0][1],null)
+                        expFrame1[0] = expFrame1[0] + 1
+                    }
+                    else{
+                        expFrame1[0] = 0
+                        isExpBul1[0] = false
+                    }
+                }
+                if(isExpBul1[1]){
+                    if(expFrame1[1] < 18) {
+                        drawBitmap(bitmapVideo.get(expFrame1[1]/2),expPos1[1][0],expPos1[1][1],null)
+                        expFrame1[1] = expFrame1[1] + 1
+                    }
+                    else{
+                        expFrame1[1] = 0
+                        isExpBul1[1] = false
+                    }
+                }
+                if(isExpBul1[2]){
+                    if(expFrame1[2] < 18) {
+                        drawBitmap(bitmapVideo.get(expFrame1[2]/2),expPos1[2][0],expPos1[2][1],null)
+                        expFrame1[2] = expFrame1[2] + 1
+                    }
+                    else{
+                        expFrame1[2] = 0
+                        isExpBul1[2] = false
+                    }
+                }
+                if(isExpBul1[3]){
+                    if(expFrame1[3] < 18) {
+                        drawBitmap(bitmapVideo.get(expFrame1[3]/2),expPos1[3][0],expPos1[3][1],null)
+                        expFrame1[3] = expFrame1[3] + 1
+                    }
+                    else{
+                        expFrame1[3] = 0
+                        isExpBul1[3] = false
+                    }
+                }
+                if(isExpBul1[4]){
+                    if(expFrame1[4] < 18) {
+                        drawBitmap(bitmapVideo.get(expFrame1[4]/2),expPos1[4][0],expPos1[4][1],null)
+                        expFrame1[4] = expFrame1[4] + 1
+                    }
+                    else{
+                        expFrame1[4] = 0
+                        isExpBul1[4] = false
+                    }
+                }
+                /////////////
+                
                 //////////////bullet 2 //////////////////////////
                 if((bullet_position_x[1]>=array_position[0]-35f)and(bullet_position_x[1]<=array_position[0]+115f)and(bullet_position_y[1]<=enemy_position_y[0]+120f)and(bullet_position_y[1]>=enemy_position_y[0])){
                     if(!just_shot_bullet[1]) {
@@ -813,7 +944,10 @@ class MyView(context: Context?, weat:String?, Color :String?, Bul :String?, Logg
                         down1 = 0f
                         enemy_visible[0] = false
                         ex_array[0] = true
-                        drawBitmap(explosion,array_position[0],enemy_position_y[0],null)
+                        isExpBul2[0] = true
+                        expPos2[0][0] = array_position[0]
+                        expPos2[0][1] = enemy_position_y[0]
+                        //drawBitmap(explosion,array_position[0],enemy_position_y[0],null)
                         just_shot_bullet[1] = true
                     }
                 }
@@ -823,7 +957,10 @@ class MyView(context: Context?, weat:String?, Color :String?, Bul :String?, Logg
                         down2 = 0f
                         enemy_visible[1] = false
                         ex_array[1] = true
-                        drawBitmap(explosion,array_position[1],enemy_position_y[1],null)
+                        isExpBul2[1] = true
+                        expPos2[1][0] = array_position[1]
+                        expPos2[1][1] = enemy_position_y[1]
+                        //drawBitmap(explosion,array_position[1],enemy_position_y[1],null)
                         just_shot_bullet[1] = true
                     }
                 }
@@ -833,7 +970,10 @@ class MyView(context: Context?, weat:String?, Color :String?, Bul :String?, Logg
                         down3 = 0f
                         enemy_visible[2] = false
                         ex_array[2] = true
-                        drawBitmap(explosion,array_position[2],enemy_position_y[2],null)
+                        isExpBul2[2] = true
+                        expPos2[2][0] = array_position[2]
+                        expPos2[2][1] = enemy_position_y[2]
+                        //drawBitmap(explosion,array_position[2],enemy_position_y[2],null)
                         just_shot_bullet[1] = true
                     }
                 }
@@ -843,7 +983,10 @@ class MyView(context: Context?, weat:String?, Color :String?, Bul :String?, Logg
                         down4 = 0f
                         enemy_visible[3] = false
                         ex_array[3] = true
-                        drawBitmap(explosion,array_position[3],enemy_position_y[3],null)
+                        isExpBul2[3] = true
+                        expPos2[3][0] = array_position[3]
+                        expPos2[3][1] = enemy_position_y[3]
+                        //drawBitmap(explosion,array_position[3],enemy_position_y[3],null)
                         just_shot_bullet[1] = true
                     }
                 }
@@ -853,10 +996,67 @@ class MyView(context: Context?, weat:String?, Color :String?, Bul :String?, Logg
                         down5 = 0f
                         enemy_visible[4] = false
                         ex_array[4] = true
-                        drawBitmap(explosion,array_position[4],enemy_position_y[4],null)
+                        isExpBul2[4] = true
+                        expPos2[4][0] = array_position[4]
+                        expPos2[4][1] = enemy_position_y[4]
+                        //drawBitmap(explosion,array_position[4],enemy_position_y[4],null)
                         just_shot_bullet[1] = true
                     }
                 }
+
+                /////////////////ESPLOSIONE BULLET 2
+                if(isExpBul2[0]){
+                    if(expFrame2[0] < 18) {
+                        drawBitmap(bitmapVideo.get(expFrame2[0]/2),expPos2[0][0],expPos2[0][1],null)
+                        expFrame2[0] = expFrame2[0] + 1
+                    }
+                    else{
+                        expFrame2[0] = 0
+                        isExpBul2[0] = false
+                    }
+                }
+                if(isExpBul2[1]){
+                    if(expFrame2[1] < 18) {
+                        drawBitmap(bitmapVideo.get(expFrame2[1]/2),expPos2[1][0],expPos2[1][1],null)
+                        expFrame2[1] = expFrame2[1] + 1
+                    }
+                    else{
+                        expFrame2[1] = 0
+                        isExpBul2[1] = false
+                    }
+                }
+                if(isExpBul2[2]){
+                    if(expFrame2[2] < 18) {
+                        drawBitmap(bitmapVideo.get(expFrame2[2]/2),expPos2[2][0],expPos2[2][1],null)
+                        expFrame2[2] = expFrame2[2] + 1
+                    }
+                    else{
+                        expFrame2[2] = 0
+                        isExpBul2[2] = false
+                    }
+                }
+                if(isExpBul2[3]){
+                    if(expFrame2[3] < 18) {
+                        drawBitmap(bitmapVideo.get(expFrame2[3]/2),expPos2[3][0],expPos2[3][1],null)
+                        expFrame2[3] = expFrame2[3] + 1
+                    }
+                    else{
+                        expFrame2[3] = 0
+                        isExpBul2[3] = false
+                    }
+                }
+                if(isExpBul2[4]){
+                    if(expFrame2[4] < 18) {
+                        drawBitmap(bitmapVideo.get(expFrame2[4]/2),expPos2[4][0],expPos2[4][1],null)
+                        expFrame1[4] = expFrame1[4] + 1
+                    }
+                    else{
+                        expFrame2[4] = 0
+                        isExpBul2[4] = false
+                    }
+                }
+                ////////////////
+
                 //////////////////////bullet 3 ////////////////////////////
                 if((bullet_position_x[2]>=array_position[0]-35f)and(bullet_position_x[2]<=array_position[0]+115f)and(bullet_position_y[2]<=enemy_position_y[0]+120f)and(bullet_position_y[2]>=enemy_position_y[0])){
                     if(!just_shot_bullet[2]) {
@@ -864,7 +1064,10 @@ class MyView(context: Context?, weat:String?, Color :String?, Bul :String?, Logg
                         down1 = 0f
                         enemy_visible[0] = false
                         ex_array[0] = true
-                        drawBitmap(explosion,array_position[0],enemy_position_y[0],null)
+                        isExpBul3[0] = true
+                        expPos3[0][0] = array_position[0]
+                        expPos3[0][1] = enemy_position_y[0]
+                        //drawBitmap(explosion,array_position[0],enemy_position_y[0],null)
                         just_shot_bullet[2] = true
                     }
                 }
@@ -874,7 +1077,10 @@ class MyView(context: Context?, weat:String?, Color :String?, Bul :String?, Logg
                         down2 = 0f
                         enemy_visible[1] = false
                         ex_array[1] = true
-                        drawBitmap(explosion,array_position[1],enemy_position_y[1],null)
+                        isExpBul3[1] = true
+                        expPos3[1][0] = array_position[1]
+                        expPos3[1][1] = enemy_position_y[1]
+                        //drawBitmap(explosion,array_position[1],enemy_position_y[1],null)
                         just_shot_bullet[2] = true
                     }
                 }
@@ -884,7 +1090,10 @@ class MyView(context: Context?, weat:String?, Color :String?, Bul :String?, Logg
                         down3 = 0f
                         enemy_visible[2] = false
                         ex_array[2] = true
-                        drawBitmap(explosion,array_position[2],enemy_position_y[2],null)
+                        isExpBul3[2] = true
+                        expPos3[2][0] = array_position[2]
+                        expPos3[2][1] = enemy_position_y[2]
+                        //drawBitmap(explosion,array_position[2],enemy_position_y[2],null)
                         just_shot_bullet[2] = true
                     }
                 }
@@ -894,7 +1103,10 @@ class MyView(context: Context?, weat:String?, Color :String?, Bul :String?, Logg
                         down4 = 0f
                         enemy_visible[3] = false
                         ex_array[3] = true
-                        drawBitmap(explosion,array_position[3],enemy_position_y[3],null)
+                        isExpBul3[3] = true
+                        expPos3[3][0] = array_position[3]
+                        expPos3[3][1] = enemy_position_y[3]
+                        //drawBitmap(explosion,array_position[3],enemy_position_y[3],null)
                         just_shot_bullet[2] = true
                     }
                 }
@@ -904,10 +1116,68 @@ class MyView(context: Context?, weat:String?, Color :String?, Bul :String?, Logg
                         down5 = 0f
                         enemy_visible[4] = false
                         ex_array[4] = true
-                        drawBitmap(explosion,array_position[4],enemy_position_y[4],null)
+                        isExpBul3[4] = true
+                        expPos3[4][0] = array_position[4]
+                        expPos3[4][1] = enemy_position_y[4]
+                        //drawBitmap(explosion,array_position[4],enemy_position_y[4],null)
                         just_shot_bullet[2] = true
                     }
                 }
+
+                /////////////////ESPLOSIONE BULLET 3
+                if(isExpBul3[0]){
+                    if(expFrame3[0] < 18) {
+                        drawBitmap(bitmapVideo.get(expFrame3[0]/2),expPos3[0][0],expPos3[0][1],null)
+                        expFrame3[0] = expFrame3[0] + 1
+                    }
+                    else{
+                        expFrame3[0] = 0
+                        isExpBul3[0] = false
+                    }
+                }
+                if(isExpBul3[1]){
+                    if(expFrame3[1] < 18) {
+                        drawBitmap(bitmapVideo.get(expFrame3[1]/2),expPos3[1][0],expPos3[1][1],null)
+                        expFrame3[1] = expFrame3[1] + 1
+                    }
+                    else{
+                        expFrame3[1] = 0
+                        isExpBul3[1] = false
+                    }
+                }
+                if(isExpBul3[2]){
+                    if(expFrame3[2] < 18) {
+                        drawBitmap(bitmapVideo.get(expFrame3[2]/2),expPos3[2][0],expPos3[2][1],null)
+                        expFrame3[2] = expFrame3[2] + 1
+                    }
+                    else{
+                        expFrame3[2] = 0
+                        isExpBul3[2] = false
+                    }
+                }
+                if(isExpBul3[3]){
+                    if(expFrame3[3] < 18) {
+                        drawBitmap(bitmapVideo.get(expFrame3[3]/2),expPos3[3][0],expPos3[3][1],null)
+                        expFrame3[3] = expFrame3[3] + 1
+                    }
+                    else{
+                        expFrame3[3] = 0
+                        isExpBul3[3] = false
+                    }
+                }
+                if(isExpBul3[4]){
+                    if(expFrame3[4] < 18) {
+                        drawBitmap(bitmapVideo.get(expFrame3[4]/2),expPos3[4][0],expPos3[4][1],null)
+                        expFrame3[4] = expFrame3[4] + 1
+                    }
+                    else{
+                        expFrame3[4] = 0
+                        isExpBul3[4] = false
+                    }
+                }
+
+                ////////////
+
                 //////////******** MANAGE COLLISION OUR BULLETS TO BOSS 1 *******////////////////
                 if((bullet_position_x[0]>=boss_x[0]-35f)and(bullet_position_x[0]<=boss_x[0]+195f)and(bullet_position_y[0]<=boss_y[0]+200f)and(bullet_position_y[0]>=boss_y[0])) {
                     if(!just_shot_bullet[0]){
