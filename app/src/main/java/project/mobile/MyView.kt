@@ -30,6 +30,7 @@ class MyView(context: Context?, weat:String?, Color :String?, Bul :String?, Logg
     var mLastRotationVector = FloatArray(3) //The last value of the rotation vector
     var mRotationMatrix = FloatArray(9)
     var roll = 0f
+    var oldRoll = 0f
 
     //Bullet positions with respect to y axis
     var up = arrayOf<Float>(0f, 0f, 0f)
@@ -95,6 +96,8 @@ class MyView(context: Context?, weat:String?, Color :String?, Bul :String?, Logg
     var sizeHeart = 50f
     var background : Bitmap
     lateinit var airplane : Bitmap
+    lateinit var airplaneLeft : Bitmap
+    lateinit var airplaneRight : Bitmap
     lateinit var bullet : Bitmap
     var enemy_type1 : Bitmap
     var enemy_type2 : Bitmap
@@ -245,6 +248,12 @@ class MyView(context: Context?, weat:String?, Color :String?, Bul :String?, Logg
         }else if(Color =="green"){
             airplane= ResourcesCompat.getDrawable(resources,R.drawable.airplanegreen,
                 null)?.toBitmap(sizeA.toInt(),sizeA.toInt())!!
+
+            airplaneLeft = ResourcesCompat.getDrawable(resources,R.drawable.airplanegreenleft,
+                null)?.toBitmap(sizeA.toInt(),sizeA.toInt())!!
+
+            airplaneRight = ResourcesCompat.getDrawable(resources,R.drawable.airplanegreenright,
+                null)?.toBitmap(sizeA.toInt(),sizeA.toInt())!!
         }
         ///// bullet
         if(Bul == "normal"){
@@ -345,10 +354,20 @@ class MyView(context: Context?, weat:String?, Color :String?, Bul :String?, Logg
                     plane_x = 990f
                 }else{
                     withTranslation(roll *(500f/0.701f), 0f) {
-                        drawBitmap(airplane, 500f, 1400f, null) }
+                        //Log.i("OLDROLL", oldRoll.toString())
+                        if (roll > oldRoll + 0.001) {
+                            Log.i("OLDROLL", oldRoll.toString())
+                            drawBitmap(airplaneRight, 500f, 1400f, null)
+                        } else if (roll < oldRoll - 0.001) {
+                            Log.i("OLDROLL", oldRoll.toString())
+                            drawBitmap(airplaneLeft, 500f, 1400f, null)
+                        } else {
+                            drawBitmap(airplane, 500f, 1400f, null)
+                        }
+                    }
                     plane_x = 500f + roll *(500f/0.701f)
                 }
-                Log.i("Roll", roll.toString())
+
                 ///////end draw airplane /////////
                 //-------- draw hearts -------//
                 if(hearts == 3){
@@ -1519,6 +1538,9 @@ class MyView(context: Context?, weat:String?, Color :String?, Bul :String?, Logg
         mLastRotationVector = p0?.values?.clone()!! //Get last rotation vector
         //Compute the rotation matrix from the rotation vector
         SensorManager.getRotationMatrixFromVector(mRotationMatrix,mLastRotationVector)
+
+        //Save the old roll angle
+        oldRoll = roll
 
         //Compute the roll angle
         roll = a*roll+(1-a)* atan2(-(mRotationMatrix[6]),mRotationMatrix[8])
