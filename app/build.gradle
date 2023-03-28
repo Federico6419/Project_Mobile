@@ -90,4 +90,7 @@ dependencies {
     // Add the dependency for the Cloud Storage library
     // When using the BoM, you don't specify versions in Firebase library dependencies
     implementation 'com.google.firebase:firebase-storage-ktx'
+
+    //To manage music when background
+    implementation "androidx.lifecycle:lifecycle-process:2.2.0"
 }

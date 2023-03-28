@@ -91,7 +91,8 @@ class MyView(context: Context?, weat:String?, Color :String?, Bul :String?, Logg
 
     var size = 2f
     var sizeA = 150f
-    var sizeB = 20f
+    var widthBullet = 20f
+    var heighBullet = 40f
     var sizeBoss = 200f
     var sizeHeart = 50f
     var background : Bitmap
@@ -99,6 +100,7 @@ class MyView(context: Context?, weat:String?, Color :String?, Bul :String?, Logg
     lateinit var airplaneLeft : Bitmap
     lateinit var airplaneRight : Bitmap
     lateinit var bullet : Bitmap
+    lateinit var bulletAvailable : Bitmap
     var enemy_type1 : Bitmap
     var enemy_type2 : Bitmap
     var enemy_type3 : Bitmap
@@ -258,12 +260,17 @@ class MyView(context: Context?, weat:String?, Color :String?, Bul :String?, Logg
         ///// bullet
         if(Bul == "normal"){
             bullet = ResourcesCompat.getDrawable(resources,R.drawable.bullet,
-                null)?.toBitmap(sizeB.toInt(),sizeB.toInt())!!
+                null)?.toBitmap(widthBullet.toInt(),heighBullet.toInt())!!
         }else if(Bul == "laser"){
             bullet = ResourcesCompat.getDrawable(resources,R.drawable.laser_bullet2,
-                null)?.toBitmap(sizeB.toInt(),sizeB.toInt())!!
+                null)?.toBitmap(widthBullet.toInt(),heighBullet.toInt())!!
         }
-        //// enemies //////
+
+        //Bullet available
+        bulletAvailable = ResourcesCompat.getDrawable(resources,R.drawable.bullet,
+            null)?.toBitmap(40, 80)!!
+
+            //// enemies //////
         enemy_type1 = ResourcesCompat.getDrawable(resources,R.drawable.enemy1,
             null)?.toBitmap(sizeA.toInt(),sizeA.toInt())!!
         enemy_type2 = ResourcesCompat.getDrawable(resources,R.drawable.enemy2,
@@ -334,7 +341,7 @@ class MyView(context: Context?, weat:String?, Color :String?, Bul :String?, Logg
                 //draw pause button
                 drawBitmap(pause_button,860f,1700f,null)
 
-                val message= "Score: $Score"
+                val message= "$Score pt"
                 val textPaint = Paint().also {
                     it.color = Color.parseColor("#000000")
                     it.strokeWidth = 100f
@@ -354,7 +361,6 @@ class MyView(context: Context?, weat:String?, Color :String?, Bul :String?, Logg
                     plane_x = 990f
                 }else{
                     withTranslation(roll *(500f/0.701f), 0f) {
-                        //Log.i("OLDROLL", oldRoll.toString())
                         if (roll > oldRoll + 0.001) {
                             Log.i("OLDROLL", oldRoll.toString())
                             drawBitmap(airplaneRight, 500f, 1400f, null)
@@ -384,15 +390,15 @@ class MyView(context: Context?, weat:String?, Color :String?, Bul :String?, Logg
                 //------ end draw hearts ------//
                 //------ draw bullet a disposizione -------//
                 if(bullet_available == 3){
-                    drawBitmap(bullet, 500f, 1720f, null)
-                    drawBitmap(bullet, 550f, 1720f, null)
-                    drawBitmap(bullet, 600f, 1720f, null)
+                    drawBitmap(bulletAvailable, 500f, 1720f, null)
+                    drawBitmap(bulletAvailable, 550f, 1720f, null)
+                    drawBitmap(bulletAvailable, 600f, 1720f, null)
                 }else if(bullet_available==2){
-                    drawBitmap(bullet, 500f, 1720f, null)
-                    drawBitmap(bullet, 550f, 1720f, null)
+                    drawBitmap(bulletAvailable, 500f, 1720f, null)
+                    drawBitmap(bulletAvailable, 550f, 1720f, null)
                     // se vogliamo possiamo metter cuore vuoto
                 }else if(bullet_available==1){
-                    drawBitmap(bullet, 500f, 1720f, null)
+                    drawBitmap(bulletAvailable, 500f, 1720f, null)
                 }
                 //------ end draw bullet a disposizione -------//
                 if(!enemy_visible[0] and ex_array[0]){
@@ -605,8 +611,8 @@ class MyView(context: Context?, weat:String?, Color :String?, Bul :String?, Logg
                     up[0] -= 40f
                     withTranslation(0f, up[0]) {
                         if (is_shot[0]) {
-                            drawBitmap(bullet, plane_x+50f, 1400f, null)
-                            res = plane_x+50f
+                            drawBitmap(bullet, plane_x+65f, 1400f, null)
+                            res = plane_x+65f
                             is_shot[0] = false
                             bullet_position_x[0] = res
                             bullet_position_y[0] = (1400f+up[0])
@@ -629,8 +635,8 @@ class MyView(context: Context?, weat:String?, Color :String?, Bul :String?, Logg
                     up[1] -= 40f
                     withTranslation(0f, up[1]) {
                         if (is_shot[1]) {
-                            drawBitmap(bullet, plane_x+50f, 1400f, null)
-                            res2 =plane_x+50f
+                            drawBitmap(bullet, plane_x+65f, 1400f, null)
+                            res2 =plane_x+65f
                             is_shot[1] = false
                             bullet_position_x[1] =res2
                             bullet_position_y[1] = (1400f+up[1])
@@ -653,8 +659,8 @@ class MyView(context: Context?, weat:String?, Color :String?, Bul :String?, Logg
                     up[2] -= 40f
                     withTranslation(0f, up[2]) {
                         if (is_shot[2]) {
-                            drawBitmap(bullet, plane_x+50f, 1400f, null)
-                            res3 = plane_x+50f
+                            drawBitmap(bullet, plane_x+65f, 1400f, null)
+                            res3 = plane_x+65f
                             is_shot[2] = false
                             bullet_position_x[2] = res3
                             bullet_position_y[2] = (1400f+up[2])

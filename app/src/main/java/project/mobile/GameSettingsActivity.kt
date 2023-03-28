@@ -2,10 +2,13 @@ package project.mobile
 
 import android.content.Intent
 import android.os.Bundle
+import android.text.Layout
+import android.view.LayoutInflater
 import android.view.View
 import android.widget.Button
 import android.widget.EditText
 import android.widget.ImageButton
+import android.widget.ProgressBar
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import com.google.gson.annotations.SerializedName
@@ -97,6 +100,7 @@ class GameSettingsActivity : AppCompatActivity() {
         //Start button management
         val startButton = findViewById(R.id.StartButton) as ImageButton
         startButton.setOnClickListener() {
+            setContentView(R.layout.activity_game_settings_loading)
 
             intent = Intent(this, GameActivity::class.java)
             intent.putExtra("Opponent", avversario)
@@ -109,17 +113,6 @@ class GameSettingsActivity : AppCompatActivity() {
             intent = Intent(this, MainActivity::class.java)
             startActivity(intent)
         }
-    }
-    override fun onPause() {
-        super.onPause()
-        music.pauseSound()
-    }
-
-    override fun onResume() {
-        super.onResume()
-
-        //Music management when resuming the homepage
-        music.playSoundMenu(this)
     }
 
 }

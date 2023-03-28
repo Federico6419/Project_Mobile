@@ -23,6 +23,9 @@ import androidx.camera.view.PreviewView
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.core.net.toUri
+import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.LifecycleEventObserver
+import androidx.lifecycle.ProcessLifecycleOwner
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.DatabaseReference
 import com.google.firebase.database.ktx.database
@@ -65,7 +68,6 @@ class SignUpActivity : AppCompatActivity() {
         var resetbutton = findViewById(R.id.ResetButton) as Button
         var submitbutton = findViewById(R.id.SubmitButton) as Button
 
-        //Manage the reset button
         //Manage the reset button
         resetbutton.setOnClickListener {
             usernameView.setText("")
@@ -405,18 +407,6 @@ class SignUpActivity : AppCompatActivity() {
             intent = Intent(this, MainActivity::class.java)
             startActivity(intent)
         }
-    }
-
-    override fun onPause() {
-        super.onPause()
-        music.pauseSound()
-    }
-
-    override fun onResume() {
-        super.onResume()
-
-        //Music management when resuming the homepage
-        music.playSoundMenu(this)
     }
 
 }

@@ -1,33 +1,36 @@
 package project.mobile
 
-import android.content.Intent
-import android.content.pm.PackageManager
-import androidx.appcompat.app.AppCompatActivity
-import android.os.Bundle
-import android.widget.ImageButton
-import android.util.Log
-import android.widget.TextView
-import android.widget.Toast
-import androidx.core.app.ActivityCompat
-import androidx.core.content.ContextCompat
-import com.google.firebase.FirebaseApp
 import android.Manifest
 import android.content.Context
-import com.google.firebase.ktx.Firebase
-import kotlinx.coroutines.*
+import android.content.Intent
+import android.content.pm.PackageManager
 import android.location.Location
 import android.location.LocationListener
 import android.location.LocationManager
-import android.os.Build
-import androidx.annotation.RequiresApi
-import com.google.firebase.auth.FirebaseAuth
-import android.media.MediaPlayer
 import android.net.Uri
-import android.view.View
+import android.os.Build
+import android.os.Bundle
+import android.util.Log
+import android.widget.ImageButton
 import android.widget.ImageView
+import android.widget.TextView
+import android.widget.Toast
+import androidx.annotation.RequiresApi
+import androidx.appcompat.app.AppCompatActivity
+import androidx.core.app.ActivityCompat
+import androidx.core.content.ContextCompat
 import androidx.core.net.toUri
+import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.LifecycleEventObserver
+import androidx.lifecycle.LifecycleObserver
+import androidx.lifecycle.OnLifecycleEvent
+import androidx.lifecycle.ProcessLifecycleOwner
+import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.ktx.Firebase
 import com.google.firebase.storage.ktx.storage
+import kotlinx.coroutines.*
 import java.io.File
+
 
 //Public variables for current weather and city services
 public var weather = ""        //Current weather variable
@@ -47,7 +50,7 @@ public var userimage: Uri? = null
 public var justExecuted = true
 
 @Suppress("DEPRECATED_IDENTITY_EQUALS")
-class MainActivity : AppCompatActivity(), LocationListener{
+class MainActivity : AppCompatActivity(), LocationListener, LifecycleObserver {
     lateinit var locationManager : LocationManager          //Define Location Manager
     private lateinit var firebaseAuth: FirebaseAuth         //Firebase Authenticatoin variable
     val storage = Firebase.storage      //Firebase Storage variable
@@ -61,6 +64,22 @@ class MainActivity : AppCompatActivity(), LocationListener{
 
         //Music management
         music.playSoundMenu(this)
+
+        //Manage music when app goes in background
+        var lifecycleEventObserver = LifecycleEventObserver { _, event ->
+            when (event) {
+                Lifecycle.Event.ON_STOP -> {
+                    //Pause music when app goes in background
+                    music.pauseSound()
+                }
+                Lifecycle.Event.ON_START -> {
+                    //Resume music when app goes in foreground
+                    music.playSoundMenu(this)
+                }
+                else -> {}
+            }
+        }
+        ProcessLifecycleOwner.get().getLifecycle().addObserver(lifecycleEventObserver)
 
         //Location Permission
         if (ContextCompat.checkSelfPermission(this,
@@ -187,7 +206,6 @@ class MainActivity : AppCompatActivity(), LocationListener{
         val startButton = findViewById(R.id.StartButton) as ImageButton
         startButton.setOnClickListener() {
             intent = Intent(this, GameSettingsActivity::class.java)
-            //intent.putExtra("Weather",weather)
             startActivity(intent)
         }
 
@@ -198,18 +216,6 @@ class MainActivity : AppCompatActivity(), LocationListener{
             startActivity(intent)
         }
 
-    }
-
-    override fun onPause() {
-        super.onPause()
-        music.pauseSound()
-    }
-
-    override fun onResume() {
-        super.onResume()
-
-        //Music management when resuming the homepage
-        music.playSoundMenu(this)
     }
 
     override fun onDestroy() {
@@ -293,5 +299,4 @@ class MainActivity : AppCompatActivity(), LocationListener{
         }
 
     }
-
 }
