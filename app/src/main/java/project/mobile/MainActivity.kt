@@ -191,6 +191,11 @@ class MainActivity : AppCompatActivity(), LocationListener{
 
     }
 
+    override fun onPause() {
+        super.onPause()
+        music.pauseSound()
+    }
+
     override fun onResume() {
         super.onResume()
 

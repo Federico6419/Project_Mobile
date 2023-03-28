@@ -110,4 +110,16 @@ class GameSettingsActivity : AppCompatActivity() {
             startActivity(intent)
         }
     }
+    override fun onPause() {
+        super.onPause()
+        music.pauseSound()
+    }
+
+    override fun onResume() {
+        super.onResume()
+
+        //Music management when resuming the homepage
+        music.playSoundMenu(this)
+    }
+
 }
