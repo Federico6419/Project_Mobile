@@ -43,6 +43,9 @@ public var current_id = ""              //ID of the current user
 public var current_score = 0           //Score of the current user
 public var userimage: Uri? = null
 
+//Variable that says if the application is executed in this moment
+public var justExecuted = true
+
 @Suppress("DEPRECATED_IDENTITY_EQUALS")
 class MainActivity : AppCompatActivity(), LocationListener{
     lateinit var locationManager : LocationManager          //Define Location Manager
@@ -74,8 +77,14 @@ class MainActivity : AppCompatActivity(), LocationListener{
 
         locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 1000, 5f,this)
 
+        //If the previous user is logged, sign him out
+        if((firebaseAuth.currentUser?.email != null) and justExecuted){
+            firebaseAuth.signOut()          //Sign out from Firebase Authentication
+        }
+
         //Get the uid of the current user
         val uid = firebaseAuth.uid
+        justExecuted = false
 
         //Check if the user id is null or not
         uid?.let {               //If user id is not null, manage the listeners of the signed homepage
@@ -201,6 +210,13 @@ class MainActivity : AppCompatActivity(), LocationListener{
 
         //Music management when resuming the homepage
         music.playSoundMenu(this)
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+
+        //Manage logout when exit from application
+        firebaseAuth.signOut()          //Sign out from Firebase Authentication
     }
 
     //Ask current location
