@@ -177,7 +177,6 @@ class MyView(context: Context?, weat:String?, Color :String?, Bul :String?, Logg
     /////////////
     /////////////
 
-
     init{
         ////////////////ESPLOSIONE
         retreiver = MediaMetadataRetriever()
@@ -958,6 +957,8 @@ class MyView(context: Context?, weat:String?, Color :String?, Bul :String?, Logg
                     if (expFrame1[0] < 18) {
                         if(expFrame1[0] == 0){
                             just_shot_bullet[0] = false
+                            //If there is an explosion play its sound
+                            music.playExplosionSound(context)
                         }
                         drawBitmap(
                             bitmapVideo.get(expFrame1[0] / 2),
@@ -1334,6 +1335,8 @@ class MyView(context: Context?, weat:String?, Color :String?, Bul :String?, Logg
                     if (expFrame3[0] < 18) {
                         if(expFrame3[0] == 0){
                             just_shot_bullet[2] = false
+                            //If there is an explosion play its sound
+                            music.playExplosionSound(context)
                         }
                         drawBitmap(
                             bitmapVideo.get(expFrame3[0] / 2),
@@ -1351,6 +1354,8 @@ class MyView(context: Context?, weat:String?, Color :String?, Bul :String?, Logg
                     if (expFrame3[1] < 18) {
                         if(expFrame3[1] == 0){
                             just_shot_bullet[2] = false
+                            //If there is an explosion play its sound
+                            music.playExplosionSound(context)
                         }
                         drawBitmap(
                             bitmapVideo.get(expFrame3[1] / 2),
@@ -1368,6 +1373,8 @@ class MyView(context: Context?, weat:String?, Color :String?, Bul :String?, Logg
                     if (expFrame3[2] < 18) {
                         if(expFrame3[2] == 0){
                             just_shot_bullet[2] = false
+                            //If there is an explosion play its sound
+                            music.playExplosionSound(context)
                         }
                         drawBitmap(
                             bitmapVideo.get(expFrame3[2] / 2),
@@ -1385,6 +1392,8 @@ class MyView(context: Context?, weat:String?, Color :String?, Bul :String?, Logg
                     if (expFrame3[3] < 18) {
                         if(expFrame3[3] == 0){
                             just_shot_bullet[2] = false
+                            //If there is an explosion play its sound
+                            music.playExplosionSound(context)
                         }
                         drawBitmap(
                             bitmapVideo.get(expFrame3[3] / 2),
@@ -1402,6 +1411,8 @@ class MyView(context: Context?, weat:String?, Color :String?, Bul :String?, Logg
                     if (expFrame3[4] < 18) {
                         if(expFrame3[4] == 0){
                             just_shot_bullet[2] = false
+                            //If there is an explosion play its sound
+                            music.playExplosionSound(context)
                         }
                         drawBitmap(
                             bitmapVideo.get(expFrame3[4] / 2),
