@@ -130,7 +130,7 @@ class MyView(context: Context?, weat:String?, Color :String?, Bul :String?, Logg
     var current_time = 0
     var change_score = true
     var old_time = 0
-    var Old_score = current_score
+    var old_score = current_score
     var id = ""
     var PAUSE = false
     var gameover = false
@@ -1546,13 +1546,14 @@ class MyView(context: Context?, weat:String?, Color :String?, Bul :String?, Logg
             }else if(!PAUSE and !start) {
                 ///////// gameover ////////////
                 gameover = true
-                if((Score > Old_score) and (logged)){
+                if((Score > old_score) and (logged)){
                     //Connecting to Firebase Database
                     val database = Firebase.database("https://mobileproject2-50486-default-rtdb.europe-west1.firebasedatabase.app/")
 
                     val referenceOldScore = database.getReference("Users/$current_id/Score")
                     referenceOldScore.setValue(Score.toString())
-                    Old_score = Score
+                    old_score = Score
+                    current_score = Score
                 }
                 plane_x = 500f
                 Score = 0

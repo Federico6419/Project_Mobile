@@ -4,6 +4,7 @@ import android.Manifest
 import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager
+import android.graphics.BitmapFactory
 import android.location.Location
 import android.location.LocationListener
 import android.location.LocationManager
@@ -11,7 +12,6 @@ import android.net.Uri
 import android.os.Build
 import android.os.Bundle
 import android.util.Log
-import android.view.View
 import android.widget.*
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.annotation.RequiresApi
@@ -22,7 +22,6 @@ import androidx.core.net.toUri
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.LifecycleEventObserver
 import androidx.lifecycle.LifecycleObserver
-import androidx.lifecycle.OnLifecycleEvent
 import androidx.lifecycle.ProcessLifecycleOwner
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.ktx.Firebase
@@ -110,15 +109,18 @@ class MainActivity : AppCompatActivity(), LocationListener, LifecycleObserver {
         uid?.let {               //If user id is not null, manage the listeners of the signed homepage
             setContentView(R.layout.activity_main_signed)
 
-
             /// intent with new method to return photo after finish changePhotoProfile activity
             var resultLauncher = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
                 if (result.resultCode == RESULT_OK) {
                     imageUri = result.data!!.getStringExtra("Image")?.toUri()!!
 
                     //Show image
-                    val changephotoButton = findViewById(R.id.iv_capture_button) as ImageButton
+                    var changephotoButton = findViewById(R.id.iv_capture_button) as ImageButton
                     changephotoButton.setImageURI(imageUri)
+                    /*var bitmap = BitmapFactory.decodeFile(File(imageUri.getPath()).getAbsolutePath())
+                    val height: Int = bitmap.height
+                    val width: Int = bitmap.width
+                    changephotoButton.width = width*/
 
                     // Create a storage reference from our app
                     var storageRef = storage.reference
