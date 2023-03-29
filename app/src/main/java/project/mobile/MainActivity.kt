@@ -111,7 +111,7 @@ class MainActivity : AppCompatActivity(), LocationListener, LifecycleObserver {
             setContentView(R.layout.activity_main_signed)
 
 
-            /// intent with new method to return photo after finish camera activity
+            /// intent with new method to return photo after finish changePhotoProfile activity
             var resultLauncher = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
                 if (result.resultCode == RESULT_OK) {
                     imageUri = result.data!!.getStringExtra("Image")?.toUri()!!
@@ -119,6 +119,23 @@ class MainActivity : AppCompatActivity(), LocationListener, LifecycleObserver {
                     //Show image
                     val changephotoButton = findViewById(R.id.iv_capture_button) as ImageButton
                     changephotoButton.setImageURI(imageUri)
+
+                    // Create a storage reference from our app
+                    var storageRef = storage.reference
+
+                    var file = imageUri
+
+                    val imageRef = storageRef.child("Images/$current_username")
+                    var uploadTask = file?.let { imageRef.putFile(it) }
+
+                    // Register observers to listen for when the download is done or if it fails
+                    if (uploadTask != null) {
+                        uploadTask.addOnFailureListener {
+                            Log.i("STORAGE", "Failed")
+                        }.addOnSuccessListener { taskSnapshot ->
+                            Log.i("STORAGE", "Success")
+                        }
+                    }
                 }
             }
             ////change photo profile intent
