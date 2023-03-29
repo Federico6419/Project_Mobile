@@ -11,10 +11,9 @@ import android.net.Uri
 import android.os.Build
 import android.os.Bundle
 import android.util.Log
-import android.widget.ImageButton
-import android.widget.ImageView
-import android.widget.TextView
-import android.widget.Toast
+import android.view.View
+import android.widget.*
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
@@ -48,6 +47,8 @@ public var userimage: Uri? = null
 
 //Variable that says if the application is executed in this moment
 public var justExecuted = true
+
+lateinit var imageUri: Uri          //Variable that will contain the URI of the image
 
 @Suppress("DEPRECATED_IDENTITY_EQUALS")
 class MainActivity : AppCompatActivity(), LocationListener, LifecycleObserver {
@@ -109,7 +110,25 @@ class MainActivity : AppCompatActivity(), LocationListener, LifecycleObserver {
         uid?.let {               //If user id is not null, manage the listeners of the signed homepage
             setContentView(R.layout.activity_main_signed)
 
-            var imageView = findViewById(R.id.iv_capture) as ImageView
+
+            /// intent with new method to return photo after finish camera activity
+            var resultLauncher = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
+                if (result.resultCode == RESULT_OK) {
+                    imageUri = result.data!!.getStringExtra("Image")?.toUri()!!
+
+                    //Show image
+                    val changephotoButton = findViewById(R.id.iv_capture_button) as ImageButton
+                    changephotoButton.setImageURI(imageUri)
+                }
+            }
+            ////change photo profile intent
+            val changephotoButton = findViewById(R.id.iv_capture_button) as ImageButton
+            changephotoButton.setOnClickListener() {
+                intent = Intent(this, ChangePhotoProfile::class.java)
+                resultLauncher.launch(intent)
+            }
+
+            //var imageView = findViewById(R.id.iv_capture) as ImageView
 
             // Create a storage reference from our app
             var storageRef = storage.reference
@@ -123,11 +142,13 @@ class MainActivity : AppCompatActivity(), LocationListener, LifecycleObserver {
             userImageRef.getFile(localFile).addOnSuccessListener {
                 // Local temp file has been created
                 userimage = localFile.toUri()
-                imageView.setImageURI(userimage)
+                changephotoButton.setImageURI(userimage)
+                //imageView.setImageURI(userimage)
                 Log.i("prova",it.toString())
             }.addOnFailureListener {
                 // Handle any errors
-                imageView.setImageResource(R.drawable.profileimage)
+                //imageView.setImageResource(R.drawable.profileimage)
+                changephotoButton.setImageResource(R.drawable.profileimage)
                 Log.i("error",it.toString())
             }
 
@@ -158,6 +179,7 @@ class MainActivity : AppCompatActivity(), LocationListener, LifecycleObserver {
                 intent = Intent(this, LeaderboardActivity::class.java)
                 startActivity(intent)
             }
+
         } ?: run {              //If user id is null, manage the listeners of the not signed homepage
             setContentView(R.layout.activity_main)
 
