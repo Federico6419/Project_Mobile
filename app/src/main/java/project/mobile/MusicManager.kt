@@ -12,6 +12,10 @@ public class MusicManager {
     var explosionPlayer2 : MediaPlayer? = null               //Explosion sound variable
     var explosionPlayer3 : MediaPlayer? = null               //Explosion sound variable
 
+    var isplaying1 = false
+    var isplaying2 = false
+    var isplaying3 = false
+
     fun playSoundMenu(conxt: Context) {
         if (mMediaPlayer == null) {
             mMediaPlayer = MediaPlayer.create(conxt, R.raw.menumusic)
@@ -31,27 +35,52 @@ public class MusicManager {
     fun playExplosionSound(conxt: Context) {
         if (explosionPlayer1 == null) {
             explosionPlayer1 = MediaPlayer.create(conxt, R.raw.explosionsound)
-            explosionPlayer1!!.isLooping = false
             explosionPlayer1!!.start()
-            explosionPlayer1!!.setOnCompletionListener{
-                //explosionPlayer1 = null
-                Log.i("FINISHED", "OK")
+            isplaying1 = true
+            explosionPlayer1!!.setOnCompletionListener(){
+                isplaying1 = false
             }
-        } else if(explosionPlayer2 == null) {
-            explosionPlayer2 = MediaPlayer.create(conxt, R.raw.explosionsound)
-            explosionPlayer2!!.isLooping = false
-            explosionPlayer2!!.start()
-            /*explosionPlayer2!!.setOnCompletionListener{
-                Log.i("FINISHED", "OK")
-            }*/
-        }else if(explosionPlayer3 == null) {
-            explosionPlayer3 = MediaPlayer.create(conxt, R.raw.explosionsound)
-            explosionPlayer3!!.isLooping = false
-            explosionPlayer3!!.start()
-            /*explosionPlayer3!!.setOnCompletionListener{
-                Log.i("FINISHED", "OK")
-            }*/
         }
+        else if(!isplaying1){
+                explosionPlayer1!!.start()
+                isplaying1 = true
+                explosionPlayer1!!.setOnCompletionListener(){
+                    isplaying1 = false
+                }
+            }
+        else if(explosionPlayer2 == null) {
+            explosionPlayer2 = MediaPlayer.create(conxt, R.raw.explosionsound)
+            explosionPlayer2!!.start()
+            isplaying2 = true
+            explosionPlayer2!!.setOnCompletionListener {
+                isplaying2 = false
+            }
+        }
+        else if(!isplaying2){
+            explosionPlayer2!!.start()
+            isplaying2 = true
+            explosionPlayer1!!.setOnCompletionListener(){
+                isplaying2 = false
+            }
+        } else if(explosionPlayer3 == null) {
+            explosionPlayer3 = MediaPlayer.create(conxt, R.raw.explosionsound)
+            explosionPlayer3!!.start()
+            isplaying3 = true
+            explosionPlayer3!!.setOnCompletionListener{
+                isplaying3 = false
+            }
+        }
+        else if(!isplaying3){
+            explosionPlayer3!!.start()
+            isplaying3 = true
+            explosionPlayer3!!.setOnCompletionListener(){
+                isplaying3 = false
+            }
+        }
+    }
+
+    fun completion() {
+        Log.i("FINISHED", "OK")
     }
 
     fun pauseSound() {
@@ -74,3 +103,4 @@ public class MusicManager {
         mMediaPlayer?.release()
     }
 }
+
