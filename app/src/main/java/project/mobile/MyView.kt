@@ -618,6 +618,7 @@ class MyView(context: Context?, weat:String?, Color :String?, Bul :String?, Logg
                             is_shot[0] = false
                             bullet_position_x[0] = res
                             bullet_position_y[0] = (1400f+up[0])
+                            music.playShootSound(context)
                         } else {
                             drawBitmap(bullet, res, 1400f, null)
                             if((up[0])<-1400f){
@@ -642,6 +643,7 @@ class MyView(context: Context?, weat:String?, Color :String?, Bul :String?, Logg
                             is_shot[1] = false
                             bullet_position_x[1] =res2
                             bullet_position_y[1] = (1400f+up[1])
+                            music.playShootSound(context)
                         } else {
                             drawBitmap(bullet, res2, 1400f, null)
                             if((up[1])<-1400f){
@@ -666,6 +668,7 @@ class MyView(context: Context?, weat:String?, Color :String?, Bul :String?, Logg
                             is_shot[2] = false
                             bullet_position_x[2] = res3
                             bullet_position_y[2] = (1400f+up[2])
+                            music.playShootSound(context)
                         } else {
                             drawBitmap(bullet, res3, 1400f, null)
                             Log.i("SCONTRO", bullet_position_y[2].toString()+", "+(enemy_position_y[0] + 150f).toString())
@@ -767,9 +770,11 @@ class MyView(context: Context?, weat:String?, Color :String?, Bul :String?, Logg
                 ////////////////  ------------- MANAGE COLLISION PLANE WITH ENEMIES AND BOSS BULLET  ----------------- ////////////////
                 if( (array_position[0]>= plane_x-140f) and (array_position[0]<=plane_x+140f)and(enemy_position_y[0] <= plane_y+300f)and(enemy_position_y[0] >= plane_y-150f)){
                     if(!justcollide[0]) {
-                        if (hearts == 0) {
+                        if (hearts == 1) {
                             start = false
                         } else {
+                            Log.i("COLPITO", "1")
+                            music.playCollisionSound(context)
                             hearts -= 1
                             justcollide[0] = true
                         }
@@ -777,49 +782,58 @@ class MyView(context: Context?, weat:String?, Color :String?, Bul :String?, Logg
                 }
                 if( (array_position[1]>= plane_x-140f)and(array_position[1]<=plane_x+140f)and(enemy_position_y[1] <= plane_y+300f)and(enemy_position_y[1] >= plane_y-150f)){
                     if(!justcollide[1]) {
-                        if (hearts == 0) {
+                        if (hearts == 1) {
                             start = false
                         } else {
+                            Log.i("COLPITO", "2")
+                            music.playCollisionSound(context)
                             hearts -= 1
                             justcollide[1] = true
                         }
                     }
                 }
                 if( (array_position[2]>= plane_x-140f)and(array_position[2]<=plane_x+140f)and(enemy_position_y[2] <= plane_y+300f)and(enemy_position_y[2] >= plane_y-150f)){
+                    Log.i("COLPITO", "3")
                     if(!justcollide[2]) {
-                        if (hearts == 0) {
+                        if (hearts == 1) {
                             start = false
                         } else {
+                            music.playCollisionSound(context)
                             hearts -= 1
                             justcollide[2] = true
                         }
                     }
                 }
                 if( (array_position[3]>= plane_x-140f)and(array_position[3]<=plane_x+140f)and(enemy_position_y[3] <= plane_y+300f)and(enemy_position_y[3] >= plane_y-150f)){
+                    Log.i("COLPITO", "4")
                     if(!justcollide[3]) {
-                        if (hearts == 0) {
+                        if (hearts == 1) {
                             start = false
                         } else {
+                            music.playCollisionSound(context)
                             hearts -= 1
                             justcollide[3] = true
                         }
                     }
                 }
                 if( (lateral_movement[4]+array_position[4]>= plane_x-15f)and(lateral_movement[4]+array_position[4]<=plane_x+15f)and(enemy_position_y[4] == plane_y)){
+                    Log.i("COLPITO", "SI")
                     if(!justcollide[4]) {
-                        if (hearts == 0) {
+                        if (hearts == 1) {
                             start = false
                         } else {
+                            music.playCollisionSound(context)
                             hearts -= 1
                             justcollide[4] = true
                         }
                     }
                 }
+
                 ////////////boss 1 bullet
                 if((boss_bullet_position_x[0] >=plane_x -25f) and (boss_bullet_position_x[0] <=plane_x +145f)and
                     (boss_bullet_position_y[0] <=plane_y +145f) and(boss_bullet_position_y[0] >=plane_y -25f)){
                     if(just_shot==false) {////// to avoid multiple collision of same bullet
-                        if (hearts == 0) {
+                        if (hearts == 1) {
                             start = false
                         } else {
                             hearts -= 1
@@ -831,7 +845,7 @@ class MyView(context: Context?, weat:String?, Color :String?, Bul :String?, Logg
                 if((boss_bullet_position_x[1] >=plane_x -25f) and (boss_bullet_position_x[1] <=plane_x +145f)and
                     (boss_bullet_position_y[1] <=plane_y +145f) and(boss_bullet_position_y[1] >=plane_y -25f)){
                     if(just_shot==false) {
-                        if (hearts == 0) {
+                        if (hearts == 1) {
                             start = false
                         } else {
                             hearts -= 1
@@ -842,7 +856,7 @@ class MyView(context: Context?, weat:String?, Color :String?, Bul :String?, Logg
                 if((boss_bullet_position_x[2] >=plane_x -25f) and (boss_bullet_position_x[2] <=plane_x +145f)and
                     (boss_bullet_position_y[2] <=plane_y +145f) and(boss_bullet_position_y[2] >=plane_y -25f)){
                     if(just_shot==false) {
-                        if (hearts == 0) {
+                        if (hearts == 1) {
                             start = false
                         } else {
                             hearts -= 1

@@ -252,8 +252,10 @@ class SignUpActivity : AppCompatActivity() {
             //Check if the email is not empty
             else if(email.isEmpty()){
                 Toast.makeText(this, "Email not inserted", Toast.LENGTH_SHORT).show()
-            }
-            //Check if the password is not empty
+            }   //Check if the email is written in the right format
+            else if(! android.util.Patterns.EMAIL_ADDRESS.matcher(email).matches()){
+                Toast.makeText(this, "Email is not written in the right format", Toast.LENGTH_SHORT).show()
+            }   //Check if the password is not empty
             else if(password.isEmpty()){
                 Toast.makeText(this, "Password not inserted", Toast.LENGTH_SHORT).show()
             }

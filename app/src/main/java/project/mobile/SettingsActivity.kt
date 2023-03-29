@@ -46,46 +46,47 @@ class SettingsActivity : AppCompatActivity() {
 
         // set on-click listener to change username
         userButton.setOnClickListener {
-            /*val user = usernameView.text.toString()
-
-            val database = Firebase.database("https://mobileproject2-50486-default-rtdb.europe-west1.firebasedatabase.app/")
-            val referenceUsername = database.getReference("Users/$current_id/Username")
-
-            referenceUsername.setValue(user)
-            Toast.makeText(this, "USERNAME CHANGED CORRECTLY", Toast.LENGTH_SHORT).show()
-
-            //Change the value of the public variable of the current user
-            current_username = user
-            startActivity(intent)*/
 
             val user = usernameView.text.toString()
 
-            //Connecting to Firebase Database
-            val database = Firebase.database("https://mobileproject2-50486-default-rtdb.europe-west1.firebasedatabase.app/")
+            //Check if the username is not empty
+            if(user.isEmpty()){
+                Toast.makeText(this, "Username not inserted", Toast.LENGTH_SHORT).show()
+            }
+            else {
 
-            val referenceDB = database.getReference("NumberOfUsers")    //Take the number of users
+                //Connecting to Firebase Database
+                val database =
+                    Firebase.database("https://mobileproject2-50486-default-rtdb.europe-west1.firebasedatabase.app/")
 
-            //Get the number of users
-            referenceDB.get().addOnSuccessListener {
-                var numberOfUsers = it.value.toString().toInt()
+                val referenceDB =
+                    database.getReference("NumberOfUsers")    //Take the number of users
 
-                var found = false
-                var referenceUsername: DatabaseReference
+                //Get the number of users
+                referenceDB.get().addOnSuccessListener {
+                    var numberOfUsers = it.value.toString().toInt()
 
-                for (i in 1..numberOfUsers) {
-                    referenceUsername = database.getReference("Users/$i/Username")    //Reference to username in the Database
+                    var found = false
+                    var referenceUsername: DatabaseReference
 
-                    referenceUsername.get().addOnSuccessListener {
-                        if ((it.value.toString() == user) and !found) {
-                            found = true
-                            //If username already exists
-                            Toast.makeText(this, "Username already exists", Toast.LENGTH_SHORT).show()
-                        } else if ((i == numberOfUsers) and !found) {
-                            //Save Username
-                            val referenceUser = database.getReference("Users/$current_id/Username")
-                            referenceUser.setValue(user)
-                            current_username = user
-                            startActivity(intent)
+                    for (i in 1..numberOfUsers) {
+                        referenceUsername =
+                            database.getReference("Users/$i/Username")    //Reference to username in the Database
+
+                        referenceUsername.get().addOnSuccessListener {
+                            if ((it.value.toString() == user) and !found) {
+                                found = true
+                                //If username already exists
+                                Toast.makeText(this, "Username already exists", Toast.LENGTH_SHORT)
+                                    .show()
+                            } else if ((i == numberOfUsers) and !found) {
+                                //Save Username
+                                val referenceUser =
+                                    database.getReference("Users/$current_id/Username")
+                                referenceUser.setValue(user)
+                                current_username = user
+                                startActivity(intent)
+                            }
                         }
                     }
                 }
@@ -96,34 +97,64 @@ class SettingsActivity : AppCompatActivity() {
         emailButton.setOnClickListener {
             val email = emailView.text.toString()
 
-            val database = Firebase.database("https://mobileproject2-50486-default-rtdb.europe-west1.firebasedatabase.app/")
-            val referenceUsername = database.getReference("Users/$current_id/Email")
+            //Check if the email is not empty
+            if(email.isEmpty()){
+                Toast.makeText(this, "Email not inserted", Toast.LENGTH_SHORT).show()
+            }       //Check if the email is written in the right format
+            else if(! android.util.Patterns.EMAIL_ADDRESS.matcher(email).matches()){
+                Toast.makeText(this, "Email is not written in the right format", Toast.LENGTH_SHORT).show()
+            }
+            else {
 
-            referenceUsername.setValue(email) // change email on database realtime
-            firebaseAuth.currentUser?.updateEmail(email) // change email on firebase authentication
-            Toast.makeText(this, "EMAIL CHANGED CORRECTLY", Toast.LENGTH_SHORT).show()
+                val database =
+                    Firebase.database("https://mobileproject2-50486-default-rtdb.europe-west1.firebasedatabase.app/")
+                val referenceUsername = database.getReference("Users/$current_id/Email")
 
-            intent.putExtra("Email", email)
-            startActivity(intent)
+                referenceUsername.setValue(email) // change email on database realtime
+                firebaseAuth.currentUser?.updateEmail(email) // change email on firebase authentication
+                Toast.makeText(this, "EMAIL CHANGED CORRECTLY", Toast.LENGTH_SHORT).show()
+
+                intent.putExtra("Email", email)
+                startActivity(intent)
+            }
         }
 
         // set on-click listener to the change password
         passButton.setOnClickListener {
             val pass = passwordView.text.toString()
 
-            val database = Firebase.database("https://mobileproject2-50486-default-rtdb.europe-west1.firebasedatabase.app/")
-            val referencePassword = database.getReference("Users/$current_id/Password")
+            //Check if the password is not empty
+            if(pass.isEmpty()){
+                Toast.makeText(this, "Password not inserted", Toast.LENGTH_SHORT).show()
+            }
+            else if(pass.length < 6){
+                Toast.makeText(this, "Password should contain at least 6 characters", Toast.LENGTH_SHORT).show()
+            }
+            else if(! pass.contains("[0-9]".toRegex())){
+                Toast.makeText(this, "Password should contain at least a number", Toast.LENGTH_SHORT).show()
+            }
+            else if(! pass.contains("[A-Z]".toRegex())){
+                Toast.makeText(this, "Password should contain at least an uppercase character", Toast.LENGTH_SHORT).show()
+            }
+            else if(! pass.contains("[a-z]".toRegex())){
+                Toast.makeText(this, "Password should contain at least an lowercase character", Toast.LENGTH_SHORT).show()
+            }
+            else {
+                val database =
+                    Firebase.database("https://mobileproject2-50486-default-rtdb.europe-west1.firebasedatabase.app/")
+                val referencePassword = database.getReference("Users/$current_id/Password")
 
-            var hash = PasswordHashManager()
-            referencePassword.setValue(hash.encryptSHA256(pass))
+                var hash = PasswordHashManager()
+                referencePassword.setValue(hash.encryptSHA256(pass))
 
-            firebaseAuth.currentUser?.updatePassword(pass)?.addOnSuccessListener{
-                //Alert of success
-                Toast.makeText(this, "PASSWORD CHANGED CORRECTLY", Toast.LENGTH_SHORT).show()
+                firebaseAuth.currentUser?.updatePassword(pass)?.addOnSuccessListener {
+                    //Alert of success
+                    Toast.makeText(this, "PASSWORD CHANGED CORRECTLY", Toast.LENGTH_SHORT).show()
 
-                startActivity(intent)
-            }?.addOnFailureListener{
-                Toast.makeText(this, "PASSWORD TOO SHORT", Toast.LENGTH_SHORT).show()
+                    startActivity(intent)
+                }?.addOnFailureListener {
+                    Toast.makeText(this, "PASSWORD TOO SHORT", Toast.LENGTH_SHORT).show()
+                }
             }
         }
 

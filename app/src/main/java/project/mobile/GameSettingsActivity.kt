@@ -46,6 +46,7 @@ class GameSettingsActivity : AppCompatActivity() {
             airplane2.setImageResource(R.drawable.airplaneblue)
             airplane3.setImageResource(R.drawable.airplanegreen)
             color = "red"
+            music.playChooseSound(this)
         }
 
         airplane2.setOnClickListener() {
@@ -53,6 +54,7 @@ class GameSettingsActivity : AppCompatActivity() {
             airplane2.setImageResource(R.drawable.airplanebluesigned)
             airplane3.setImageResource(R.drawable.airplanegreen)
             color = "blue"
+            music.playChooseSound(this)
         }
 
         airplane3.setOnClickListener() {
@@ -60,6 +62,7 @@ class GameSettingsActivity : AppCompatActivity() {
             airplane2.setImageResource(R.drawable.airplaneblue)
             airplane3.setImageResource(R.drawable.airplanegreensigned)
             color = "green"
+            music.playChooseSound(this)
         }
 
 
@@ -76,6 +79,7 @@ class GameSettingsActivity : AppCompatActivity() {
             bullet2.setImageResource(R.drawable.bullet)
             //bullet3.setImageResource(R.drawable.bullet)
             bullet = "normal"
+            music.playChooseSound(this)
         }
 
         bullet2.setOnClickListener() {
@@ -83,6 +87,7 @@ class GameSettingsActivity : AppCompatActivity() {
             bullet1.setImageResource(R.drawable.bullet)
             //bullet3.setImageResource(R.drawable.bullet)
             bullet = "laser"
+            music.playChooseSound(this)
         }
 
 
