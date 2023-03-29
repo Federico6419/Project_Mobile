@@ -26,7 +26,7 @@ public class MusicManager {
 
     fun playSoundGame(conxt: Context) {
         if (mMediaPlayer == null) {
-            mMediaPlayer = MediaPlayer.create(conxt, R.raw.gamemusic)
+            mMediaPlayer = MediaPlayer.create(conxt, R.raw.gamemusiclow)
             mMediaPlayer!!.isLooping = true
             mMediaPlayer!!.start()
         } else mMediaPlayer!!.start()
