@@ -163,14 +163,12 @@ public class MusicManager {
             isShooting1 = true
             shootPlayer1!!.setOnCompletionListener() {
                 isShooting1 = false
-                Log.i("SHOOT", "1")
             }
         } else if (!isShooting1) {
             shootPlayer1!!.start()
             isShooting1 = true
             shootPlayer1!!.setOnCompletionListener() {
                 isShooting1 = false
-                Log.i("SHOOT", "1")
             }
         } else if (shootPlayer2 == null) {
             shootPlayer2 = MediaPlayer.create(conxt, R.raw.shootsound)
@@ -178,14 +176,12 @@ public class MusicManager {
             isShooting2 = true
             shootPlayer2!!.setOnCompletionListener() {
                 isShooting2 = false
-                Log.i("SHOOT", "2")
             }
         } else if (!isShooting2) {
             shootPlayer2!!.start()
             isShooting2 = true
             shootPlayer2!!.setOnCompletionListener() {
                 isShooting2 = false
-                Log.i("SHOOT", "2")
             }
         } else if (shootPlayer3 == null) {
             shootPlayer3 = MediaPlayer.create(conxt, R.raw.shootsound)
@@ -193,14 +189,12 @@ public class MusicManager {
             isShooting3 = true
             shootPlayer3!!.setOnCompletionListener() {
                 isShooting3 = false
-                Log.i("SHOOT", "3")
             }
         } else if (!isShooting3) {
             shootPlayer3!!.start()
             isShooting3 = true
             shootPlayer3!!.setOnCompletionListener() {
                 isShooting3 = false
-                Log.i("SHOOT", "3")
             }
         }
     }

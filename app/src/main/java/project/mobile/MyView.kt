@@ -107,6 +107,7 @@ class MyView(context: Context?, weat:String?, Color :String?, Bul :String?, Logg
     var boss1 : Bitmap
     var boss2 : Bitmap
     var heart : Bitmap
+    var skull : Bitmap
     var explosion : Bitmap
     var pause_button : Bitmap
     var resume_button : Bitmap
@@ -134,6 +135,8 @@ class MyView(context: Context?, weat:String?, Color :String?, Bul :String?, Logg
     var id = ""
     var PAUSE = false
     var gameover = false
+    
+    var numKills = 0        //Variable that counts the number of kills
 
     var col = ""
     var bul = ""
@@ -246,6 +249,9 @@ class MyView(context: Context?, weat:String?, Color :String?, Bul :String?, Logg
 
             airplaneLeft = ResourcesCompat.getDrawable(resources,R.drawable.airplaneleft,
                 null)?.toBitmap(sizeA.toInt(),sizeA.toInt())!!
+
+            airplaneRight = ResourcesCompat.getDrawable(resources,R.drawable.airplaneright,
+                null)?.toBitmap(sizeA.toInt(),sizeA.toInt())!!
         }else if(Color == "blue"){
             airplane= ResourcesCompat.getDrawable(resources,R.drawable.airplaneblue,
                 null)?.toBitmap(sizeA.toInt(),sizeA.toInt())!!
@@ -289,6 +295,8 @@ class MyView(context: Context?, weat:String?, Color :String?, Bul :String?, Logg
             null)?.toBitmap(sizeHeart.toInt(),sizeHeart.toInt())!!
         explosion = ResourcesCompat.getDrawable(resources,R.drawable.heart,
             null)?.toBitmap(sizeHeart.toInt(),sizeHeart.toInt())!!
+        skull = ResourcesCompat.getDrawable(resources,R.drawable.skull,
+            null)?.toBitmap(120,120)!!
         pause_button = ResourcesCompat.getDrawable(resources,R.drawable.pausebutton,
             null)?.toBitmap(200, 200)!!
         resume_button = ResourcesCompat.getDrawable(resources,R.drawable.resume_button,
@@ -403,6 +411,19 @@ class MyView(context: Context?, weat:String?, Color :String?, Bul :String?, Logg
                     drawBitmap(bulletAvailable, 500f, 1720f, null)
                 }
                 //------ end draw bullet a disposizione -------//
+
+                //Draw number of kills
+                drawBitmap(skull, 20f, 1740f, null)
+                val numKillsText = "$numKills"
+                val killsPaint = Paint().also {
+                    it.color = Color.parseColor("#000000")
+                    it.strokeWidth = 100f
+                    it.strokeMiter = 100f
+                    it.textSize=70f
+                }
+                canvas.drawText(numKillsText,0, numKillsText.length,150f,1820f, killsPaint)
+
+                //Spawn enemies
                 if(!enemy_visible[0] and ex_array[0]){
                     GlobalScope.launch {
                         spawn_enemy(0)
@@ -872,6 +893,7 @@ class MyView(context: Context?, weat:String?, Color :String?, Bul :String?, Logg
                     if ((bullet_position_x[0] >= array_position[0] - 35f) and (bullet_position_x[0] <= array_position[0] + 145f) and (bullet_position_y[0] <= enemy_position_y[0] + 150f) and (bullet_position_y[0] >= enemy_position_y[0])) {
                         if (!just_shot_bullet[0]) {
                             Score += 50
+                            numKills += 1
                             down1 = 0f
                             enemy_visible[0] = false
                             is_visible_bul[0] = false
@@ -891,6 +913,7 @@ class MyView(context: Context?, weat:String?, Color :String?, Bul :String?, Logg
                     if ((bullet_position_x[0] >= array_position[1] - 35f) and (bullet_position_x[0] <= array_position[1] + 145f) and (bullet_position_y[0] <= enemy_position_y[1] + 150f) and (bullet_position_y[0] >= enemy_position_y[1])) {
                         if (!just_shot_bullet[0]) {
                             Score += 50
+                            numKills += 1
                             down2 = 0f
                             enemy_visible[1] = false
                             is_visible_bul[0] = false
@@ -910,6 +933,7 @@ class MyView(context: Context?, weat:String?, Color :String?, Bul :String?, Logg
                     if ((bullet_position_x[0] >= array_position[2] - 35f) and (bullet_position_x[0] <= array_position[2] + 145f) and (bullet_position_y[0] <= enemy_position_y[2] + 150f) and (bullet_position_y[0] >= enemy_position_y[2])) {
                         if (!just_shot_bullet[0]) {
                             Score += 50
+                            numKills += 1
                             down3 = 0f
                             enemy_visible[2] = false
                             is_visible_bul[0] = false
@@ -929,6 +953,7 @@ class MyView(context: Context?, weat:String?, Color :String?, Bul :String?, Logg
                     if ((bullet_position_x[0] >= array_position[3] - 35f) and (bullet_position_x[0] <= array_position[3] + 145f) and (bullet_position_y[0] <= enemy_position_y[3] + 150f) and (bullet_position_y[0] >= enemy_position_y[3])) {
                         if (!just_shot_bullet[0]) {
                             Score += 50
+                            numKills += 1
                             down4 = 0f
                             enemy_visible[3] = false
                             is_visible_bul[0] = false
@@ -948,6 +973,7 @@ class MyView(context: Context?, weat:String?, Color :String?, Bul :String?, Logg
                     if ((bullet_position_x[0] >= lateral_movement[4] + array_position[4] - 35f) and (bullet_position_x[0] <= lateral_movement[4] + array_position[4] + 115f) and (bullet_position_y[0] <= enemy_position_y[4] + 120f) and (bullet_position_y[0] >= enemy_position_y[4])) {
                         if (!just_shot_bullet[0]) {
                             Score += 50
+                            numKills += 1
                             down5 = 0f
                             enemy_visible[4] = false
                             is_visible_bul[0] = false
@@ -1069,6 +1095,7 @@ class MyView(context: Context?, weat:String?, Color :String?, Bul :String?, Logg
                     if ((bullet_position_x[1] >= array_position[0] - 35f) and (bullet_position_x[1] <= array_position[0] + 145f) and (bullet_position_y[1] <= enemy_position_y[0] + 150f) and (bullet_position_y[1] >= enemy_position_y[0])) {
                         if (!just_shot_bullet[1]) {
                             Score += 50
+                            numKills += 1
                             down1 = 0f
                             enemy_visible[0] = false
                             is_visible_bul[1] = false
@@ -1087,6 +1114,7 @@ class MyView(context: Context?, weat:String?, Color :String?, Bul :String?, Logg
                     if ((bullet_position_x[1] >= array_position[1] - 35f) and (bullet_position_x[1] <= array_position[1] + 145f) and (bullet_position_y[1] <= enemy_position_y[1] + 150f) and (bullet_position_y[1] >= enemy_position_y[1])) {
                         if (!just_shot_bullet[1]) {
                             Score += 50
+                            numKills += 1
                             down2 = 0f
                             enemy_visible[1] = false
                             is_visible_bul[1] = false
@@ -1105,6 +1133,7 @@ class MyView(context: Context?, weat:String?, Color :String?, Bul :String?, Logg
                     if ((bullet_position_x[1] >= array_position[2] - 35f) and (bullet_position_x[1] <= array_position[2] + 145f) and (bullet_position_y[1] <= enemy_position_y[2] + 150f) and (bullet_position_y[1] >= enemy_position_y[2])) {
                         if (!just_shot_bullet[1]) {
                             Score += 50
+                            numKills += 1
                             down3 = 0f
                             enemy_visible[2] = false
                             is_visible_bul[1] = false
@@ -1124,6 +1153,7 @@ class MyView(context: Context?, weat:String?, Color :String?, Bul :String?, Logg
                     if ((bullet_position_x[1] >= array_position[3] - 35f) and (bullet_position_x[1] <= array_position[3] + 145f) and (bullet_position_y[1] <= enemy_position_y[3] + 150f) and (bullet_position_y[1] >= enemy_position_y[3])) {
                         if (!just_shot_bullet[1]) {
                             Score += 50
+                            numKills += 1
                             down4 = 0f
                             enemy_visible[3] = false
                             is_visible_bul[1] = false
@@ -1143,6 +1173,7 @@ class MyView(context: Context?, weat:String?, Color :String?, Bul :String?, Logg
                     if ((bullet_position_x[1] >= lateral_movement[4] + array_position[4] - 35f) and (bullet_position_x[1] <= lateral_movement[4] + array_position[4] + 115f) and (bullet_position_y[1] <= enemy_position_y[4] + 120f) and (bullet_position_y[1] >= enemy_position_y[4])) {
                         if (!just_shot_bullet[1]) {
                             Score += 50
+                            numKills += 1
                             down5 = 0f
                             enemy_visible[4] = false
                             is_visible_bul[1] = false
@@ -1265,6 +1296,7 @@ class MyView(context: Context?, weat:String?, Color :String?, Bul :String?, Logg
                         if (!just_shot_bullet[2]) {
                             Log.i("COLLISIONE", "AEREO 1")
                             Score += 50
+                            numKills += 1
                             down1 = 0f
                             enemy_visible[0] = false
                             is_visible_bul[2] = false
@@ -1284,6 +1316,7 @@ class MyView(context: Context?, weat:String?, Color :String?, Bul :String?, Logg
                         if (!just_shot_bullet[2]) {
                             Log.i("COLLISIONE", "AEREO 2")
                             Score += 50
+                            numKills += 1
                             down2 = 0f
                             enemy_visible[1] = false
                             is_visible_bul[2] = false
@@ -1304,6 +1337,7 @@ class MyView(context: Context?, weat:String?, Color :String?, Bul :String?, Logg
                         if (!just_shot_bullet[2]) {
                             Log.i("COLLISIONE", "AEREO 3")
                             Score += 50
+                            numKills += 1
                             down3 = 0f
                             enemy_visible[2] = false
                             is_visible_bul[2] = false
@@ -1324,6 +1358,7 @@ class MyView(context: Context?, weat:String?, Color :String?, Bul :String?, Logg
                         if (!just_shot_bullet[2]) {
                             Log.i("COLLISIONE", "AEREO 4")
                             Score += 50
+                            numKills += 1
                             down4 = 0f
                             enemy_visible[3] = false
                             is_visible_bul[2] = false
@@ -1344,6 +1379,7 @@ class MyView(context: Context?, weat:String?, Color :String?, Bul :String?, Logg
                         if (!just_shot_bullet[2]) {
                             Log.i("COLLISIONE", "AEREO 5")
                             Score += 50
+                            numKills += 1
                             down5 = 0f
                             enemy_visible[4] = false
                             is_visible_bul[2] = false
