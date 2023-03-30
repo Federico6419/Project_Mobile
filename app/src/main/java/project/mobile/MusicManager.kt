@@ -57,200 +57,191 @@ public class MusicManager {
         } else mMediaPlayer!!.start()
     }
 
-    fun initializeGameMusic(conxt: Context){
-        if (explosionPlayer1 == null) {
-            explosionPlayer1 = MediaPlayer.create(conxt, R.raw.explosionsound)
-        }
-        if (explosionPlayer2 == null) {
-            explosionPlayer2 = MediaPlayer.create(conxt, R.raw.explosionsound)
-        }
-        if (explosionPlayer3 == null) {
-            explosionPlayer3 = MediaPlayer.create(conxt, R.raw.explosionsound)
-        }
-    }
-
     fun playExplosionSound(conxt: Context) {
-        /*if (explosionPlayer1 == null) {
-            explosionPlayer1 = MediaPlayer.create(conxt, R.raw.explosionsound)
-            explosionPlayer1!!.start()
-            isplaying1 = true
-            explosionPlayer1!!.setOnCompletionListener(){
-                isplaying1 = false
-            }
-        }*/
-        if(!isplaying1){
+        if(!muted) {
+            if (explosionPlayer1 == null) {
+                explosionPlayer1 = MediaPlayer.create(conxt, R.raw.explosionsound)
                 explosionPlayer1!!.start()
                 isplaying1 = true
-                explosionPlayer1!!.setOnCompletionListener(){
+                explosionPlayer1!!.setOnCompletionListener() {
                     isplaying1 = false
                 }
-            }
-        /*else if(explosionPlayer2 == null) {
-            explosionPlayer2 = MediaPlayer.create(conxt, R.raw.explosionsound)
-            explosionPlayer2!!.start()
-            isplaying2 = true
-            explosionPlayer2!!.setOnCompletionListener {
-                isplaying2 = false
-            }
-        }*/
-        else if(!isplaying2) {
-            explosionPlayer2!!.start()
-            isplaying2 = true
-            explosionPlayer1!!.setOnCompletionListener() {
-                isplaying2 = false
-            }
-        }
-        /*} else if(explosionPlayer3 == null) {
-            explosionPlayer3 = MediaPlayer.create(conxt, R.raw.explosionsound)
-            explosionPlayer3!!.start()
-            isplaying3 = true
-            explosionPlayer3!!.setOnCompletionListener{
-                isplaying3 = false
-            }
-        }*/
-        else if(!isplaying3){
-            explosionPlayer3!!.start()
-            isplaying3 = true
-            explosionPlayer3!!.setOnCompletionListener(){
-                isplaying3 = false
+            } else if (!isplaying1) {
+                explosionPlayer1!!.start()
+                isplaying1 = true
+                explosionPlayer1!!.setOnCompletionListener() {
+                    isplaying1 = false
+                }
+            } else if (explosionPlayer2 == null) {
+                explosionPlayer2 = MediaPlayer.create(conxt, R.raw.explosionsound)
+                explosionPlayer2!!.start()
+                isplaying2 = true
+                explosionPlayer2!!.setOnCompletionListener {
+                    isplaying2 = false
+                }
+            } else if (!isplaying2) {
+                explosionPlayer2!!.start()
+                isplaying2 = true
+                explosionPlayer2!!.setOnCompletionListener() {
+                    isplaying2 = false
+                }
+            } else if (explosionPlayer3 == null) {
+                explosionPlayer3 = MediaPlayer.create(conxt, R.raw.explosionsound)
+                explosionPlayer3!!.start()
+                isplaying3 = true
+                explosionPlayer3!!.setOnCompletionListener {
+                    isplaying3 = false
+                }
+            } else if (!isplaying3) {
+                explosionPlayer3!!.start()
+                isplaying3 = true
+                explosionPlayer3!!.setOnCompletionListener() {
+                    isplaying3 = false
+                }
             }
         }
     }
 
     fun playCollisionSound(conxt: Context) {
-        if (collisionPlayer1 == null) {
-            collisionPlayer1 = MediaPlayer.create(conxt, R.raw.explosionsound)
-            collisionPlayer1!!.start()
-            hitPlayer1 = MediaPlayer.create(conxt, R.raw.hitsound)
-            hitPlayer1!!.start()
-            isColliding1 = true
-            collisionPlayer1!!.setOnCompletionListener() {
-                isColliding1 = false
-            }
-        } else if (!isColliding1) {
-            collisionPlayer1!!.start()
-            hitPlayer1!!.start()
-            isColliding1 = true
-            collisionPlayer1!!.setOnCompletionListener() {
-                isColliding1 = false
-            }
-        } else if (collisionPlayer2 == null) {
-            collisionPlayer2 = MediaPlayer.create(conxt, R.raw.explosionsound)
-            collisionPlayer2!!.start()
-            hitPlayer2 = MediaPlayer.create(conxt, R.raw.hitsound)
-            hitPlayer2!!.start()
-            isColliding2 = true
-            collisionPlayer2!!.setOnCompletionListener() {
-                isColliding2 = false
-            }
-        } else if (!isColliding2) {
-            collisionPlayer2!!.start()
-            hitPlayer2!!.start()
-            isColliding2 = true
-            collisionPlayer2!!.setOnCompletionListener() {
-                isColliding2 = false
-            }
-        } else if (collisionPlayer3 == null) {
-            collisionPlayer3 = MediaPlayer.create(conxt, R.raw.explosionsound)
-            collisionPlayer3!!.start()
-            hitPlayer3 = MediaPlayer.create(conxt, R.raw.hitsound)
-            hitPlayer3!!.start()
-            isColliding3 = true
-            collisionPlayer3!!.setOnCompletionListener() {
-                isColliding3 = false
-            }
-        } else if (!isColliding3) {
-            collisionPlayer3!!.start()
-            hitPlayer3!!.start()
-            isColliding3 = true
-            collisionPlayer3!!.setOnCompletionListener() {
-                isColliding3 = false
+        if(!muted) {
+            if (collisionPlayer1 == null) {
+                collisionPlayer1 = MediaPlayer.create(conxt, R.raw.explosionsound)
+                collisionPlayer1!!.start()
+                hitPlayer1 = MediaPlayer.create(conxt, R.raw.hitsound)
+                hitPlayer1!!.start()
+                isColliding1 = true
+                collisionPlayer1!!.setOnCompletionListener() {
+                    isColliding1 = false
+                }
+            } else if (!isColliding1) {
+                collisionPlayer1!!.start()
+                hitPlayer1!!.start()
+                isColliding1 = true
+                collisionPlayer1!!.setOnCompletionListener() {
+                    isColliding1 = false
+                }
+            } else if (collisionPlayer2 == null) {
+                collisionPlayer2 = MediaPlayer.create(conxt, R.raw.explosionsound)
+                collisionPlayer2!!.start()
+                hitPlayer2 = MediaPlayer.create(conxt, R.raw.hitsound)
+                hitPlayer2!!.start()
+                isColliding2 = true
+                collisionPlayer2!!.setOnCompletionListener() {
+                    isColliding2 = false
+                }
+            } else if (!isColliding2) {
+                collisionPlayer2!!.start()
+                hitPlayer2!!.start()
+                isColliding2 = true
+                collisionPlayer2!!.setOnCompletionListener() {
+                    isColliding2 = false
+                }
+            } else if (collisionPlayer3 == null) {
+                collisionPlayer3 = MediaPlayer.create(conxt, R.raw.explosionsound)
+                collisionPlayer3!!.start()
+                hitPlayer3 = MediaPlayer.create(conxt, R.raw.hitsound)
+                hitPlayer3!!.start()
+                isColliding3 = true
+                collisionPlayer3!!.setOnCompletionListener() {
+                    isColliding3 = false
+                }
+            } else if (!isColliding3) {
+                collisionPlayer3!!.start()
+                hitPlayer3!!.start()
+                isColliding3 = true
+                collisionPlayer3!!.setOnCompletionListener() {
+                    isColliding3 = false
+                }
             }
         }
     }
 
     fun playShootSound(conxt: Context) {
-        if (shootPlayer1 == null) {
-            shootPlayer1 = MediaPlayer.create(conxt, R.raw.shootsound)
-            shootPlayer1!!.start()
-            isShooting1 = true
-            shootPlayer1!!.setOnCompletionListener() {
-                isShooting1 = false
-            }
-        } else if (!isShooting1) {
-            shootPlayer1!!.start()
-            isShooting1 = true
-            shootPlayer1!!.setOnCompletionListener() {
-                isShooting1 = false
-            }
-        } else if (shootPlayer2 == null) {
-            shootPlayer2 = MediaPlayer.create(conxt, R.raw.shootsound)
-            shootPlayer2!!.start()
-            isShooting2 = true
-            shootPlayer2!!.setOnCompletionListener() {
-                isShooting2 = false
-            }
-        } else if (!isShooting2) {
-            shootPlayer2!!.start()
-            isShooting2 = true
-            shootPlayer2!!.setOnCompletionListener() {
-                isShooting2 = false
-            }
-        } else if (shootPlayer3 == null) {
-            shootPlayer3 = MediaPlayer.create(conxt, R.raw.shootsound)
-            shootPlayer3!!.start()
-            isShooting3 = true
-            shootPlayer3!!.setOnCompletionListener() {
-                isShooting3 = false
-            }
-        } else if (!isShooting3) {
-            shootPlayer3!!.start()
-            isShooting3 = true
-            shootPlayer3!!.setOnCompletionListener() {
-                isShooting3 = false
+        if(!muted) {
+            if (shootPlayer1 == null) {
+                shootPlayer1 = MediaPlayer.create(conxt, R.raw.shootsound)
+                shootPlayer1!!.start()
+                isShooting1 = true
+                shootPlayer1!!.setOnCompletionListener() {
+                    isShooting1 = false
+                }
+            } else if (!isShooting1) {
+                shootPlayer1!!.start()
+                isShooting1 = true
+                shootPlayer1!!.setOnCompletionListener() {
+                    isShooting1 = false
+                }
+            } else if (shootPlayer2 == null) {
+                shootPlayer2 = MediaPlayer.create(conxt, R.raw.shootsound)
+                shootPlayer2!!.start()
+                isShooting2 = true
+                shootPlayer2!!.setOnCompletionListener() {
+                    isShooting2 = false
+                }
+            } else if (!isShooting2) {
+                shootPlayer2!!.start()
+                isShooting2 = true
+                shootPlayer2!!.setOnCompletionListener() {
+                    isShooting2 = false
+                }
+            } else if (shootPlayer3 == null) {
+                shootPlayer3 = MediaPlayer.create(conxt, R.raw.shootsound)
+                shootPlayer3!!.start()
+                isShooting3 = true
+                shootPlayer3!!.setOnCompletionListener() {
+                    isShooting3 = false
+                }
+            } else if (!isShooting3) {
+                shootPlayer3!!.start()
+                isShooting3 = true
+                shootPlayer3!!.setOnCompletionListener() {
+                    isShooting3 = false
+                }
             }
         }
     }
 
     fun playChooseSound(conxt: Context) {
-        if (choosePlayer1 == null) {
-            choosePlayer1 = MediaPlayer.create(conxt, R.raw.choosesound)
-            choosePlayer1!!.start()
-            isChoosing1 = true
-            choosePlayer1!!.setOnCompletionListener() {
-                isChoosing1 = false
-            }
-        } else if (!isChoosing1) {
-            choosePlayer1!!.start()
-            isChoosing1 = true
-            choosePlayer1!!.setOnCompletionListener() {
-                isChoosing1 = false
-            }
-        } else if (choosePlayer2 == null) {
-            choosePlayer2 = MediaPlayer.create(conxt, R.raw.choosesound)
-            choosePlayer2!!.start()
-            isChoosing2 = true
-            choosePlayer2!!.setOnCompletionListener {
-                isChoosing2 = false
-            }
-        } else if (!isChoosing2) {
-            choosePlayer2!!.start()
-            isChoosing2 = true
-            choosePlayer1!!.setOnCompletionListener() {
-                isChoosing2 = false
-            }
-        } else if (choosePlayer3 == null) {
-            choosePlayer3 = MediaPlayer.create(conxt, R.raw.choosesound)
-            choosePlayer3!!.start()
-            isChoosing3 = true
-            choosePlayer3!!.setOnCompletionListener {
-                isChoosing3 = false
-            }
-        } else if (!isChoosing3) {
-            choosePlayer3!!.start()
-            isChoosing3 = true
-            choosePlayer3!!.setOnCompletionListener() {
-                isChoosing3 = false
+        if(!muted) {
+            if (choosePlayer1 == null) {
+                choosePlayer1 = MediaPlayer.create(conxt, R.raw.choosesound)
+                choosePlayer1!!.start()
+                isChoosing1 = true
+                choosePlayer1!!.setOnCompletionListener() {
+                    isChoosing1 = false
+                }
+            } else if (!isChoosing1) {
+                choosePlayer1!!.start()
+                isChoosing1 = true
+                choosePlayer1!!.setOnCompletionListener() {
+                    isChoosing1 = false
+                }
+            } else if (choosePlayer2 == null) {
+                choosePlayer2 = MediaPlayer.create(conxt, R.raw.choosesound)
+                choosePlayer2!!.start()
+                isChoosing2 = true
+                choosePlayer2!!.setOnCompletionListener {
+                    isChoosing2 = false
+                }
+            } else if (!isChoosing2) {
+                choosePlayer2!!.start()
+                isChoosing2 = true
+                choosePlayer1!!.setOnCompletionListener() {
+                    isChoosing2 = false
+                }
+            } else if (choosePlayer3 == null) {
+                choosePlayer3 = MediaPlayer.create(conxt, R.raw.choosesound)
+                choosePlayer3!!.start()
+                isChoosing3 = true
+                choosePlayer3!!.setOnCompletionListener {
+                    isChoosing3 = false
+                }
+            } else if (!isChoosing3) {
+                choosePlayer3!!.start()
+                isChoosing3 = true
+                choosePlayer3!!.setOnCompletionListener() {
+                    isChoosing3 = false
+                }
             }
         }
     }
@@ -269,24 +260,6 @@ public class MusicManager {
 
     fun setVolume(left: Float, right: Float){
         mMediaPlayer?.setVolume(left, right)
-    }
-
-    fun setVolumeGame(left: Float, right: Float){
-        explosionPlayer1?.setVolume(left, right)
-        explosionPlayer2?.setVolume(left, right)
-        explosionPlayer3?.setVolume(left, right)
-        collisionPlayer1?.setVolume(left, right)
-        collisionPlayer2?.setVolume(left, right)
-        collisionPlayer3?.setVolume(left, right)
-        hitPlayer1?.setVolume(left, right)
-        hitPlayer2?.setVolume(left, right)
-        hitPlayer3?.setVolume(left, right)
-        shootPlayer1?.setVolume(left, right)
-        shootPlayer2?.setVolume(left, right)
-        shootPlayer3?.setVolume(left, right)
-        choosePlayer1?.setVolume(left, right)
-        choosePlayer2?.setVolume(left, right)
-        choosePlayer3?.setVolume(left, right)
     }
 
     fun releasePlayer(){
