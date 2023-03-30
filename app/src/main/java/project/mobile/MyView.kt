@@ -246,6 +246,9 @@ class MyView(context: Context?, weat:String?, Color :String?, Bul :String?, Logg
 
             airplaneLeft = ResourcesCompat.getDrawable(resources,R.drawable.airplaneleft,
                 null)?.toBitmap(sizeA.toInt(),sizeA.toInt())!!
+
+            airplaneRight = ResourcesCompat.getDrawable(resources,R.drawable.airplaneright,
+                null)?.toBitmap(sizeA.toInt(),sizeA.toInt())!!
         }else if(Color == "blue"){
             airplane= ResourcesCompat.getDrawable(resources,R.drawable.airplaneblue,
                 null)?.toBitmap(sizeA.toInt(),sizeA.toInt())!!
