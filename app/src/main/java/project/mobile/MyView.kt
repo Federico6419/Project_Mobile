@@ -39,7 +39,7 @@ class MyView(context: Context?, weat:String?, Color :String?, Bul :String?, Logg
     var shotboss = arrayOf<Boolean>(false,false)
     var boss_bullet_position_x=arrayOf<Float>(0f,0f,0f)
     var boss_bullet_position_y=arrayOf<Float>(0f,0f,0f)
-    var just_shot = false ///to avoid multiple collision of single bullet of the boss
+    //var just_shot = false ///to avoid multiple collision of single bullet of the boss
     var justcollide = arrayOf<Boolean>(false,false,false,false,false) // to avoid multiple collision of single enemy
     var just_shot_bullet =  arrayOf<Boolean>(false,false,false) // to avoid multiple collision of single bullet of our airplane
     var just_shot_bullet_boss = arrayOf<Boolean>(false,false,false) // to avoid multiple collision of single bullet of our airplane on the boss
@@ -342,7 +342,7 @@ class MyView(context: Context?, weat:String?, Color :String?, Bul :String?, Logg
                     change_score = true
                 }
                 if((current_time %2== 0) and(change_score == true)){
-                    Score += 5
+                    Score += 10
                     change_score = false
                 }
                 Log.i("TIME",current_time.toString())
@@ -712,23 +712,21 @@ class MyView(context: Context?, weat:String?, Color :String?, Bul :String?, Logg
                 }
                 ///////// boss1 bullet /////////////
                 if(boss_visible[0]){
+                    upboss[0]+= 20f
                     withTranslation(0f, upboss[0]) {
-                        upboss[0]+= 10f
                         if (shotboss[0]) {
-                            drawBitmap(bullet, lateral_movement_boss[0]+boss_x[0]+60f, (upboss[0]+boss_y[0]+120f), null)
-                            resboss = lateral_movement_boss[0]+boss_x[0]+60f
-                            resbossy = (upboss[0]+boss_y[0]+120f)
+                            drawBitmap(bullet, lateral_movement_boss[0]+boss_x[0]+90f, (boss_y[0]+200f), null)
+                            resboss = lateral_movement_boss[0]+boss_x[0]+90f
+                            resbossy = (boss_y[0]+200f)
                             shotboss[0] = false
                             boss_bullet_position_x[0] = resboss
                             boss_bullet_position_y[0] = (resbossy)
                         } else {
-                            drawBitmap(bullet, resboss, (resbossy+upboss[0]), null)
-                            //Log.i("ROLL",(1400f+up3).toString())
+                            drawBitmap(bullet, resboss, (resbossy), null)
                             if((upboss[0])>1400f){
-                                //Log.i("ROLL","sta usando il terzo bullet")
                                 upboss[0] = 0f
                                 shotboss[0]= true
-                                just_shot = false
+                                just_shot_bullet_boss[0] = false
                             }
                             boss_bullet_position_x[0] = (resboss)
                             boss_bullet_position_y[0] = (upboss[0]+resbossy)
@@ -740,20 +738,18 @@ class MyView(context: Context?, weat:String?, Color :String?, Bul :String?, Logg
                     withTranslation(0f, upboss[1]) {
                         upboss[1]+= 10f
                         if (shotboss[1]) {
-                            drawBitmap(bullet, lateral_movement_boss[1]+boss_x[1]+60f, (upboss[1]+boss_y[1]+120f), null)
-                            resboss2_1 = lateral_movement_boss[1]+boss_x[1]+60f
-                            resbossy2_1 = (upboss[1]+boss_y[1]+120f)
+                            drawBitmap(bullet, lateral_movement_boss[1]+boss_x[1]+90f, (boss_y[1]+200f), null)
+                            resboss2_1 = lateral_movement_boss[1]+boss_x[1]+90f
+                            resbossy2_1 = (upboss[1]+boss_y[1]+200f)
                             shotboss[1] = false
                             boss_bullet_position_x[1] = resboss2_1
                             boss_bullet_position_y[1] = (resbossy2_1)
                         } else {
-                            drawBitmap(bullet, resboss2_1, (resbossy2_1+upboss[1]), null)
-                            //Log.i("ROLL",(1400f+up3).toString())
+                            drawBitmap(bullet, resboss2_1, (resbossy2_1), null)
                             if((upboss[1])>1400f){
-                                //Log.i("ROLL","sta usando il terzo bullet")
                                 upboss[1] = 0f
                                 shotboss[1]= true
-                                just_shot = false
+                                just_shot_bullet_boss[1]= false
                             }
                             boss_bullet_position_x[1] = (resboss2_1)
                             boss_bullet_position_y[1] = (upboss[1]+resbossy2_1)
@@ -766,20 +762,18 @@ class MyView(context: Context?, weat:String?, Color :String?, Bul :String?, Logg
                     withTranslation(0f, upboss[1]) {
                         upboss[1]+= 10f
                         if (shotboss[1]) {
-                            drawBitmap(bullet, lateral_movement_boss[1]+boss_x[1]+60f, (upboss[1]+boss_y[1]+120f), null)
-                            resboss2_2 = lateral_movement_boss[1]+boss_x[1]+60f
-                            resbossy2_2 = (upboss[1]+boss_y[1]+120f)
+                            drawBitmap(bullet, lateral_movement_boss[1]+boss_x[1]+90f,(boss_y[1]+200f), null)
+                            resboss2_2 = lateral_movement_boss[1]+boss_x[1]+90f
+                            resbossy2_2 = (upboss[1]+boss_y[1]+200f)
                             shotboss[1] = false
                             boss_bullet_position_x[1] = resboss2_2
                             boss_bullet_position_y[1] = (resbossy2_2)
                         }else {
-                            drawBitmap(bullet, resboss2_2, (resbossy2_2+upboss[1]), null)
-                            //Log.i("ROLL",(1400f+up3).toString())
+                            drawBitmap(bullet, resboss2_2, (resbossy2_2), null)
                             if((upboss[1])>1400f){
-                                //Log.i("ROLL","sta usando il terzo bullet")
                                 upboss[1] = 0f
                                 shotboss[1]= true
-                                just_shot = false
+                                just_shot_bullet_boss[2] = false
                             }
                             boss_bullet_position_x[1] = (resboss2_2)
                             boss_bullet_position_y[1] = (upboss[1]+resbossy2_2)
@@ -788,8 +782,8 @@ class MyView(context: Context?, weat:String?, Color :String?, Bul :String?, Logg
                 }
 
 
-                ////////////////  ------------- MANAGE COLLISION PLANE WITH ENEMIES AND BOSS BULLET  ----------------- ////////////////
-                if( (array_position[0]>= plane_x-140f) and (array_position[0]<=plane_x+140f)and(enemy_position_y[0] <= plane_y+300f)and(enemy_position_y[0] >= plane_y-150f)){
+                //////////////////  ------------- MANAGE COLLISION OUR PLANE WITH ENEMIES   ----------------- ////////////////
+                if( (array_position[0]>= plane_x-140f)and(array_position[0]<=plane_x+140f)and(enemy_position_y[0] <= plane_y+300f)and(enemy_position_y[0] >= plane_y-150f)){
                     if(!justcollide[0]) {
                         if (hearts == 1) {
                             start = false
@@ -849,45 +843,47 @@ class MyView(context: Context?, weat:String?, Color :String?, Bul :String?, Logg
                         }
                     }
                 }
+                ////////////////  ------------------------------------------- ////////////////////
 
+                ////////////////  ------------- BOSS BULLET MANAGEMENT  ----------------- ////////////////
                 ////////////boss 1 bullet
-                if((boss_bullet_position_x[0] >=plane_x -25f) and (boss_bullet_position_x[0] <=plane_x +145f)and
-                    (boss_bullet_position_y[0] <=plane_y +145f) and(boss_bullet_position_y[0] >=plane_y -25f)){
-                    if(just_shot==false) {////// to avoid multiple collision of same bullet
+                if((boss_bullet_position_x[0]>= plane_x-15f) and (boss_bullet_position_x[0]<=plane_x+165f)
+                    and(boss_bullet_position_y[0] <= plane_y+190f)and(boss_bullet_position_y[0] >= plane_y-15f)){
+                    if(just_shot_bullet_boss[0]==false) {////// to avoid multiple collision of same bullet
                         if (hearts == 1) {
                             start = false
                         } else {
                             hearts -= 1
-                            just_shot=true
+                            just_shot_bullet_boss[0]=true
                         }
                     }
                 }
                 ///////boss 2 bullets
-                if((boss_bullet_position_x[1] >=plane_x -25f) and (boss_bullet_position_x[1] <=plane_x +145f)and
-                    (boss_bullet_position_y[1] <=plane_y +145f) and(boss_bullet_position_y[1] >=plane_y -25f)){
-                    if(just_shot==false) {
+                if((boss_bullet_position_x[1]>= plane_x-15f) and (boss_bullet_position_x[1]<=plane_x+165f)
+                    and(boss_bullet_position_y[1] <= plane_y+190f)and(boss_bullet_position_y[1] >= plane_y-15f)){
+                    if(just_shot_bullet_boss[1]==false) {
                         if (hearts == 1) {
                             start = false
                         } else {
                             hearts -= 1
-                            just_shot=true
+                            just_shot_bullet_boss[1]=true
                         }
                     }
                 }
-                if((boss_bullet_position_x[2] >=plane_x -25f) and (boss_bullet_position_x[2] <=plane_x +145f)and
-                    (boss_bullet_position_y[2] <=plane_y +145f) and(boss_bullet_position_y[2] >=plane_y -25f)){
-                    if(just_shot==false) {
+                if((boss_bullet_position_x[2] >=plane_x -15f) and (boss_bullet_position_x[2] <=plane_x +165f)and
+                    (boss_bullet_position_y[2] <=plane_y +190f) and(boss_bullet_position_y[2] >=plane_y -15f)){
+                    if(just_shot_bullet_boss[2]==false) {
                         if (hearts == 1) {
                             start = false
                         } else {
                             hearts -= 1
-                            just_shot=true
+                            just_shot_bullet_boss[2]=true
                         }
                     }
                 }
                 ///////////////////////// ---------------------------------- ////////////////////////////////
 
-                /////////////////////////////// -------------- MANAGE COLLISION OF OUR PLANE BULLETS   ----------------- ///////////////////////////
+                /////////////////////////////// -------------- MANAGE COLLISION OF OUR PLANE BULLETS TO ENEMIES  ----------------- ///////////////////////////
                 ///////////////bullet 1
                 if(is_visible_bul[0]) {
                     if ((bullet_position_x[0] >= array_position[0] - 35f) and (bullet_position_x[0] <= array_position[0] + 145f) and (bullet_position_y[0] <= enemy_position_y[0] + 150f) and (bullet_position_y[0] >= enemy_position_y[0])) {
@@ -1495,10 +1491,10 @@ class MyView(context: Context?, weat:String?, Color :String?, Bul :String?, Logg
                     }
                 }
 
-                ////////////
+                //////////////////////***************************************************//////////////////////////////////////////
 
-                //////////******** MANAGE COLLISION OUR BULLETS TO BOSS 1 *******////////////////
-                if((bullet_position_x[0]>=boss_x[0]-35f)and(bullet_position_x[0]<=boss_x[0]+195f)and(bullet_position_y[0]<=boss_y[0]+200f)and(bullet_position_y[0]>=boss_y[0])) {
+                ///////////////******** MANAGE COLLISION OUR BULLETS TO BOSS 1 *******////////////////
+                if((bullet_position_x[0]>=boss_x[0]-15f)and(bullet_position_x[0]<=boss_x[0]+215f)and(bullet_position_y[0]<=boss_y[0]+215f)and(bullet_position_y[0]>=boss_y[0]-15f)) {
                     if(!just_shot_bullet[0]){
                         just_shot_bullet[0] = true
                         if(life_boss[0]>1){
@@ -1512,7 +1508,7 @@ class MyView(context: Context?, weat:String?, Color :String?, Bul :String?, Logg
                         }
                     }
                 }
-                if((bullet_position_x[1]>=boss_x[1]-35f)and(bullet_position_x[1]<=boss_x[0]+195f)and(bullet_position_y[1]<=boss_y[0]+200f)and(bullet_position_y[1]>=boss_y[0])) {
+                if((bullet_position_x[1]>=boss_x[1]-15f)and(bullet_position_x[1]<=boss_x[0]+215f)and(bullet_position_y[1]<=boss_y[0]+215f)and(bullet_position_y[1]>=boss_y[0]-15f)) {
                     if(!just_shot_bullet[1]){
                         just_shot_bullet[1] = true
                         if(life_boss[0]>1){
@@ -1526,7 +1522,7 @@ class MyView(context: Context?, weat:String?, Color :String?, Bul :String?, Logg
                         }
                     }
                 }
-                if((bullet_position_x[2]>=boss_x[0]-35f)and(bullet_position_x[2]<=boss_x[0]+195f)and(bullet_position_y[2]<=boss_y[0]+200f)and(bullet_position_y[2]>=boss_y[0])) {
+                if((bullet_position_x[2]>=boss_x[0]-15f)and(bullet_position_x[2]<=boss_x[0]+215f)and(bullet_position_y[2]<=boss_y[0]+215f)and(bullet_position_y[2]>=boss_y[0]-15f)) {
                     if(!just_shot_bullet[2]){
                         just_shot_bullet[2] = true
                         if(life_boss[0]>1){
@@ -1541,7 +1537,7 @@ class MyView(context: Context?, weat:String?, Color :String?, Bul :String?, Logg
                     }
                 }
                 //////////******** OUR BULLET HIT BOSS 2 *******////////////////
-                if((bullet_position_x[0]>=boss_x[1]-35f)and(bullet_position_x[0]<=boss_x[1]+195f)and(bullet_position_y[0]<=boss_y[1]+200f)and(bullet_position_y[0]>=boss_y[1])) {
+                if((bullet_position_x[0]>=boss_x[1]-15f)and(bullet_position_x[0]<=boss_x[1]+215f)and(bullet_position_y[0]<=boss_y[1]+215f)and(bullet_position_y[0]>=boss_y[1]-15f)) {
                     if(!just_shot_bullet[0]){
                         just_shot_bullet[0] = true
                         if(life_boss[0]>1){
@@ -1554,7 +1550,7 @@ class MyView(context: Context?, weat:String?, Color :String?, Bul :String?, Logg
                         }
                     }
                 }
-                if((bullet_position_x[1]>=boss_x[1]-35f)and(bullet_position_x[1]<=boss_x[1]+195f)and(bullet_position_y[1]<=boss_y[1]+200f)and(bullet_position_y[1]>=boss_y[1])) {
+                if((bullet_position_x[1]>=boss_x[1]-15f)and(bullet_position_x[1]<=boss_x[1]+215f)and(bullet_position_y[1]<=boss_y[1]+215f)and(bullet_position_y[1]>=boss_y[1]-15f)) {
                     if(!just_shot_bullet[1]){
                         just_shot_bullet[1] = true
                         if(life_boss[0]>1){
@@ -1567,7 +1563,7 @@ class MyView(context: Context?, weat:String?, Color :String?, Bul :String?, Logg
                         }
                     }
                 }
-                if((bullet_position_x[2]>=boss_x[1]-35f)and(bullet_position_x[2]<=boss_x[1]+195f)and(bullet_position_y[2]<=boss_y[1]+200f)and(bullet_position_y[2]>=boss_y[1])) {
+                if((bullet_position_x[2]>=boss_x[1]-15f)and(bullet_position_x[2]<=boss_x[1]+215f)and(bullet_position_y[2]<=boss_y[1]+215f)and(bullet_position_y[2]>=boss_y[1]-15f)) {
                     if(!just_shot_bullet[2]){
                         just_shot_bullet[2] = true
                         if(life_boss[0]>1){
@@ -1580,7 +1576,7 @@ class MyView(context: Context?, weat:String?, Color :String?, Bul :String?, Logg
                         }
                     }
                 }
-                //////////////// end collision bullet ///////////////
+                //////////////// ********** END COLLISION BULLET WITH BOSS *******************///////////////
             }else if(PAUSE and !start){
                 val message="GAME PAUSED"
                 val textPaint = Paint().also {
