@@ -57,44 +57,57 @@ public class MusicManager {
         } else mMediaPlayer!!.start()
     }
 
-    fun playExplosionSound(conxt: Context) {
+    fun initializeGameMusic(conxt: Context){
         if (explosionPlayer1 == null) {
+            explosionPlayer1 = MediaPlayer.create(conxt, R.raw.explosionsound)
+        }
+        if (explosionPlayer2 == null) {
+            explosionPlayer2 = MediaPlayer.create(conxt, R.raw.explosionsound)
+        }
+        if (explosionPlayer3 == null) {
+            explosionPlayer3 = MediaPlayer.create(conxt, R.raw.explosionsound)
+        }
+    }
+
+    fun playExplosionSound(conxt: Context) {
+        /*if (explosionPlayer1 == null) {
             explosionPlayer1 = MediaPlayer.create(conxt, R.raw.explosionsound)
             explosionPlayer1!!.start()
             isplaying1 = true
             explosionPlayer1!!.setOnCompletionListener(){
                 isplaying1 = false
             }
-        }
-        else if(!isplaying1){
+        }*/
+        if(!isplaying1){
                 explosionPlayer1!!.start()
                 isplaying1 = true
                 explosionPlayer1!!.setOnCompletionListener(){
                     isplaying1 = false
                 }
             }
-        else if(explosionPlayer2 == null) {
+        /*else if(explosionPlayer2 == null) {
             explosionPlayer2 = MediaPlayer.create(conxt, R.raw.explosionsound)
             explosionPlayer2!!.start()
             isplaying2 = true
             explosionPlayer2!!.setOnCompletionListener {
                 isplaying2 = false
             }
-        }
-        else if(!isplaying2){
+        }*/
+        else if(!isplaying2) {
             explosionPlayer2!!.start()
             isplaying2 = true
-            explosionPlayer1!!.setOnCompletionListener(){
+            explosionPlayer1!!.setOnCompletionListener() {
                 isplaying2 = false
             }
-        } else if(explosionPlayer3 == null) {
+        }
+        /*} else if(explosionPlayer3 == null) {
             explosionPlayer3 = MediaPlayer.create(conxt, R.raw.explosionsound)
             explosionPlayer3!!.start()
             isplaying3 = true
             explosionPlayer3!!.setOnCompletionListener{
                 isplaying3 = false
             }
-        }
+        }*/
         else if(!isplaying3){
             explosionPlayer3!!.start()
             isplaying3 = true
@@ -256,6 +269,24 @@ public class MusicManager {
 
     fun setVolume(left: Float, right: Float){
         mMediaPlayer?.setVolume(left, right)
+    }
+
+    fun setVolumeGame(left: Float, right: Float){
+        explosionPlayer1?.setVolume(left, right)
+        explosionPlayer2?.setVolume(left, right)
+        explosionPlayer3?.setVolume(left, right)
+        collisionPlayer1?.setVolume(left, right)
+        collisionPlayer2?.setVolume(left, right)
+        collisionPlayer3?.setVolume(left, right)
+        hitPlayer1?.setVolume(left, right)
+        hitPlayer2?.setVolume(left, right)
+        hitPlayer3?.setVolume(left, right)
+        shootPlayer1?.setVolume(left, right)
+        shootPlayer2?.setVolume(left, right)
+        shootPlayer3?.setVolume(left, right)
+        choosePlayer1?.setVolume(left, right)
+        choosePlayer2?.setVolume(left, right)
+        choosePlayer3?.setVolume(left, right)
     }
 
     fun releasePlayer(){
