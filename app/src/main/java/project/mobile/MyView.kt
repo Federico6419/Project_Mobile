@@ -74,7 +74,7 @@ class MyView(context: Context?, weat:String?, Color :String?, Bul :String?, Logg
     var life_boss = arrayOf<Int>(3,3)
     var bullet_available = 3
     var bullet_boss = arrayOf<Int>(3,3)
-    var beat_boss1 = false
+    var beat_boss1 = false  /// allow to spawn a plus enemy(che si muove lateralmente) after have beaten the boss 1
 
     var boss_x = arrayOf<Float>(0f,0f)
     var boss_y = arrayOf<Float>(0f,0f)
@@ -108,7 +108,6 @@ class MyView(context: Context?, weat:String?, Color :String?, Bul :String?, Logg
     var boss2 : Bitmap
     var heart : Bitmap
     var skull : Bitmap
-    var explosion : Bitmap
     var pause_button : Bitmap
     var resume_button : Bitmap
     var quit_button : Bitmap
@@ -145,6 +144,7 @@ class MyView(context: Context?, weat:String?, Color :String?, Bul :String?, Logg
     ///////////////ESPLOSIONE
     var retreiver: MediaMetadataRetriever
     var bitmapVideo = ArrayList<Bitmap>()
+    var bitmapVideoBoss = ArrayList<Bitmap>()
 
 
     //EXPLOSION BULLET 1
@@ -178,7 +178,37 @@ class MyView(context: Context?, weat:String?, Color :String?, Bul :String?, Logg
     //Array that contains the positions of the explosions with bullet 3
     var expPos3 = arrayOf(floatArrayOf(0f, 0f), floatArrayOf(0f, 0f), floatArrayOf(0f, 0f), floatArrayOf(0f, 0f), floatArrayOf(0f, 0f))
     /////////////
-    /////////////
+    //EXPLOSION BULLET 1 BOSS
+    //Array that says for the bullet  if one of the 2 boss is exploding
+    var isExpBul1_Boss = arrayOf<Boolean>(false, false)
+
+    //Array that contains the frame to show for the explosions with bullet
+    var expFrame1_Boss = arrayOf<Int>(0, 0)
+
+    //Array that contains the positions of the explosions with bullet 1
+    var expPos1_Boss = arrayOf(floatArrayOf(0f, 0f), floatArrayOf(0f, 0f))
+
+    //EXPLOSION BULLET 2 BOSS
+    //Array that says for the bullet  if one of the 2 boss is exploding
+    var isExpBul2_Boss = arrayOf<Boolean>(false, false)
+
+    //Array that contains the frame to show for the explosions with bullet
+    var expFrame2_Boss = arrayOf<Int>(0, 0)
+
+    //Array that contains the positions of the explosions with bullet 1
+    var expPos2_Boss = arrayOf(floatArrayOf(0f, 0f), floatArrayOf(0f, 0f))
+
+    //EXPLOSION BULLET 3 BOSS
+    //Array that says for the bullet  if one of the 2 boss is exploding
+    var isExpBul3_Boss = arrayOf<Boolean>(false, false)
+
+    //Array that contains the frame to show for the explosions with bullet
+    var expFrame3_Boss = arrayOf<Int>(0, 0)
+
+    //Array that contains the positions of the explosions with bullet 1
+    var expPos3_Boss = arrayOf(floatArrayOf(0f, 0f), floatArrayOf(0f, 0f))
+
+    /////////////*************************////////////////////
 
     init{
         ////////////////ESPLOSIONE
@@ -204,6 +234,7 @@ class MyView(context: Context?, weat:String?, Color :String?, Bul :String?, Logg
 
 
             bitmapVideo.add(Bitmap.createScaledBitmap(bitmap, 150, 150, true))
+            bitmapVideoBoss.add(Bitmap.createScaledBitmap(bitmap, 200, 200, true))
             i += 100000
         }
 
@@ -292,8 +323,6 @@ class MyView(context: Context?, weat:String?, Color :String?, Bul :String?, Logg
             null)?.toBitmap(sizeBoss.toInt(),sizeBoss.toInt())!!
         ///// hearts////
         heart = ResourcesCompat.getDrawable(resources,R.drawable.heart,
-            null)?.toBitmap(sizeHeart.toInt(),sizeHeart.toInt())!!
-        explosion = ResourcesCompat.getDrawable(resources,R.drawable.heart,
             null)?.toBitmap(sizeHeart.toInt(),sizeHeart.toInt())!!
         skull = ResourcesCompat.getDrawable(resources,R.drawable.skull,
             null)?.toBitmap(120,120)!!
@@ -455,11 +484,11 @@ class MyView(context: Context?, weat:String?, Color :String?, Bul :String?, Logg
                         spawn_boss(0)
                     }
                 }
-                if((Score >3000) and (!boss_visible[1])){
+                /*if((Score >3000) and (!boss_visible[1])){
                     GlobalScope.launch {
                         spawn_boss(1)
                     }
-                }
+                }*/
                 ///////////------------------ manage position of boss 1 -------------///////////////
                 if(boss_visible[0]){
                     //// permette al boss di muoversi avanti e indietro per count volte lungo asse y
@@ -982,7 +1011,6 @@ class MyView(context: Context?, weat:String?, Color :String?, Bul :String?, Logg
                             isExpBul1[4] = true
                             expPos1[4][0] = array_position[4]
                             expPos1[4][1] = enemy_position_y[4]
-                            //drawBitmap(explosion,array_position[4],enemy_position_y[4],null)
                             just_shot_bullet[0] = true
                         }
                     }
@@ -1367,7 +1395,6 @@ class MyView(context: Context?, weat:String?, Color :String?, Bul :String?, Logg
                             isExpBul3[3] = true
                             expPos3[3][0] = array_position[3]
                             expPos3[3][1] = enemy_position_y[3]
-                            //drawBitmap(explosion,array_position[3],enemy_position_y[3],null)
                             just_shot_bullet[2] = true
                         }
                     }
@@ -1388,7 +1415,6 @@ class MyView(context: Context?, weat:String?, Color :String?, Bul :String?, Logg
                             isExpBul3[4] = true
                             expPos3[4][0] = array_position[4]
                             expPos3[4][1] = enemy_position_y[4]
-                            //drawBitmap(explosion,array_position[4],enemy_position_y[4],null)
                             just_shot_bullet[2] = true
                         }
                     }
@@ -1497,28 +1523,37 @@ class MyView(context: Context?, weat:String?, Color :String?, Bul :String?, Logg
                 if((bullet_position_x[0]>=boss_x[0]-15f)and(bullet_position_x[0]<=boss_x[0]+215f)and(bullet_position_y[0]<=boss_y[0]+215f)and(bullet_position_y[0]>=boss_y[0]-15f)) {
                     if(!just_shot_bullet[0]){
                         just_shot_bullet[0] = true
-                        if(life_boss[0]>1){
+                        ////// check if boss have still some lives, otherwise set the boss invisible(dead)
+                        if(life_boss[0]==1){
+                            Log.i("prova", life_boss[0].toString())
                             life_boss[0] -=1
-                        }else{
-                            life_boss[0] -= 1
                             boss_visible[0]= false
                             Score += 200
-                            drawBitmap(explosion,boss_x[0],boss_y[0],null)
                             beat_boss1 = true
+                            isExpBul1_Boss[0] = true
+                            expPos1_Boss[0][0] = boss_x[0]
+                            expPos1_Boss[0][1] = boss_y[0]
+                        }else{
+                            Log.i("prova", life_boss[0].toString())
+                            life_boss[0] -= 1
                         }
                     }
                 }
                 if((bullet_position_x[1]>=boss_x[1]-15f)and(bullet_position_x[1]<=boss_x[0]+215f)and(bullet_position_y[1]<=boss_y[0]+215f)and(bullet_position_y[1]>=boss_y[0]-15f)) {
                     if(!just_shot_bullet[1]){
                         just_shot_bullet[1] = true
-                        if(life_boss[0]>1){
+                        if(life_boss[0]==1){
+                            Log.i("prova", life_boss[0].toString())
                             life_boss[0] -=1
-                        }else{
-                            life_boss[0] -= 1
                             boss_visible[0]= false
                             Score += 200
-                            drawBitmap(explosion,boss_x[0],boss_y[0],null)
                             beat_boss1 = true
+                            isExpBul1_Boss[0] = true
+                            expPos1_Boss[0][0] = boss_x[0]
+                            expPos1_Boss[0][1] = boss_y[0]
+                        }else{
+                            Log.i("prova", life_boss[0].toString())
+                            life_boss[0] -= 1
                         }
                     }
                 }
@@ -1526,13 +1561,17 @@ class MyView(context: Context?, weat:String?, Color :String?, Bul :String?, Logg
                     if(!just_shot_bullet[2]){
                         just_shot_bullet[2] = true
                         if(life_boss[0]>1){
+                            Log.i("prova", life_boss[0].toString())
                             life_boss[0] -=1
-                        }else{
-                            life_boss[0] -= 1
                             boss_visible[0]= false
                             Score += 200
-                            drawBitmap(explosion,boss_x[0],boss_y[0],null)
                             beat_boss1 = true
+                            isExpBul1_Boss[0] = true
+                            expPos1_Boss[0][0] = boss_x[0]
+                            expPos1_Boss[0][1] = boss_y[0]
+                        }else{
+                            Log.i("prova", life_boss[0].toString())
+                            life_boss[0] -= 1
                         }
                     }
                 }
@@ -1540,43 +1579,175 @@ class MyView(context: Context?, weat:String?, Color :String?, Bul :String?, Logg
                 if((bullet_position_x[0]>=boss_x[1]-15f)and(bullet_position_x[0]<=boss_x[1]+215f)and(bullet_position_y[0]<=boss_y[1]+215f)and(bullet_position_y[0]>=boss_y[1]-15f)) {
                     if(!just_shot_bullet[0]){
                         just_shot_bullet[0] = true
-                        if(life_boss[0]>1){
+                        if(life_boss[0]==1){
                             life_boss[0] -=1
-                        }else{
-                            life_boss[0] -= 1
                             boss_visible[0]= false
                             Score += 200
-                            drawBitmap(explosion,boss_x[1],boss_y[1],null)
+                            isExpBul1_Boss[0] = true
+                            expPos1_Boss[1][0] = boss_x[1]
+                            expPos1_Boss[1][1] = boss_y[1]
+                        }else{
+                            life_boss[0] -= 1
                         }
                     }
                 }
                 if((bullet_position_x[1]>=boss_x[1]-15f)and(bullet_position_x[1]<=boss_x[1]+215f)and(bullet_position_y[1]<=boss_y[1]+215f)and(bullet_position_y[1]>=boss_y[1]-15f)) {
                     if(!just_shot_bullet[1]){
                         just_shot_bullet[1] = true
-                        if(life_boss[0]>1){
+                        if(life_boss[0]==1){
                             life_boss[0] -=1
-                        }else{
-                            life_boss[0] -= 1
                             boss_visible[0]= false
                             Score += 200
-                            drawBitmap(explosion,boss_x[1],boss_y[1],null)
+                            isExpBul1_Boss[0] = true
+                            expPos1_Boss[1][0] = boss_x[1]
+                            expPos1_Boss[1][1] = boss_y[1]
+                        }else{
+                            life_boss[0] -= 1
                         }
                     }
                 }
                 if((bullet_position_x[2]>=boss_x[1]-15f)and(bullet_position_x[2]<=boss_x[1]+215f)and(bullet_position_y[2]<=boss_y[1]+215f)and(bullet_position_y[2]>=boss_y[1]-15f)) {
                     if(!just_shot_bullet[2]){
                         just_shot_bullet[2] = true
-                        if(life_boss[0]>1){
+                        if(life_boss[0]==1){
                             life_boss[0] -=1
-                        }else{
-                            life_boss[0] -= 1
                             boss_visible[0]= false
                             Score += 200
-                            drawBitmap(explosion,boss_x[1],boss_y[1],null)
+                            isExpBul1_Boss[0] = true
+                            expPos1_Boss[1][0] = boss_x[1]
+                            expPos1_Boss[1][1] = boss_y[1]
+                        }else{
+                            life_boss[0] -= 1
                         }
                     }
                 }
                 //////////////// ********** END COLLISION BULLET WITH BOSS *******************///////////////
+
+                //////////////////////// EXPLOSION BOSS  /////////////////////////////////////////
+                /////////////////ESPLOSIONE BULLET 1 BOSS 1
+                if (isExpBul1_Boss[0]) {
+                    if (expFrame1_Boss[0] < 18) {
+                        if(expFrame1_Boss[0] == 0){
+                            just_shot_bullet_boss[0] = false
+                            //If there is an explosion play its sound
+                            music.playExplosionSound(context)
+                        }
+                        drawBitmap(
+                            bitmapVideoBoss.get(expFrame1_Boss[0] / 2),
+                            expPos1_Boss[0][0],
+                            expPos1_Boss[0][1],
+                            null
+                        )
+                        expFrame1_Boss[0] = expFrame1_Boss[0] + 1
+                    } else {
+                        expFrame1_Boss[0] = 0
+                        isExpBul1_Boss[0] = false
+                    }
+                }
+                /////////////////ESPLOSIONE BULLET 1 BOSS 2
+                if (isExpBul1_Boss[1]) {
+                    if (expFrame1_Boss[1] < 18) {
+                        if(expFrame1_Boss[1] == 0){
+                            just_shot_bullet_boss[1] = false
+                            //If there is an explosion play its sound
+                            music.playExplosionSound(context)
+                        }
+                        drawBitmap(
+                            bitmapVideoBoss.get(expFrame1_Boss[1] / 2),
+                            expPos1_Boss[1][0],
+                            expPos1_Boss[1][1],
+                            null
+                        )
+                        expFrame1_Boss[1] = expFrame1_Boss[1] + 1
+                    } else {
+                        expFrame1_Boss[1] = 0
+                        isExpBul1_Boss[1] = false
+                    }
+                }
+                /////////////////ESPLOSIONE BULLET 2 BOSS 1
+                if (isExpBul2_Boss[0]) {
+                    if (expFrame2_Boss[0] < 18) {
+                        if(expFrame2_Boss[0] == 0){
+                            just_shot_bullet_boss[0] = false
+                            //If there is an explosion play its sound
+                            music.playExplosionSound(context)
+                        }
+                        drawBitmap(
+                            bitmapVideoBoss.get(expFrame1_Boss[0] / 2),
+                            expPos2_Boss[0][0],
+                            expPos2_Boss[0][1],
+                            null
+                        )
+                        expFrame2_Boss[0] = expFrame2_Boss[0] + 1
+                    } else {
+                        expFrame2_Boss[0] = 0
+                        isExpBul2_Boss[0] = false
+                    }
+                }
+                /////////////////ESPLOSIONE BULLET 2 BOSS 2
+                if (isExpBul2_Boss[1]) {
+                    if (expFrame2_Boss[1] < 18) {
+                        if(expFrame2_Boss[1] == 0){
+                            just_shot_bullet_boss[1] = false
+                            //If there is an explosion play its sound
+                            music.playExplosionSound(context)
+                        }
+                        drawBitmap(
+                            bitmapVideoBoss.get(expFrame2_Boss[1] / 2),
+                            expPos2_Boss[1][0],
+                            expPos2_Boss[1][1],
+                            null
+                        )
+                        expFrame2_Boss[1] = expFrame2_Boss[1] + 1
+                    } else {
+                        expFrame2_Boss[1] = 0
+                        isExpBul2_Boss[1] = false
+                    }
+                }
+                /////////////////ESPLOSIONE BULLET 3 BOSS 1
+                if (isExpBul3_Boss[0]) {
+                    if (expFrame3_Boss[0] < 18) {
+                        if(expFrame3_Boss[0] == 0){
+                            just_shot_bullet_boss[0] = false
+                            //If there is an explosion play its sound
+                            music.playExplosionSound(context)
+                        }
+                        drawBitmap(
+                            bitmapVideoBoss.get(expFrame3_Boss[0] / 2),
+                            expPos3_Boss[0][0],
+                            expPos3_Boss[0][1],
+                            null
+                        )
+                        expFrame3_Boss[0] = expFrame3_Boss[0] + 1
+                    } else {
+                        expFrame3_Boss[0] = 0
+                        isExpBul3_Boss[0] = false
+                    }
+                }
+                /////////////////ESPLOSIONE BULLET 3 BOSS 2
+                if (isExpBul3_Boss[1]) {
+                    if (expFrame3_Boss[1] < 18) {
+                        if(expFrame3_Boss[1] == 0){
+                            just_shot_bullet_boss[1] = false
+                            //If there is an explosion play its sound
+                            music.playExplosionSound(context)
+                        }
+                        drawBitmap(
+                            bitmapVideoBoss.get(expFrame3_Boss[1] / 2),
+                            expPos3_Boss[1][0],
+                            expPos3_Boss[1][1],
+                            null
+                        )
+                        expFrame3_Boss[1] = expFrame3_Boss[1] + 1
+                    } else {
+                        expFrame3_Boss[1] = 0
+                        isExpBul3_Boss[1] = false
+                    }
+                }
+
+                ///////////////////////////***************************************************/////////////////////////////////////
+
+                //////////////// PAUSE AND GAMEOVER MANAGEMENT //////////////////////////////
             }else if(PAUSE and !start){
                 val message="GAME PAUSED"
                 val textPaint = Paint().also {
