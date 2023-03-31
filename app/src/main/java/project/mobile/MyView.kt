@@ -1574,7 +1574,7 @@ class MyView(context: Context?, weat:String?, Color :String?, Bul :String?, Logg
                     if(!just_shot_bullet[2]){
                         just_shot_bullet[2] = true
                         if(life_boss[0]>0) {
-                            if (life_boss[0] > 1) {
+                            if (life_boss[0]== 1) {
                                 Log.i("prova", life_boss[0].toString())
                                 life_boss[0] -= 1
                                 boss_visible[0] = false
