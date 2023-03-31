@@ -74,6 +74,8 @@ class MyView(context: Context?, weat:String?, Color :String?, Bul :String?, Logg
     var life_boss = arrayOf<Int>(3,3)
     var bullet_available = 3
     var bullet_boss = arrayOf<Int>(3,3)
+    var boss1_spawned = false
+    var boss2_spawned = false
     var beat_boss1 = false  /// allow to spawn a plus enemy(che si muove lateralmente) after have beaten the boss 1
 
     var boss_x = arrayOf<Float>(0f,0f)
@@ -479,18 +481,20 @@ class MyView(context: Context?, weat:String?, Color :String?, Bul :String?, Logg
                     }
                 }*/
                 //////////////////////// spawn bosses //////////////////
-                if((Score >500)and(Score<1500) and (!boss_visible[0])){
+                if((Score >500) and  (!boss1_spawned)){
                     GlobalScope.launch {
+                        boss1_spawned = true
                         spawn_boss(0)
                     }
                 }
-                /*if((Score >3000) and (!boss_visible[1])){
+                if((Score >3000) and (!boss2_spawned)){
                     GlobalScope.launch {
+                        boss2_spawned = true
                         spawn_boss(1)
                     }
-                }*/
+                }
                 ///////////------------------ manage position of boss 1 -------------///////////////
-                if(boss_visible[0]){
+                if((boss_visible[0])and(!beat_boss1)){
                     //// permette al boss di muoversi avanti e indietro per count volte lungo asse y
                     if((boss_y[0]>1000f) and(!up_if_true[0]) and (count_boss[0]<4)){
                         up_if_true[0] = true
@@ -1520,104 +1524,110 @@ class MyView(context: Context?, weat:String?, Color :String?, Bul :String?, Logg
                 //////////////////////***************************************************//////////////////////////////////////////
 
                 ///////////////******** MANAGE COLLISION OUR BULLETS TO BOSS 1 *******////////////////
-                if((bullet_position_x[0]>=boss_x[0]-15f)and(bullet_position_x[0]<=boss_x[0]+215f)and(bullet_position_y[0]<=boss_y[0]+215f)and(bullet_position_y[0]>=boss_y[0]-15f)) {
+                if((bullet_position_x[0]>=boss_x[0]+lateral_movement_boss[0]-15f)and(bullet_position_x[0]<=boss_x[0]+lateral_movement_boss[0]+215f)and(bullet_position_y[0]<=boss_y[0]+215f)and(bullet_position_y[0]>=boss_y[0]-15f)) {
                     if(!just_shot_bullet[0]){
                         just_shot_bullet[0] = true
-                        ////// check if boss have still some lives, otherwise set the boss invisible(dead)
-                        if(life_boss[0]==1){
-                            Log.i("prova", life_boss[0].toString())
-                            life_boss[0] -=1
-                            boss_visible[0]= false
-                            Score += 200
-                            beat_boss1 = true
-                            isExpBul1_Boss[0] = true
-                            expPos1_Boss[0][0] = boss_x[0]
-                            expPos1_Boss[0][1] = boss_y[0]
-                        }else{
-                            Log.i("prova", life_boss[0].toString())
-                            life_boss[0] -= 1
+                        if(life_boss[0]>0) {
+                            ////// check if boss have still some lives, otherwise set the boss invisible(dead)
+                            if (life_boss[0] == 1) {
+                                Log.i("prova", life_boss[0].toString())
+                                life_boss[0] -= 1
+                                boss_visible[0] = false
+                                Score += 200
+                                beat_boss1 = true
+                                isExpBul1_Boss[0] = true
+                                expPos1_Boss[0][0] = boss_x[0]+lateral_movement_boss[0]
+                                expPos1_Boss[0][1] = boss_y[0]
+                            } else {
+                                Log.i("prova", life_boss[0].toString())
+                                life_boss[0] -= 1
+                            }
                         }
                     }
                 }
-                if((bullet_position_x[1]>=boss_x[1]-15f)and(bullet_position_x[1]<=boss_x[0]+215f)and(bullet_position_y[1]<=boss_y[0]+215f)and(bullet_position_y[1]>=boss_y[0]-15f)) {
+                if((bullet_position_x[1]>=boss_x[0]+lateral_movement_boss[0]-15f)and(bullet_position_x[1]<=boss_x[0]+lateral_movement_boss[0]+215f)and(bullet_position_y[1]<=boss_y[0]+215f)and(bullet_position_y[1]>=boss_y[0]-15f)) {
                     if(!just_shot_bullet[1]){
                         just_shot_bullet[1] = true
-                        if(life_boss[0]==1){
-                            Log.i("prova", life_boss[0].toString())
-                            life_boss[0] -=1
-                            boss_visible[0]= false
-                            Score += 200
-                            beat_boss1 = true
-                            isExpBul1_Boss[0] = true
-                            expPos1_Boss[0][0] = boss_x[0]
-                            expPos1_Boss[0][1] = boss_y[0]
-                        }else{
-                            Log.i("prova", life_boss[0].toString())
-                            life_boss[0] -= 1
+                        if(life_boss[0]>0) {
+                            if (life_boss[0] == 1) {
+                                Log.i("prova", life_boss[0].toString())
+                                life_boss[0] -= 1
+                                boss_visible[0] = false
+                                Score += 200
+                                beat_boss1 = true
+                                isExpBul1_Boss[0] = true
+                                expPos1_Boss[0][0] = boss_x[0]+lateral_movement_boss[0]
+                                expPos1_Boss[0][1] = boss_y[0]
+                            } else {
+                                Log.i("prova", life_boss[0].toString())
+                                life_boss[0] -= 1
+                            }
                         }
                     }
                 }
-                if((bullet_position_x[2]>=boss_x[0]-15f)and(bullet_position_x[2]<=boss_x[0]+215f)and(bullet_position_y[2]<=boss_y[0]+215f)and(bullet_position_y[2]>=boss_y[0]-15f)) {
+                if((bullet_position_x[2]>=boss_x[0]+lateral_movement_boss[0]-15f)and(bullet_position_x[2]<=boss_x[0]+lateral_movement_boss[0]+215f)and(bullet_position_y[2]<=boss_y[0]+215f)and(bullet_position_y[2]>=boss_y[0]-15f)) {
                     if(!just_shot_bullet[2]){
                         just_shot_bullet[2] = true
-                        if(life_boss[0]>1){
-                            Log.i("prova", life_boss[0].toString())
-                            life_boss[0] -=1
-                            boss_visible[0]= false
-                            Score += 200
-                            beat_boss1 = true
-                            isExpBul1_Boss[0] = true
-                            expPos1_Boss[0][0] = boss_x[0]
-                            expPos1_Boss[0][1] = boss_y[0]
-                        }else{
-                            Log.i("prova", life_boss[0].toString())
-                            life_boss[0] -= 1
+                        if(life_boss[0]>0) {
+                            if (life_boss[0] > 1) {
+                                Log.i("prova", life_boss[0].toString())
+                                life_boss[0] -= 1
+                                boss_visible[0] = false
+                                Score += 200
+                                beat_boss1 = true
+                                isExpBul1_Boss[0] = true
+                                expPos1_Boss[0][0] = boss_x[0]+lateral_movement_boss[0]
+                                expPos1_Boss[0][1] = boss_y[0]
+                            } else {
+                                Log.i("prova", life_boss[0].toString())
+                                life_boss[0] -= 1
+                            }
                         }
                     }
                 }
                 //////////******** OUR BULLET HIT BOSS 2 *******////////////////
-                if((bullet_position_x[0]>=boss_x[1]-15f)and(bullet_position_x[0]<=boss_x[1]+215f)and(bullet_position_y[0]<=boss_y[1]+215f)and(bullet_position_y[0]>=boss_y[1]-15f)) {
+                if((bullet_position_x[0]>=boss_x[1]+lateral_movement_boss[1]-15f)and(bullet_position_x[0]<=boss_x[1]+lateral_movement_boss[1]+215f)and(bullet_position_y[0]<=boss_y[1]+215f)and(bullet_position_y[0]>=boss_y[1]-15f)) {
                     if(!just_shot_bullet[0]){
-                        just_shot_bullet[0] = true
-                        if(life_boss[0]==1){
-                            life_boss[0] -=1
-                            boss_visible[0]= false
+                        just_shot_bullet[1] = true
+                        if(life_boss[1]==1){
+                            life_boss[1] -=1
+                            boss_visible[1]= false
                             Score += 200
-                            isExpBul1_Boss[0] = true
-                            expPos1_Boss[1][0] = boss_x[1]
+                            isExpBul1_Boss[1] = true
+                            expPos1_Boss[1][0] = boss_x[1]+lateral_movement_boss[1]
                             expPos1_Boss[1][1] = boss_y[1]
                         }else{
-                            life_boss[0] -= 1
+                            life_boss[1] -= 1
                         }
                     }
                 }
                 if((bullet_position_x[1]>=boss_x[1]-15f)and(bullet_position_x[1]<=boss_x[1]+215f)and(bullet_position_y[1]<=boss_y[1]+215f)and(bullet_position_y[1]>=boss_y[1]-15f)) {
                     if(!just_shot_bullet[1]){
                         just_shot_bullet[1] = true
-                        if(life_boss[0]==1){
-                            life_boss[0] -=1
-                            boss_visible[0]= false
+                        if(life_boss[1]==1){
+                            life_boss[1] -=1
+                            boss_visible[1]= false
                             Score += 200
-                            isExpBul1_Boss[0] = true
+                            isExpBul1_Boss[1] = true
                             expPos1_Boss[1][0] = boss_x[1]
                             expPos1_Boss[1][1] = boss_y[1]
                         }else{
-                            life_boss[0] -= 1
+                            life_boss[1] -= 1
                         }
                     }
                 }
                 if((bullet_position_x[2]>=boss_x[1]-15f)and(bullet_position_x[2]<=boss_x[1]+215f)and(bullet_position_y[2]<=boss_y[1]+215f)and(bullet_position_y[2]>=boss_y[1]-15f)) {
                     if(!just_shot_bullet[2]){
                         just_shot_bullet[2] = true
-                        if(life_boss[0]==1){
-                            life_boss[0] -=1
-                            boss_visible[0]= false
+                        if(life_boss[1]==1){
+                            life_boss[1] -=1
+                            boss_visible[1]= false
                             Score += 200
-                            isExpBul1_Boss[0] = true
+                            isExpBul1_Boss[1] = true
                             expPos1_Boss[1][0] = boss_x[1]
                             expPos1_Boss[1][1] = boss_y[1]
                         }else{
-                            life_boss[0] -= 1
+                            life_boss[1] -= 1
                         }
                     }
                 }
