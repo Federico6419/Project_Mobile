@@ -75,7 +75,7 @@ class GameSettingsActivity : AppCompatActivity() {
 
         bullet1.setOnClickListener() {
             bullet1.setImageResource(R.drawable.bulletsigned)
-            bullet2.setImageResource(R.drawable.laser_bullet2)
+            bullet2.setImageResource(R.drawable.lasersettings)
             //bullet3.setImageResource(R.drawable.bullet)
             bullet = "normal"
             music.playChooseSound(this)
@@ -83,7 +83,7 @@ class GameSettingsActivity : AppCompatActivity() {
 
         bullet2.setOnClickListener() {
             bullet1.setImageResource(R.drawable.bulletsettings)
-            bullet2.setImageResource(R.drawable.bulletsigned)
+            bullet2.setImageResource(R.drawable.lasersigned)
             //bullet3.setImageResource(R.drawable.bullet)
             bullet = "laser"
             music.playChooseSound(this)

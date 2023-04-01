@@ -58,7 +58,7 @@
         android:layout_height="60dp"
         android:background="@null"
         android:scaleType="fitXY"
-        android:src="@drawable/laser_bullet2"
+        android:src="@drawable/lasersettings"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.664"
