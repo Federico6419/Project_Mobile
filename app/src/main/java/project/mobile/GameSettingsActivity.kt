@@ -1,11 +1,8 @@
 package project.mobile
 
 import android.content.Intent
-import android.graphics.Color
 import android.os.Bundle
-import android.text.Layout
-import android.view.LayoutInflater
-import android.view.View
+import android.view.ViewManager
 import android.widget.*
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.isVisible
@@ -27,7 +24,6 @@ class GameSettingsActivity : AppCompatActivity() {
     private lateinit var firebaseAuth: FirebaseAuth         //Firebase Authenticatoin variable
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_game_settings)
 
         firebaseAuth = FirebaseAuth.getInstance()   //Get instance from Firebase Authentication
 
@@ -36,70 +32,12 @@ class GameSettingsActivity : AppCompatActivity() {
         var color = "red"
         var bullet = "normal"
 
-        //Airplane selection management
-        val airplane1: ImageButton = findViewById(R.id.Airplane1) as ImageButton
-        airplane1.setImageResource(R.drawable.airplaneredsigned)
-
-        val airplane2: ImageButton = findViewById(R.id.Airplane2) as ImageButton
-        airplane2.setImageResource(R.drawable.airplaneblue)
-
-        val airplane3: ImageButton = findViewById(R.id.Airplane3) as ImageButton
-        airplane3.setImageResource(R.drawable.airplanegreen)
-
-        airplane1.setOnClickListener() {
-            airplane1.setImageResource(R.drawable.airplaneredsigned)
-            airplane2.setImageResource(R.drawable.airplaneblue)
-            airplane3.setImageResource(R.drawable.airplanegreen)
-            color = "red"
-            music.playChooseSound(this)
-        }
-
-        airplane2.setOnClickListener() {
-            airplane1.setImageResource(R.drawable.airplane)
-            airplane2.setImageResource(R.drawable.airplanebluesigned)
-            airplane3.setImageResource(R.drawable.airplanegreen)
-            color = "blue"
-            music.playChooseSound(this)
-        }
-
-        airplane3.setOnClickListener() {
-            airplane1.setImageResource(R.drawable.airplane)
-            airplane2.setImageResource(R.drawable.airplaneblue)
-            airplane3.setImageResource(R.drawable.airplanegreensigned)
-            color = "green"
-            music.playChooseSound(this)
-        }
-
-
-        //Bullet selection management
-        val bullet1: ImageButton = findViewById(R.id.Bullet1) as ImageButton
-
-        val bullet2: ImageButton = findViewById(R.id.Bullet2) as ImageButton
-
-        //val bullet3: ImageButton = findViewById(R.id.Bullet3) as ImageButton
-
-        bullet1.setOnClickListener() {
-            bullet1.setImageResource(R.drawable.bulletsigned)
-            bullet2.setImageResource(R.drawable.lasersettings)
-            //bullet3.setImageResource(R.drawable.bullet)
-            bullet = "normal"
-            music.playChooseSound(this)
-        }
-
-        bullet2.setOnClickListener() {
-            bullet1.setImageResource(R.drawable.bulletsettings)
-            bullet2.setImageResource(R.drawable.lasersigned)
-            //bullet3.setImageResource(R.drawable.bullet)
-            bullet = "laser"
-            music.playChooseSound(this)
-        }
-
-
-        //Opponent management
         //Get the uid of the current user
         val uid = firebaseAuth.uid
-        //Check if the user id is null or not
-        uid?.let {             //If user id is not null, display the choose of the opponent
+
+        uid?.let {
+            setContentView(R.layout.activity_game_settings_opponent)
+
             //Connecting to Firebase Database
             val database = Firebase.database("https://mobileproject2-50486-default-rtdb.europe-west1.firebasedatabase.app/")
 
@@ -158,26 +96,78 @@ class GameSettingsActivity : AppCompatActivity() {
             }
 
         } ?: run {
-            //Change Set Opponent button in Sign Up button
-            var opponentNameView = findViewById(R.id.Opponent) as TextView
-            opponentNameView.text = "You have to be logged to choose your opponent"
-            val user = findViewById(R.id.Username) as EditText
-            user.isVisible = false
-            user.isClickable = false
-            val opponentButton = findViewById(R.id.SubmitButton) as Button
-            opponentButton.text = "Sign Up"
-            opponentButton.setOnClickListener{
+            setContentView(R.layout.activity_game_settings)
+
+            val signUpButton = findViewById(R.id.SignUpButton) as Button
+            signUpButton.setOnClickListener {
                 intent = Intent(this, SignUpActivity::class.java)
                 startActivity(intent)
             }
 
             //Change Remove Opponent button in Sign In button
-            val removeButton = findViewById(R.id.RemoveButton) as Button
-            removeButton.text = "Sign In"
-            removeButton.setOnClickListener() {
+            val signInButton = findViewById(R.id.SignInButton) as Button
+            signInButton.setOnClickListener() {
                 intent = Intent(this, SignInActivity::class.java)
                 startActivity(intent)
             }
+        }
+
+        //Airplane selection management
+        val airplane1: ImageButton = findViewById(R.id.Airplane1) as ImageButton
+        airplane1.setImageResource(R.drawable.airplaneredsigned)
+
+        val airplane2: ImageButton = findViewById(R.id.Airplane2) as ImageButton
+        airplane2.setImageResource(R.drawable.airplaneblue)
+
+        val airplane3: ImageButton = findViewById(R.id.Airplane3) as ImageButton
+        airplane3.setImageResource(R.drawable.airplanegreen)
+
+        airplane1.setOnClickListener() {
+            airplane1.setImageResource(R.drawable.airplaneredsigned)
+            airplane2.setImageResource(R.drawable.airplaneblue)
+            airplane3.setImageResource(R.drawable.airplanegreen)
+            color = "red"
+            music.playChooseSound(this)
+        }
+
+        airplane2.setOnClickListener() {
+            airplane1.setImageResource(R.drawable.airplane)
+            airplane2.setImageResource(R.drawable.airplanebluesigned)
+            airplane3.setImageResource(R.drawable.airplanegreen)
+            color = "blue"
+            music.playChooseSound(this)
+        }
+
+        airplane3.setOnClickListener() {
+            airplane1.setImageResource(R.drawable.airplane)
+            airplane2.setImageResource(R.drawable.airplaneblue)
+            airplane3.setImageResource(R.drawable.airplanegreensigned)
+            color = "green"
+            music.playChooseSound(this)
+        }
+
+
+        //Bullet selection management
+        val bullet1: ImageButton = findViewById(R.id.Bullet1) as ImageButton
+
+        val bullet2: ImageButton = findViewById(R.id.Bullet2) as ImageButton
+
+        //val bullet3: ImageButton = findViewById(R.id.Bullet3) as ImageButton
+
+        bullet1.setOnClickListener() {
+            bullet1.setImageResource(R.drawable.bulletsigned)
+            bullet2.setImageResource(R.drawable.lasersettings)
+            //bullet3.setImageResource(R.drawable.bullet)
+            bullet = "normal"
+            music.playChooseSound(this)
+        }
+
+        bullet2.setOnClickListener() {
+            bullet1.setImageResource(R.drawable.bulletsettings)
+            bullet2.setImageResource(R.drawable.lasersigned)
+            //bullet3.setImageResource(R.drawable.bullet)
+            bullet = "laser"
+            music.playChooseSound(this)
         }
 
 

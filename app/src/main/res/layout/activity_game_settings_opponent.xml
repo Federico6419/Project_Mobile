@@ -142,7 +142,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:fontFamily="sans-serif-light"
-        android:text="You need to be logged to choose an opponent"
+        android:text="Current opponent: None"
         android:textColor="@color/white"
         android:textSize="18dp"
         app:layout_constraintBottom_toBottomOf="parent"
@@ -153,36 +153,49 @@
         app:layout_constraintVertical_bias="0.57"
         tools:ignore="MissingConstraints" />
 
+    <EditText
+        android:id="@+id/Username"
+        android:layout_width="344dp"
+        android:layout_height="46dp"
+        android:hint="Insert Username"
+        android:textAlignment="center"
+        android:textColor="#6bfff7"
+        android:textColorHint="#52afaa"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.492"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.63" />
+
     <Button
-        android:id="@+id/SignUpButton"
+        android:id="@+id/SubmitButton"
         android:layout_width="150dp"
-        android:layout_height="80dp"
-        android:textSize="20dp"
-        android:text="Sign Up"
+        android:layout_height="40dp"
+        android:text="Set opponent"
         android:textAllCaps="false"
         app:backgroundTint="@color/purple_700"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.176"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.671" />
-
+        app:layout_constraintHorizontal_bias="0.190"
+        app:layout_constraintVertical_bias="0.69" />
 
     <Button
-        android:id="@+id/SignInButton"
+        android:id="@+id/RemoveButton"
         android:layout_width="150dp"
-        android:layout_height="80dp"
-        android:textSize="20dp"
-        android:text="Sign In"
+        android:layout_height="40dp"
+        android:text="Remove opponent"
         android:textAllCaps="false"
-        app:backgroundTint="@color/purple_700"
+        app:backgroundTint="@color/red"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.823"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.671" />
+        app:layout_constraintHorizontal_bias="0.810"
+        app:layout_constraintVertical_bias="0.69" />
+
 
     <ImageButton
         android:id="@+id/StartButton"
