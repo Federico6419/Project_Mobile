@@ -62,6 +62,7 @@ class MyView(context: Context?, weat:String?, Color :String?, Bul :String?, Logg
     var down4 = 0f
     var down5 = 0f
     var increment_velocity = 0 /// to augment velocity of enemy after tot points
+    var augment_score =  arrayOf<Boolean>(false,false,false,false)
     var lateral_movement = arrayOf<Float>(0f,0f,0f,0f,0f)
     var lateral_movement_boss = arrayOf<Float>(0f,0f)
     var dx_if_true = arrayOf<Boolean>(true,true,true,true,true)
@@ -573,8 +574,21 @@ class MyView(context: Context?, weat:String?, Color :String?, Bul :String?, Logg
                 }
                 ////////// increase the value of the enemy translation //////////
                 /// increment velocity every 500 score and at most 2000 score
-                if((Score %500 == 0) and (Score<2000)){
+                if((Score==500) and (!augment_score[0])){
                     increment_velocity += 1
+                    augment_score[0] = true
+                }
+                if((Score==1000) and (!augment_score[1])){
+                    increment_velocity += 1
+                    augment_score[1] = true
+                }
+                if((Score==1500) and (!augment_score[2])){
+                    increment_velocity += 1
+                    augment_score[2] = true
+                }
+                if((Score==2000) and (!augment_score[3])){
+                    increment_velocity += 1
+                    augment_score[3] = true
                 }
                 //////
                 if(enemy_visible[0]) {
@@ -600,7 +614,16 @@ class MyView(context: Context?, weat:String?, Color :String?, Bul :String?, Logg
                 }
                 if(enemy_visible[3]) {
                     down4 += 7+(increment_velocity)
-                    withTranslation (0f,down4) {
+                    if((lateral_movement[3]+array_position[3]>900f) and (dx_if_true[3] == true)){
+                        dx_if_true[3] = false
+                    }else if((lateral_movement[3]+array_position[3]<100f) and (dx_if_true[3]==false)){
+                        dx_if_true[3] = true
+                    }
+
+                    if(dx_if_true[3]==true){lateral_movement[3] =lateral_movement[3]+12f}
+                    if(dx_if_true[3]==false){lateral_movement[3] =lateral_movement[3]-12f}
+
+                    withTranslation (lateral_movement[3],down5) {
                         drawBitmap(array_enemy_type[array_type[3]], array_position[3], 0f, null)
 
                     }
@@ -931,7 +954,7 @@ class MyView(context: Context?, weat:String?, Color :String?, Bul :String?, Logg
                 ///////////////bullet 1
                 if(is_visible_bul[0]) {
                     if ((bullet_position_x[0] >= array_position[0] - 35f) and (bullet_position_x[0] <= array_position[0] + 145f) and (bullet_position_y[0] <= enemy_position_y[0] + 150f) and (bullet_position_y[0] >= enemy_position_y[0])) {
-                        if (!just_shot_bullet[0]) {
+                        if ((!just_shot_bullet[0]) and (enemy_visible[0])) {
                             Score += 50
                             numKills += 1
                             down1 = 0f
@@ -950,7 +973,7 @@ class MyView(context: Context?, weat:String?, Color :String?, Bul :String?, Logg
                         }
                     }
                     if ((bullet_position_x[0] >= array_position[1] - 35f) and (bullet_position_x[0] <= array_position[1] + 145f) and (bullet_position_y[0] <= enemy_position_y[1] + 150f) and (bullet_position_y[0] >= enemy_position_y[1])) {
-                        if (!just_shot_bullet[0]) {
+                        if ((!just_shot_bullet[0]) and (enemy_visible[1])) {
                             Score += 50
                             numKills += 1
                             down2 = 0f
@@ -970,7 +993,7 @@ class MyView(context: Context?, weat:String?, Color :String?, Bul :String?, Logg
                         }
                     }
                     if ((bullet_position_x[0] >= array_position[2] - 35f) and (bullet_position_x[0] <= array_position[2] + 145f) and (bullet_position_y[0] <= enemy_position_y[2] + 150f) and (bullet_position_y[0] >= enemy_position_y[2])) {
-                        if (!just_shot_bullet[0]) {
+                        if ((!just_shot_bullet[0]) and (enemy_visible[2])) {
                             Score += 50
                             numKills += 1
                             down3 = 0f
@@ -989,11 +1012,12 @@ class MyView(context: Context?, weat:String?, Color :String?, Bul :String?, Logg
                             just_shot_bullet[0] = true
                         }
                     }
-                    if ((bullet_position_x[0] >= array_position[3] - 35f) and (bullet_position_x[0] <= array_position[3] + 145f) and (bullet_position_y[0] <= enemy_position_y[3] + 150f) and (bullet_position_y[0] >= enemy_position_y[3])) {
-                        if (!just_shot_bullet[0]) {
+                    if ((bullet_position_x[0] >= array_position[3]+lateral_movement[3]  - 35f) and (bullet_position_x[0] <= array_position[3]+lateral_movement[3]  + 145f) and (bullet_position_y[0] <= enemy_position_y[3] + 150f) and (bullet_position_y[0] >= enemy_position_y[3])) {
+                        if ((!just_shot_bullet[0]) and (enemy_visible[3])) {
                             Score += 50
                             numKills += 1
                             down4 = 0f
+                            lateral_movement[3]= 0f
                             enemy_visible[3] = false
                             is_visible_bul[0] = false
                             if (bullet_available < 3) {
@@ -1003,14 +1027,14 @@ class MyView(context: Context?, weat:String?, Color :String?, Bul :String?, Logg
                                 0f                      //Put the bullet at the starting position
                             ex_array[3] = true
                             isExpBul1[3] = true
-                            expPos1[3][0] = array_position[3]
+                            expPos1[3][0] = array_position[3]+lateral_movement[3]
                             expPos1[3][1] = enemy_position_y[3]
                             //drawBitmap(explosion,array_position[3],enemy_position_y[3],null)
                             just_shot_bullet[0] = true
                         }
                     }
                     if ((bullet_position_x[0] >= lateral_movement[4] + array_position[4] - 35f) and (bullet_position_x[0] <= lateral_movement[4] + array_position[4] + 115f) and (bullet_position_y[0] <= enemy_position_y[4] + 120f) and (bullet_position_y[0] >= enemy_position_y[4])) {
-                        if (!just_shot_bullet[0]) {
+                        if ((!just_shot_bullet[0]) and (enemy_visible[4])) {
                             Score += 50
                             numKills += 1
                             down5 = 0f
@@ -1131,7 +1155,7 @@ class MyView(context: Context?, weat:String?, Color :String?, Bul :String?, Logg
                 //////////////bullet 2 //////////////////////////
                 if(is_visible_bul[1]) {
                     if ((bullet_position_x[1] >= array_position[0] - 35f) and (bullet_position_x[1] <= array_position[0] + 145f) and (bullet_position_y[1] <= enemy_position_y[0] + 150f) and (bullet_position_y[1] >= enemy_position_y[0])) {
-                        if (!just_shot_bullet[1]) {
+                        if ((!just_shot_bullet[1]) and (enemy_visible[0])) {
                             Score += 50
                             numKills += 1
                             down1 = 0f
@@ -1150,7 +1174,7 @@ class MyView(context: Context?, weat:String?, Color :String?, Bul :String?, Logg
                         }
                     }
                     if ((bullet_position_x[1] >= array_position[1] - 35f) and (bullet_position_x[1] <= array_position[1] + 145f) and (bullet_position_y[1] <= enemy_position_y[1] + 150f) and (bullet_position_y[1] >= enemy_position_y[1])) {
-                        if (!just_shot_bullet[1]) {
+                        if ((!just_shot_bullet[1]) and (enemy_visible[1])) {
                             Score += 50
                             numKills += 1
                             down2 = 0f
@@ -1169,7 +1193,7 @@ class MyView(context: Context?, weat:String?, Color :String?, Bul :String?, Logg
                         }
                     }
                     if ((bullet_position_x[1] >= array_position[2] - 35f) and (bullet_position_x[1] <= array_position[2] + 145f) and (bullet_position_y[1] <= enemy_position_y[2] + 150f) and (bullet_position_y[1] >= enemy_position_y[2])) {
-                        if (!just_shot_bullet[1]) {
+                        if ((!just_shot_bullet[1]) and (enemy_visible[2])) {
                             Score += 50
                             numKills += 1
                             down3 = 0f
@@ -1188,11 +1212,12 @@ class MyView(context: Context?, weat:String?, Color :String?, Bul :String?, Logg
                             just_shot_bullet[1] = true
                         }
                     }
-                    if ((bullet_position_x[1] >= array_position[3] - 35f) and (bullet_position_x[1] <= array_position[3] + 145f) and (bullet_position_y[1] <= enemy_position_y[3] + 150f) and (bullet_position_y[1] >= enemy_position_y[3])) {
-                        if (!just_shot_bullet[1]) {
+                    if ((bullet_position_x[1] >= array_position[3]+lateral_movement[3]  - 35f) and (bullet_position_x[1] <= array_position[3] +lateral_movement[3] + 145f) and (bullet_position_y[1] <= enemy_position_y[3] + 150f) and (bullet_position_y[1] >= enemy_position_y[3])) {
+                        if ((!just_shot_bullet[1]) and (enemy_visible[3])) {
                             Score += 50
                             numKills += 1
                             down4 = 0f
+                            lateral_movement[3]= 0f
                             enemy_visible[3] = false
                             is_visible_bul[1] = false
                             if (bullet_available < 3) {
@@ -1202,14 +1227,14 @@ class MyView(context: Context?, weat:String?, Color :String?, Bul :String?, Logg
                                 0f                      //Put the bullet at the starting position
                             ex_array[3] = true
                             isExpBul2[3] = true
-                            expPos2[3][0] = array_position[3]
+                            expPos2[3][0] = array_position[3]+lateral_movement[3]
                             expPos2[3][1] = enemy_position_y[3]
                             //drawBitmap(explosion,array_position[3],enemy_position_y[3],null)
                             just_shot_bullet[1] = true
                         }
                     }
                     if ((bullet_position_x[1] >= lateral_movement[4] + array_position[4] - 35f) and (bullet_position_x[1] <= lateral_movement[4] + array_position[4] + 115f) and (bullet_position_y[1] <= enemy_position_y[4] + 120f) and (bullet_position_y[1] >= enemy_position_y[4])) {
-                        if (!just_shot_bullet[1]) {
+                        if ((!just_shot_bullet[1]) and (enemy_visible[4])) {
                             Score += 50
                             numKills += 1
                             down5 = 0f
@@ -1331,13 +1356,14 @@ class MyView(context: Context?, weat:String?, Color :String?, Bul :String?, Logg
                 //////////////////////bullet 3 ////////////////////////////
                 if(is_visible_bul[2]) {
                     if ((bullet_position_x[2] >= array_position[0] - 35f) and (bullet_position_x[2] <= array_position[0] + 145f) and (bullet_position_y[2] <= enemy_position_y[0] + 150f) and (bullet_position_y[2] >= enemy_position_y[0])) {
-                        if (!just_shot_bullet[2]) {
+                        if ((!just_shot_bullet[2]) and (enemy_visible[0])) {
                             Log.i("COLLISIONE", "AEREO 1")
                             Score += 50
                             numKills += 1
                             down1 = 0f
                             enemy_visible[0] = false
                             is_visible_bul[2] = false
+                            Log.i("prova",enemy_visible[0].toString())
                             if (bullet_available < 3) {
                                 bullet_available += 1       //Bullet retruns available
                             }
@@ -1351,13 +1377,14 @@ class MyView(context: Context?, weat:String?, Color :String?, Bul :String?, Logg
                         }
                     }
                     if ((bullet_position_x[2] >= array_position[1] - 35f) and (bullet_position_x[2] <= array_position[1] + 145f) and (bullet_position_y[2] <= enemy_position_y[1] + 150f) and (bullet_position_y[2] >= enemy_position_y[1])) {
-                        if (!just_shot_bullet[2]) {
+                        if ((!just_shot_bullet[2]) and (enemy_visible[1])) {
                             Log.i("COLLISIONE", "AEREO 2")
                             Score += 50
                             numKills += 1
                             down2 = 0f
                             enemy_visible[1] = false
                             is_visible_bul[2] = false
+                            Log.i("prova",enemy_visible[1].toString())
                             if (bullet_available < 3) {
                                 bullet_available += 1       //Bullet retruns available
                             }
@@ -1372,13 +1399,14 @@ class MyView(context: Context?, weat:String?, Color :String?, Bul :String?, Logg
                         }
                     }
                     if ((bullet_position_x[2] >= array_position[2] - 35f) and (bullet_position_x[2] <= array_position[2] + 145f) and (bullet_position_y[2] <= enemy_position_y[2] + 150f) and (bullet_position_y[2] >= enemy_position_y[2])) {
-                        if (!just_shot_bullet[2]) {
+                        if ((!just_shot_bullet[2]) and (enemy_visible[2])) {
                             Log.i("COLLISIONE", "AEREO 3")
                             Score += 50
                             numKills += 1
                             down3 = 0f
                             enemy_visible[2] = false
                             is_visible_bul[2] = false
+                            Log.i("prova",enemy_visible[2].toString())
                             if (bullet_available < 3) {
                                 bullet_available += 1       //Bullet retruns available
                             }
@@ -1392,14 +1420,16 @@ class MyView(context: Context?, weat:String?, Color :String?, Bul :String?, Logg
                             just_shot_bullet[2] = true
                         }
                     }
-                    if ((bullet_position_x[2] >= array_position[3] - 35f) and (bullet_position_x[2] <= array_position[3] + 145f) and (bullet_position_y[2] <= enemy_position_y[3] + 150f) and (bullet_position_y[2] >= enemy_position_y[3])) {
-                        if (!just_shot_bullet[2]) {
+                    if ((bullet_position_x[2] >= array_position[3]+lateral_movement[3]  - 35f) and (bullet_position_x[2] <= array_position[3]+lateral_movement[3]  + 145f) and (bullet_position_y[2] <= enemy_position_y[3] + 150f) and (bullet_position_y[2] >= enemy_position_y[3])) {
+                        if ((!just_shot_bullet[2]) and (enemy_visible[3])) {
                             Log.i("COLLISIONE", "AEREO 4")
                             Score += 50
                             numKills += 1
                             down4 = 0f
+                            lateral_movement[3]= 0f
                             enemy_visible[3] = false
                             is_visible_bul[2] = false
+                            Log.i("prova",enemy_visible[3].toString())
                             if (bullet_available < 3) {
                                 bullet_available += 1       //Bullet retruns available
                             }
@@ -1407,19 +1437,20 @@ class MyView(context: Context?, weat:String?, Color :String?, Bul :String?, Logg
                                 0f                      //Put the bullet at the starting position
                             ex_array[3] = true
                             isExpBul3[3] = true
-                            expPos3[3][0] = array_position[3]
+                            expPos3[3][0] = array_position[3]+ lateral_movement[3]
                             expPos3[3][1] = enemy_position_y[3]
                             just_shot_bullet[2] = true
                         }
                     }
                     if ((bullet_position_x[2] >= lateral_movement[4] + array_position[4] - 35f) and (bullet_position_x[2] <= lateral_movement[4] + array_position[4] + 115f) and (bullet_position_y[2] <= enemy_position_y[4] + 120f) and (bullet_position_y[2] >= enemy_position_y[4])) {
-                        if (!just_shot_bullet[2]) {
+                        if ((!just_shot_bullet[2]) and (enemy_visible[4])) {
                             Log.i("COLLISIONE", "AEREO 5")
                             Score += 50
                             numKills += 1
                             down5 = 0f
                             enemy_visible[4] = false
                             is_visible_bul[2] = false
+                            Log.i("prova",enemy_visible[4].toString())
                             if (bullet_available < 3) {
                                 bullet_available += 1       //Bullet retruns available
                             }
@@ -1909,7 +1940,7 @@ class MyView(context: Context?, weat:String?, Color :String?, Bul :String?, Logg
             var type = (0..2).random()
             var position = ((60..940).random())
             //Log.i("Prova", position.toString())
-            for (i in (0..4)) {
+            for (i in (0..3)) {
                 if (!enemy_visible[i]) {
                     enemy_visible[i] = true
                     array_type[i] = type
