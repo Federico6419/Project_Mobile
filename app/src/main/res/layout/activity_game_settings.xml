@@ -40,11 +40,11 @@
 
     <ImageButton
         android:id="@+id/Bullet1"
-        android:layout_width="30dp"
-        android:layout_height="30dp"
+        android:layout_width="60dp"
+        android:layout_height="60dp"
         android:background="@null"
         android:scaleType="fitXY"
-        android:src="@drawable/bullet"
+        android:src="@drawable/bulletsigned"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.333"
@@ -54,11 +54,11 @@
 
     <ImageButton
         android:id="@+id/Bullet2"
-        android:layout_width="30dp"
-        android:layout_height="30dp"
+        android:layout_width="60dp"
+        android:layout_height="60dp"
         android:background="@null"
         android:scaleType="fitXY"
-        android:src="@drawable/laser_bullet2"
+        android:src="@drawable/lasersettings"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.664"

@@ -68,23 +68,22 @@ class GameSettingsActivity : AppCompatActivity() {
 
         //Bullet selection management
         val bullet1: ImageButton = findViewById(R.id.Bullet1) as ImageButton
-        bullet1.setImageResource(R.drawable.airplane)
 
         val bullet2: ImageButton = findViewById(R.id.Bullet2) as ImageButton
 
         //val bullet3: ImageButton = findViewById(R.id.Bullet3) as ImageButton
 
         bullet1.setOnClickListener() {
-            bullet1.setImageResource(R.drawable.airplane)
-            bullet2.setImageResource(R.drawable.bullet)
+            bullet1.setImageResource(R.drawable.bulletsigned)
+            bullet2.setImageResource(R.drawable.lasersettings)
             //bullet3.setImageResource(R.drawable.bullet)
             bullet = "normal"
             music.playChooseSound(this)
         }
 
         bullet2.setOnClickListener() {
-            bullet2.setImageResource(R.drawable.airplane)
-            bullet1.setImageResource(R.drawable.bullet)
+            bullet1.setImageResource(R.drawable.bulletsettings)
+            bullet2.setImageResource(R.drawable.lasersigned)
             //bullet3.setImageResource(R.drawable.bullet)
             bullet = "laser"
             music.playChooseSound(this)
