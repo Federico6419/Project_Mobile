@@ -5,12 +5,13 @@ import android.os.Bundle
 import android.text.Layout
 import android.view.LayoutInflater
 import android.view.View
-import android.widget.Button
-import android.widget.EditText
-import android.widget.ImageButton
-import android.widget.ProgressBar
-import android.widget.TextView
+import android.widget.*
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.view.isVisible
+import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.database.DatabaseReference
+import com.google.firebase.database.ktx.database
+import com.google.firebase.ktx.Firebase
 import com.google.gson.annotations.SerializedName
 
 
@@ -22,9 +23,12 @@ data class Difference_Json(
 )
 
 class GameSettingsActivity : AppCompatActivity() {
+    private lateinit var firebaseAuth: FirebaseAuth         //Firebase Authenticatoin variable
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_game_settings)
+
+        firebaseAuth = FirebaseAuth.getInstance()   //Get instance from Firebase Authentication
 
         supportActionBar?.setTitle("                     Death Planes")     //Define the name of the application
 
@@ -91,13 +95,67 @@ class GameSettingsActivity : AppCompatActivity() {
 
 
         //Opponent management
-        val opponentButton = findViewById(R.id.SubmitButton) as Button
-        var avversario = ""
-        opponentButton.setOnClickListener() {
-            val opponent = findViewById(R.id.Opponent) as TextView
+        //Get the uid of the current user
+        val uid = firebaseAuth.uid
+        //Check if the user id is null or not
+        uid?.let {             //If user id is not null, display the choose of the opponent
+            //Connecting to Firebase Database
+            val database = Firebase.database("https://mobileproject2-50486-default-rtdb.europe-west1.firebasedatabase.app/")
+
+            //Set the opponent's name
+            var opponentNameView = findViewById(R.id.Opponent) as TextView
+            val opponentNameReference = database.getReference("Users/$current_id/Opponent")    //Take the number of users
+
+            //Get the opponent, if there is one set it
+            opponentNameReference.get().addOnSuccessListener {
+                if(it.value != null) {
+                    opponentNameView.text = "Current opponent: " + it.value.toString()
+                }
+            }
+
+            //Change opponent
+            val opponentButton = findViewById(R.id.SubmitButton) as Button
+            opponentButton.setOnClickListener() {
+                val user = findViewById(R.id.Username) as EditText
+
+                val numUsersReference = database.getReference("NumberOfUsers")
+                numUsersReference.get().addOnSuccessListener {
+                    var numberOfUsers = it.value.toString().toInt()
+
+                    var found = false
+                    var referenceUsername: DatabaseReference
+
+                    for (i in 1..numberOfUsers) {
+                        referenceUsername =
+                            database.getReference("Users/$i/Username")    //Reference to username in the Database
+
+                        referenceUsername.get().addOnSuccessListener {
+                            if ((it.value.toString() == user.text.toString()) and (!found)) {
+                                found = true
+                                //If username already exists
+                                opponentNameReference.setValue(user.text)
+                                opponentNameView.text = "Current opponent: " + user.text
+                            } else if ((i == numberOfUsers) and !found) {
+                                //If username does not exist
+                                Toast.makeText(this, "This username doesn't exists", Toast.LENGTH_SHORT)
+                                    .show()
+                            }
+                        }
+                    }
+                }
+            }
+        } ?: run {
+            var opponentNameView = findViewById(R.id.Opponent) as TextView
+            opponentNameView.text = "You have to be logged to choose your opponent"
             val user = findViewById(R.id.Username) as EditText
-            opponent.text = "Current opponent: " + user.text
-            avversario = user.text.toString()
+            user.isVisible = false
+            user.isClickable = false
+            val opponentButton = findViewById(R.id.SubmitButton) as Button
+            opponentButton.text = "Sign In"
+            opponentButton.setOnClickListener{
+                intent = Intent(this, SignInActivity::class.java)
+                startActivity(intent)
+            }
         }
 
 
@@ -107,7 +165,6 @@ class GameSettingsActivity : AppCompatActivity() {
             setContentView(R.layout.activity_game_settings_loading)
 
             intent = Intent(this, GameActivity::class.java)
-            intent.putExtra("Opponent", avversario)
             intent.putExtra("Color", color)
             intent.putExtra("Bullet", bullet)
             startActivity(intent)
