@@ -623,7 +623,7 @@ class MyView(context: Context?, weat:String?, Color :String?, Bul :String?, Logg
                     if(dx_if_true[3]==true){lateral_movement[3] =lateral_movement[3]+12f}
                     if(dx_if_true[3]==false){lateral_movement[3] =lateral_movement[3]-12f}
 
-                    withTranslation (lateral_movement[3],down5) {
+                    withTranslation (lateral_movement[3],down4) {
                         drawBitmap(array_enemy_type[array_type[3]], array_position[3], 0f, null)
 
                     }
@@ -667,6 +667,7 @@ class MyView(context: Context?, weat:String?, Color :String?, Bul :String?, Logg
                     down4 = 0f
                     enemy_visible[3] = false
                     ex_array[3] = true
+                    lateral_movement[3] = 0f
                     justcollide[3] = false
                 }
                 if(down5 > 1720f){  //// reset down variable to respawn the enemies
@@ -886,7 +887,7 @@ class MyView(context: Context?, weat:String?, Color :String?, Bul :String?, Logg
                         }
                     }
                 }
-                if( (array_position[3]>= plane_x-140f)and(array_position[3]<=plane_x+140f)and(enemy_position_y[3] <= plane_y+300f)and(enemy_position_y[3] >= plane_y-150f)){
+                if( (array_position[3]+lateral_movement[3]>= plane_x-140f)and(array_position[3]+lateral_movement[3]<=plane_x+140f)and(enemy_position_y[3] <= plane_y+300f)and(enemy_position_y[3] >= plane_y-150f)){
                     Log.i("COLPITO", "4")
                     if(!justcollide[3]) {
                         if (hearts == 1) {
@@ -1576,6 +1577,7 @@ class MyView(context: Context?, weat:String?, Color :String?, Bul :String?, Logg
                                 boss_visible[0] = false
                                 Score += 200
                                 beat_boss1 = true
+                                numKills += 1
                                 isExpBul1_Boss[0] = true
                                 expPos1_Boss[0][0] = boss_x[0]+lateral_movement_boss[0]
                                 expPos1_Boss[0][1] = boss_y[0]
@@ -1596,6 +1598,7 @@ class MyView(context: Context?, weat:String?, Color :String?, Bul :String?, Logg
                                 boss_visible[0] = false
                                 Score += 200
                                 beat_boss1 = true
+                                numKills += 1
                                 isExpBul1_Boss[0] = true
                                 expPos1_Boss[0][0] = boss_x[0]+lateral_movement_boss[0]
                                 expPos1_Boss[0][1] = boss_y[0]
@@ -1616,6 +1619,7 @@ class MyView(context: Context?, weat:String?, Color :String?, Bul :String?, Logg
                                 boss_visible[0] = false
                                 Score += 200
                                 beat_boss1 = true
+                                numKills += 1
                                 isExpBul1_Boss[0] = true
                                 expPos1_Boss[0][0] = boss_x[0]+lateral_movement_boss[0]
                                 expPos1_Boss[0][1] = boss_y[0]
@@ -1634,6 +1638,7 @@ class MyView(context: Context?, weat:String?, Color :String?, Bul :String?, Logg
                             life_boss[1] -=1
                             boss_visible[1]= false
                             Score += 200
+                            numKills += 1
                             isExpBul1_Boss[1] = true
                             expPos1_Boss[1][0] = boss_x[1]+lateral_movement_boss[1]
                             expPos1_Boss[1][1] = boss_y[1]
@@ -1649,6 +1654,7 @@ class MyView(context: Context?, weat:String?, Color :String?, Bul :String?, Logg
                             life_boss[1] -=1
                             boss_visible[1]= false
                             Score += 200
+                            numKills += 1
                             isExpBul1_Boss[1] = true
                             expPos1_Boss[1][0] = boss_x[1]
                             expPos1_Boss[1][1] = boss_y[1]
@@ -1664,6 +1670,7 @@ class MyView(context: Context?, weat:String?, Color :String?, Bul :String?, Logg
                             life_boss[1] -=1
                             boss_visible[1]= false
                             Score += 200
+                            numKills += 1
                             isExpBul1_Boss[1] = true
                             expPos1_Boss[1][0] = boss_x[1]
                             expPos1_Boss[1][1] = boss_y[1]
