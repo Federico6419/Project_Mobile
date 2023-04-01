@@ -1793,14 +1793,16 @@ class MyView(context: Context?, weat:String?, Color :String?, Bul :String?, Logg
                     current_score = Score
                 }
                 plane_x = 500f
-                Score = 0
                 hearts = 3
                 val intent = Intent(context, GameoverActivity::class.java)
                 //intent.putExtra("Opponent", opponent)
                 intent.putExtra("Color", col)
                 intent.putExtra("Bullet", bul)
+                intent.putExtra("Score", Score)
                 music.stopSound()
                 startActivity(context, intent, null)
+
+                Score = 0
             }
             if(!gameover){
                 invalidate()
