@@ -114,7 +114,7 @@ class GameSettingsActivity : AppCompatActivity() {
                     var usernameText = findViewById(R.id.Username) as EditText
                     usernameText.setText("")    //NON FUNZIONA
                 }
-            }//
+            }
 
             //Change opponent
             val opponentButton = findViewById(R.id.SubmitButton) as Button
