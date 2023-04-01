@@ -1829,7 +1829,7 @@ class MyView(context: Context?, weat:String?, Color :String?, Bul :String?, Logg
                 //intent.putExtra("Opponent", opponent)
                 intent.putExtra("Color", col)
                 intent.putExtra("Bullet", bul)
-                intent.putExtra("Score", Score)
+                intent.putExtra("Score", Score.toString())
                 music.stopSound()
                 startActivity(context, intent, null)
 

@@ -169,17 +169,31 @@
         app:layout_constraintVertical_bias="0.63" />
 
     <Button
-        android:id="@+id/SubmitButton"
+    android:id="@+id/SubmitButton"
+    android:layout_width="150dp"
+    android:layout_height="40dp"
+    android:text="Set opponent"
+    android:textAllCaps="false"
+    app:backgroundTint="@color/purple_700"
+    app:layout_constraintBottom_toBottomOf="parent"
+    app:layout_constraintEnd_toEndOf="parent"
+    app:layout_constraintStart_toStartOf="parent"
+    app:layout_constraintTop_toTopOf="parent"
+    app:layout_constraintHorizontal_bias="0.190"
+    app:layout_constraintVertical_bias="0.69" />
+
+    <Button
+        android:id="@+id/RemoveButton"
         android:layout_width="150dp"
         android:layout_height="40dp"
-        android:text="Set opponent"
+        android:text="Remove opponent"
         android:textAllCaps="false"
         app:backgroundTint="@color/purple_700"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintHorizontal_bias="0.500"
+        app:layout_constraintHorizontal_bias="0.810"
         app:layout_constraintVertical_bias="0.69" />
 
 

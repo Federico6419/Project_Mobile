@@ -41,14 +41,8 @@ class GameActivity : AppCompatActivity() {
 
         firebaseAuth = FirebaseAuth.getInstance()   //Get instance from Firebase Authentication
 
-        val opponent = intent.getStringExtra("Opponent")
         val color = intent.getStringExtra("Color")
         val bul = intent.getStringExtra("Bullet")
-
-
-        GlobalScope.launch {
-            getDifference(current_username, opponent)
-        }
 
         //Music management
         music.stopSound()

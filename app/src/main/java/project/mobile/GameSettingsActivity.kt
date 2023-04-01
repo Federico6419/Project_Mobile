@@ -1,6 +1,7 @@
 package project.mobile
 
 import android.content.Intent
+import android.graphics.Color
 import android.os.Bundle
 import android.text.Layout
 import android.view.LayoutInflater
@@ -104,12 +105,14 @@ class GameSettingsActivity : AppCompatActivity() {
 
             //Set the opponent's name
             var opponentNameView = findViewById(R.id.Opponent) as TextView
-            val opponentNameReference = database.getReference("Users/$current_id/Opponent")    //Take the number of users
+            val opponentNameReference = database.getReference("Users/$current_id/Opponent")
 
             //Get the opponent, if there is one set it
             opponentNameReference.get().addOnSuccessListener {
                 if(it.value != null) {
                     opponentNameView.text = "Current opponent: " + it.value.toString()
+                    var usernameText = findViewById(R.id.Username) as EditText
+                    usernameText.setText("")    //NON FUNZIONA
                 }
             }
 
@@ -133,7 +136,7 @@ class GameSettingsActivity : AppCompatActivity() {
                             if ((it.value.toString() == user.text.toString()) and (!found)) {
                                 found = true
                                 //If username already exists
-                                opponentNameReference.setValue(user.text)
+                                opponentNameReference.setValue(user.text.toString())
                                 opponentNameView.text = "Current opponent: " + user.text
                             } else if ((i == numberOfUsers) and !found) {
                                 //If username does not exist
@@ -144,15 +147,34 @@ class GameSettingsActivity : AppCompatActivity() {
                     }
                 }
             }
+
+            //Remove opponent
+            val removeButton = findViewById(R.id.RemoveButton) as Button
+            removeButton.setOnClickListener() {
+                val opponentNameReference = database.getReference("Users/$current_id/Opponent")
+                opponentNameReference.removeValue()
+                var opponentNameView = findViewById(R.id.Opponent) as TextView
+                opponentNameView.text = "Current opponent: None"
+            }
+
         } ?: run {
+            //Change Set Opponent button in Sign Up button
             var opponentNameView = findViewById(R.id.Opponent) as TextView
             opponentNameView.text = "You have to be logged to choose your opponent"
             val user = findViewById(R.id.Username) as EditText
             user.isVisible = false
             user.isClickable = false
             val opponentButton = findViewById(R.id.SubmitButton) as Button
-            opponentButton.text = "Sign In"
+            opponentButton.text = "Sign Up"
             opponentButton.setOnClickListener{
+                intent = Intent(this, SignUpActivity::class.java)
+                startActivity(intent)
+            }
+
+            //Change Remove Opponent button in Sign In button
+            val removeButton = findViewById(R.id.RemoveButton) as Button
+            removeButton.text = "Sign In"
+            removeButton.setOnClickListener() {
                 intent = Intent(this, SignInActivity::class.java)
                 startActivity(intent)
             }
