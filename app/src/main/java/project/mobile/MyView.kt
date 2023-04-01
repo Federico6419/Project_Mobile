@@ -61,6 +61,7 @@ class MyView(context: Context?, weat:String?, Color :String?, Bul :String?, Logg
     var down3 = 0f
     var down4 = 0f
     var down5 = 0f
+    var increment_velocity = 0 /// to augment velocity of enemy after tot points
     var lateral_movement = arrayOf<Float>(0f,0f,0f,0f,0f)
     var lateral_movement_boss = arrayOf<Float>(0f,0f)
     var dx_if_true = arrayOf<Boolean>(true,true,true,true,true)
@@ -571,36 +572,41 @@ class MyView(context: Context?, weat:String?, Color :String?, Bul :String?, Logg
                     }
                 }
                 ////////// increase the value of the enemy translation //////////
+                /// increment velocity every 500 score and at most 2000 score
+                if((Score %500 == 0) and (Score<2000)){
+                    increment_velocity += 1
+                }
+                //////
                 if(enemy_visible[0]) {
-                    down1 += 7
+                    down1 += 7+(increment_velocity)
                     withTranslation (0f,down1) {
                         drawBitmap(array_enemy_type[array_type[0]], array_position[0], 0f, null)
 
                     }
                 }
                 if(enemy_visible[1]) {
-                    down2 += 7
+                    down2 += 7+(increment_velocity)
                     withTranslation (0f,down2) {
                         drawBitmap(array_enemy_type[array_type[1]], array_position[1], 0f, null)
 
                     }
                 }
                 if(enemy_visible[2]) {
-                    down3 += 7
+                    down3 += 7+(increment_velocity)
                     withTranslation (0f,down3) {
                         drawBitmap(array_enemy_type[array_type[2]], array_position[2], 0f, null)
 
                     }
                 }
                 if(enemy_visible[3]) {
-                    down4 += 7
+                    down4 += 7+(increment_velocity)
                     withTranslation (0f,down4) {
                         drawBitmap(array_enemy_type[array_type[3]], array_position[3], 0f, null)
 
                     }
                 }
                 if(enemy_visible[4]) {
-                    down5 += 7
+                    down5 += 7+(increment_velocity)
                     if((lateral_movement[4]+array_position[4]>900f) and (dx_if_true[4] == true)){
                         dx_if_true[4] = false
                     }else if((lateral_movement[4]+array_position[4]<100f) and (dx_if_true[4]==false)){
@@ -934,8 +940,7 @@ class MyView(context: Context?, weat:String?, Color :String?, Bul :String?, Logg
                             if (bullet_available < 3) {
                                 bullet_available += 1       //Bullet retruns available
                             }
-                            up[0] =
-                                0f                      //Put the bullet at the starting position
+                            up[0] = 0f                      //Put the y cordinate of bullet at the starting position
                             ex_array[0] = true
                             isExpBul1[0] = true
                             expPos1[0][0] = array_position[0]
