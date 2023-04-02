@@ -108,9 +108,18 @@ class LeaderboardActivity : AppCompatActivity() {
                                     TableRow.LayoutParams.WRAP_CONTENT
                                 )
                             )
-                            tr.setBackgroundColor(Color.GRAY)
+
                             var drawable = getDrawable(R.drawable.border)
-                            tr.setBackground(drawable)
+                            var drawableGreen = getDrawable(R.drawable.bordergreen)
+                            firebaseAuth.uid?.let {
+                                if(current_username == items.users?.get(tot)?.username.toString()) {
+                                    tr.setBackground(drawableGreen)
+                                } else{
+                                    tr.setBackground(drawable)
+                                }
+                            } ?: run {
+                                tr.setBackground(drawable)
+                            }
                             tr.setPadding(10, 0, 10, 0)
 
                             //Create a new column
