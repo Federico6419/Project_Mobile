@@ -53,269 +53,25 @@
                 android:layout_weight="1"
                 android:text="Score" />
         </TableRow>
-
-        <TableRow
-            android:background="#F0F7F7"
-            android:padding="5dp">
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:text="1°" />
-
-            <TextView
-                android:id="@+id/player1"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:text="..." />
-
-            <TextView
-                android:id="@+id/score1"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:text="0" />
-        </TableRow>
-
-        <TableRow
-            android:background="#F0F7F7"
-            android:padding="5dp">
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:text="2°" />
-
-            <TextView
-                android:id="@+id/player2"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:text="..." />
-
-
-            <TextView
-                android:id="@+id/score2"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:text="0" />
-
-        </TableRow>
-
-        <TableRow
-            android:background="#F0F7F7"
-            android:padding="5dp">
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:text="3°" />
-
-            <TextView
-                android:id="@+id/player3"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:text="..." />
-
-            <TextView
-                android:id="@+id/score3"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:text="0" />
-
-        </TableRow>
-
-        <TableRow
-            android:background="#F0F7F7"
-            android:padding="5dp">
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:text="4°" />
-
-            <TextView
-                android:id="@+id/player4"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:text="..." />
-
-            <TextView
-                android:id="@+id/score4"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:text="0" />
-
-        </TableRow>
-
-        <TableRow
-            android:background="#F0F7F7"
-            android:padding="5dp">
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:text="5°" />
-
-            <TextView
-                android:id="@+id/player5"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:text="..." />
-
-            <TextView
-                android:id="@+id/score5"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:text="0" />
-
-        </TableRow>
-
-        <TableRow
-            android:background="#F0F7F7"
-            android:padding="5dp">
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:text="6°" />
-
-            <TextView
-                android:id="@+id/player6"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:text="..." />
-
-            <TextView
-                android:id="@+id/score6"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:text="0" />
-
-        </TableRow>
-
-        <TableRow
-            android:background="#F0F7F7"
-            android:padding="5dp">
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:text="7°" />
-
-            <TextView
-                android:id="@+id/player7"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:text="..." />
-
-            <TextView
-                android:id="@+id/score7"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:text="0" />
-
-        </TableRow>
-
-        <TableRow
-            android:background="#F0F7F7"
-            android:padding="5dp">
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:text="8°" />
-
-            <TextView
-                android:id="@+id/player8"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:text="..." />
-
-            <TextView
-                android:id="@+id/score8"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:text="0" />
-
-        </TableRow>
-
-        <TableRow
-            android:background="#F0F7F7"
-            android:padding="5dp">
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:text="9°" />
-
-            <TextView
-                android:id="@+id/player9"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:text="..." />
-
-            <TextView
-                android:id="@+id/score9"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:text="0" />
-
-        </TableRow>
-
-        <TableRow
-            android:layout_height="wrap_content"
-            android:background="#F0F7F7"
-            android:padding="5dp">
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:text="10°" />
-
-            <TextView
-                android:id="@+id/player10"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:text="..." />
-
-            <TextView
-                android:id="@+id/score10"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:text="0" />
-
-        </TableRow>
-
     </TableLayout>
+
+    <ScrollView
+        android:id="@+id/scroll"
+        android:layout_width="match_parent"
+        android:layout_height="500dp"
+        android:paddingLeft="40dp"
+        android:paddingRight="40dp"
+        android:paddingTop="170dp"
+        tools:ignore="MissingConstraints">
+
+        <TableLayout
+            android:id="@+id/Table"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            tools:layout_editor_absoluteX="40dp"
+            tools:layout_editor_absoluteY="173dp">
+        </TableLayout>
+    </ScrollView>
 
     <ProgressBar
         android:id="@+id/progress_loader"
@@ -388,4 +144,5 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="0.771" />
+
 </androidx.constraintlayout.widget.ConstraintLayout>

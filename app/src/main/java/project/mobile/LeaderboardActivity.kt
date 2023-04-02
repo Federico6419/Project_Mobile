@@ -1,13 +1,12 @@
 package project.mobile
 
-import android.app.ProgressDialog
+import android.content.Context
 import android.content.Intent
+import android.graphics.Color
 import android.os.Bundle
 import android.util.Log
 import android.view.View
-import android.widget.ImageButton
-import android.widget.ProgressBar
-import android.widget.TextView
+import android.widget.*
 import androidx.appcompat.app.AppCompatActivity
 import com.google.firebase.auth.FirebaseAuth
 import com.google.gson.annotations.SerializedName
@@ -28,12 +27,11 @@ data class Users(
 )
 
 
-var users = arrayOf<String>("","","","","","","","","","")
-var scores = arrayOf<Int>(0,0,0,0,0,0,0,0,0,0)
+var users = arrayOf<String>()
+var scores = arrayOf<Int>()
 var numberOfUsers = 0
-//var username: String? = null
-//var id = ""
-//var score = ""
+
+lateinit var conxt : Context
 
 class LeaderboardActivity : AppCompatActivity() {
     private lateinit var firebaseAuth: FirebaseAuth         //Firebase Authenticatoin variable
@@ -41,6 +39,8 @@ class LeaderboardActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_leaderboard)
+
+        conxt = this
 
         firebaseAuth = FirebaseAuth.getInstance()   //Get instance from Firebase Authentication
 
@@ -82,59 +82,73 @@ class LeaderboardActivity : AppCompatActivity() {
                     if (items != null) {
                         var tot = 0
                         numberOfUsers = items.numberOfUsers!!
-                        Log.i("leader", items.toString())
-                        while((tot<10) and (tot< items.numberOfUsers!!)) {
 
-                            users[tot] = items.users?.get(tot)?.username.toString()
-                            scores[tot] = items.users?.get(tot)?.score!!
-                            tot = tot+1
+                        //Find the Table layout
+                        val tl = findViewById(R.id.Table) as TableLayout
+
+                        while(tot< items.numberOfUsers!!) {
+                            users.plus((items.users?.get(tot)?.username.toString()))
+                            scores.plus(items.users?.get(tot)?.score!!)
+
+                            //Create a new row
+                            var tr = TableRow(conxt)
+                            tr.setLayoutParams(
+                                TableRow.LayoutParams(
+                                    TableRow.LayoutParams.MATCH_PARENT,
+                                    TableRow.LayoutParams.WRAP_CONTENT
+                                )
+                            )
+                            tr.setBackgroundColor(Color.GRAY)
+                            tr.setPadding(10, 10, 10, 10)
+
+                            //Create a new column
+                            val tv1 = TextView(conxt)
+                            tv1.setLayoutParams(
+                                TableRow.LayoutParams(
+                                    TableRow.LayoutParams.MATCH_PARENT,
+                                    TableRow.LayoutParams.WRAP_CONTENT
+                                )
+                            )
+                            tv1.text = (tot+1).toString() + "°"
+                            tr.addView(tv1)
+
+                            //Create a new column
+                            val tv2 = TextView(conxt)
+                            tv2.setLayoutParams(
+                                TableRow.LayoutParams(
+                                    TableRow.LayoutParams.MATCH_PARENT,
+                                    TableRow.LayoutParams.WRAP_CONTENT
+                                )
+                            )
+                            tv2.text = items.users?.get(tot)?.username.toString()
+                            tv2.setPadding(275, 0, 0, 0)
+                            tr.addView(tv2)
+
+                            //Create a new column
+                            val tv3 = TextView(conxt)
+                            tv3.setLayoutParams(
+                                TableRow.LayoutParams(
+                                    TableRow.LayoutParams.MATCH_PARENT,
+                                    TableRow.LayoutParams.WRAP_CONTENT
+                                )
+                            )
+                            tv3.text = (items.users?.get(tot)?.score!!).toString()
+                            tv3.setPadding(70, 0, 0, 0)
+                            tr.addView(tv3)
+
+                            //Add the row to the table
+                            tl.addView(
+                                tr,
+                                TableLayout.LayoutParams(
+                                    TableLayout.LayoutParams.MATCH_PARENT,
+                                    TableLayout.LayoutParams.WRAP_CONTENT
+                                )
+                            )
+
+                            tot += 1
                         }
                     }
                     Log.i("leader", users.toString())
-
-                    var player1 = findViewById(R.id.player1) as TextView
-                    var player2 = findViewById(R.id.player2) as TextView
-                    var player3 = findViewById(R.id.player3) as TextView
-                    var player4 = findViewById(R.id.player4) as TextView
-                    var player5 = findViewById(R.id.player5) as TextView
-                    var player6 = findViewById(R.id.player6) as TextView
-                    var player7 = findViewById(R.id.player7) as TextView
-                    var player8 = findViewById(R.id.player8) as TextView
-                    var player9 = findViewById(R.id.player9) as TextView
-                    var player10 = findViewById(R.id.player10) as TextView
-
-                    var score1 = findViewById(R.id.score1) as TextView
-                    var score2 = findViewById(R.id.score2) as TextView
-                    var score3 = findViewById(R.id.score3) as TextView
-                    var score4 = findViewById(R.id.score4) as TextView
-                    var score5 = findViewById(R.id.score5) as TextView
-                    var score6 = findViewById(R.id.score6) as TextView
-                    var score7 = findViewById(R.id.score7) as TextView
-                    var score8 = findViewById(R.id.score8) as TextView
-                    var score9 = findViewById(R.id.score9) as TextView
-                    var score10 = findViewById(R.id.score10) as TextView
-
-                    player1.text = users[0]
-                    player2.text = users[1]
-                    player3.text = users[2]
-                    player4.text = users[3]
-                    player5.text = users[4]
-                    player6.text = users[5]
-                    player7.text = users[6]
-                    player8.text = users[7]
-                    player9.text = users[8]
-                    player10.text = users[9]
-
-                    score1.text = scores[0].toString()
-                    score2.text = scores[1].toString()
-                    score3.text = scores[2].toString()
-                    score4.text = scores[3].toString()
-                    score5.text = scores[4].toString()
-                    score6.text = scores[5].toString()
-                    score7.text = scores[6].toString()
-                    score8.text = scores[7].toString()
-                    score9.text = scores[8].toString()
-                    score10.text = scores[9].toString()
 
                     var tot = 0
                     var myScore = ""
