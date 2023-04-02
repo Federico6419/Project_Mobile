@@ -3,28 +3,22 @@ package project.mobile
 import android.content.Context
 import android.content.Intent
 import android.graphics.Color
+import android.icu.util.Calendar
+import android.icu.util.GregorianCalendar
 import android.os.Bundle
+import android.os.Handler
+import android.os.Looper
 import android.util.Log
 import android.view.View
 import android.widget.*
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.net.toUri
 import com.google.firebase.auth.FirebaseAuth
-import com.google.gson.annotations.SerializedName
+import com.google.firebase.ktx.Firebase
+import com.google.firebase.storage.ktx.storage
 import kotlinx.coroutines.*
-
-
-data class Flask_Json(
-    @SerializedName("numberOfUsers")
-    var numberOfUsers: Int?,
-    @SerializedName("users")
-    var users: List<Users>?
-)
-data class Users(
-    @SerializedName("username")
-    val username: String?,
-    @SerializedName("score")
-    val score: Int?
-)
+import java.io.File
+import java.util.*
 
 
 var users = arrayOf<String>()
@@ -35,6 +29,7 @@ lateinit var conxt : Context
 
 class LeaderboardActivity : AppCompatActivity() {
     private lateinit var firebaseAuth: FirebaseAuth         //Firebase Authenticatoin variable
+    val storage = Firebase.storage      //Firebase Storage variable
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -69,6 +64,21 @@ class LeaderboardActivity : AppCompatActivity() {
         var progressBar = findViewById(R.id.progress_loader) as ProgressBar
         progressBar.visibility = View.VISIBLE
 
+        //Manage points after loading text
+        var loading = findViewById(R.id.LoadingText) as TextView
+        var numPoints = 1
+        val timer = Timer()
+        timer.scheduleAtFixedRate(object : TimerTask() {
+            override fun run() {
+                Handler(Looper.getMainLooper()).post(java.lang.Runnable {
+                    if (numPoints == 4) numPoints = 1
+                    loading.text = "Downloading leaderboard" + ".".repeat(numPoints)
+                    numPoints += 1
+                })
+            }
+        }, 10, 600)
+
+
         val flaskApi = RequestLeaderboard().retrofit.create(FlaskInterface::class.java)
         CoroutineScope(Dispatchers.IO).launch {
 
@@ -99,7 +109,9 @@ class LeaderboardActivity : AppCompatActivity() {
                                 )
                             )
                             tr.setBackgroundColor(Color.GRAY)
-                            tr.setPadding(10, 10, 10, 10)
+                            var drawable = getDrawable(R.drawable.border)
+                            tr.setBackground(drawable)
+                            tr.setPadding(10, 0, 10, 0)
 
                             //Create a new column
                             val tv1 = TextView(conxt)
@@ -110,7 +122,37 @@ class LeaderboardActivity : AppCompatActivity() {
                                 )
                             )
                             tv1.text = (tot+1).toString() + "°"
+                            tv1.setPadding(0, 100, 0, 100)
                             tr.addView(tv1)
+
+                            //Create a new column
+                            val iv = ImageView(conxt)
+                            iv.setLayoutParams(
+                                TableRow.LayoutParams(
+                                    TableRow.LayoutParams.MATCH_PARENT,
+                                    TableRow.LayoutParams.WRAP_CONTENT
+                                )
+                            )
+
+                            // Create a storage reference from our app
+                            var storageRef = storage.reference
+
+                            // Create a reference with an initial file path and name
+                            val userImageRef = storageRef.child("Images/"+ items.users?.get(tot)?.username.toString())
+
+                            val localFile = File.createTempFile("images", "jpg")
+
+                            userImageRef.getFile(localFile).addOnSuccessListener {
+                                // Local temp file has been created
+                                iv.setImageURI(localFile.toUri())
+                            }.addOnFailureListener {
+                                // Handle any errors
+                                iv.setImageResource(R.drawable.profileimage)
+                            }
+                            iv.getLayoutParams().height = 250
+                            iv.getLayoutParams().width = 250
+                            iv.setPadding(160, 0, 0, 0)
+                            tr.addView(iv)
 
                             //Create a new column
                             val tv2 = TextView(conxt)
@@ -121,7 +163,7 @@ class LeaderboardActivity : AppCompatActivity() {
                                 )
                             )
                             tv2.text = items.users?.get(tot)?.username.toString()
-                            tv2.setPadding(275, 0, 0, 0)
+                            tv2.setPadding(10, 0, 0, 0)
                             tr.addView(tv2)
 
                             //Create a new column
@@ -133,7 +175,7 @@ class LeaderboardActivity : AppCompatActivity() {
                                 )
                             )
                             tv3.text = (items.users?.get(tot)?.score!!).toString()
-                            tv3.setPadding(70, 0, 0, 0)
+                            tv3.setPadding(80, 0, 0, 0)
                             tr.addView(tv3)
 
                             //Add the row to the table
@@ -175,6 +217,7 @@ class LeaderboardActivity : AppCompatActivity() {
 
                 }
                 progressBar.visibility = View.INVISIBLE
+                loading.visibility = View.INVISIBLE
             }
         }
     }
