@@ -61,6 +61,9 @@ class SignUpActivity : AppCompatActivity() {
 
         supportActionBar?.setTitle("                     Death Planes")     //Decide the title of the application
 
+        //Music management
+        music.playSoundMenu(this)
+
         //Getting the references to the Views
         var usernameView = (findViewById(R.id.Username) as EditText)
         var emailView = (findViewById(R.id.Email) as EditText)

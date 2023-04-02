@@ -31,6 +31,9 @@ class SignInActivity : AppCompatActivity() {
 
         supportActionBar?.setTitle("                     Death Planes")
 
+        //Music management
+        music.playSoundMenu(this)
+
         //Getting the references to the Views
         var emailView = findViewById(R.id.Email) as EditText
         var passwordView = findViewById(R.id.Password) as EditText
