@@ -31,7 +31,7 @@
         app:layout_constraintHorizontal_bias="0.208"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.180"
+        app:layout_constraintVertical_bias="0.150"
         tools:ignore="MissingConstraints" />
 
     <TextView
@@ -46,7 +46,7 @@
         app:layout_constraintHorizontal_bias="0.486"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.26"
+        app:layout_constraintVertical_bias="0.23"
         tools:ignore="MissingConstraints" />
 
     <Button
@@ -62,7 +62,7 @@
         app:layout_constraintHorizontal_bias="0.2"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.360" />
+        app:layout_constraintVertical_bias="0.320" />
 
     <Button
         android:id="@+id/SignInButton"
@@ -77,12 +77,12 @@
         app:layout_constraintHorizontal_bias="0.8"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.360" />
+        app:layout_constraintVertical_bias="0.320" />
 
     <TableLayout
         android:layout_width="match_parent"
-        android:layout_height="450dp"
-        android:layout_marginTop="310dp"
+        android:layout_height="430dp"
+        android:layout_marginTop="280dp"
         android:paddingLeft="40dp"
         android:paddingRight="40dp"
         app:layout_constraintBottom_toBottomOf="parent"
@@ -119,10 +119,10 @@
     <ScrollView
         android:id="@+id/scroll"
         android:layout_width="match_parent"
-        android:layout_height="620dp"
+        android:layout_height="600dp"
         android:paddingLeft="40dp"
         android:paddingRight="40dp"
-        android:paddingTop="351dp"
+        android:paddingTop="321dp"
         tools:ignore="MissingConstraints">
 
         <TableLayout
@@ -188,7 +188,7 @@
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.685" />
+        app:layout_constraintVertical_bias="0.645" />
 
     <TextView
         android:id="@+id/LoadingText"
@@ -202,7 +202,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.75"
+        app:layout_constraintVertical_bias="0.71"
         tools:ignore="MissingConstraints" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
