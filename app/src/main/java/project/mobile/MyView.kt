@@ -400,26 +400,28 @@ class MyView(context: Context?, weat:String?, Color :String?, Bul :String?, Logg
 
                 ///////draw the airplane with constraint on the x axe /////////
                 if((roll<-0.701f)){
-                    withTranslation(-492f, 0f) {
+                    withTranslation(-495f, 0f) {
                         drawBitmap(airplane, 500f, 1400f, null) }
                     plane_x = 0f
-                }else if ((roll>0.701f)){
-                    withTranslation(490f, 0f) {
+                }else if ((roll>0.701f)or((roll *(500f/0.701f)+500f)>925f)){
+                    withTranslation(425f, 0f) {
                         drawBitmap(airplane, 500f, 1400f, null) }
-                    plane_x = 990f
+                    plane_x = 925f
                 }else{
-                    withTranslation(roll *(500f/0.701f), 0f) {
-                        if (roll > oldRoll + 0.001) {
-                            Log.i("OLDROLL", oldRoll.toString())
-                            drawBitmap(airplaneRight, 500f, 1400f, null)
-                        } else if (roll < oldRoll - 0.001) {
-                            Log.i("OLDROLL", oldRoll.toString())
-                            drawBitmap(airplaneLeft, 500f, 1400f, null)
-                        } else {
-                            drawBitmap(airplane, 500f, 1400f, null)
+                    if((roll *(500f/0.701f)+500f)<925f){ /// to avoid airplane goes too much on the right, outside the screen
+                        withTranslation(roll *(500f/0.701f), 0f) {
+                            if (roll > oldRoll + 0.001) {
+                                Log.i("OLDROLL", oldRoll.toString())
+                                drawBitmap(airplaneRight, 500f, 1400f, null)
+                            } else if (roll < oldRoll - 0.001) {
+                                Log.i("OLDROLL", oldRoll.toString())
+                                drawBitmap(airplaneLeft, 500f, 1400f, null)
+                            } else {
+                                drawBitmap(airplane, 500f, 1400f, null)
+                            }
                         }
+                        plane_x = 500f + roll *(500f/0.701f)
                     }
-                    plane_x = 500f + roll *(500f/0.701f)
                 }
 
                 ///////end draw airplane /////////
@@ -475,13 +477,16 @@ class MyView(context: Context?, weat:String?, Color :String?, Bul :String?, Logg
                 if(!enemy_visible[2] and ex_array[2]){
                     GlobalScope.launch {
                         spawn_enemy(2)
+                        Log.i("boss","spawnto nemico 2")
                     }
                 }
-                if(!enemy_visible[3] and ex_array[3] and (beat_boss1==true)){
+                if((!enemy_visible[3]) and (ex_array[3]) and (beat_boss1==true)){
                     GlobalScope.launch {
                         spawn_enemy(3)
+                        Log.i("boss","spawnto nemico laterale")
                     }
                 }
+                //Log.i("boss",beat_boss1.toString())
                 /*if(!enemy_visible[4] and ex_array[4]){
                     GlobalScope.launch {
                         spawn_enemy(4)
@@ -494,7 +499,7 @@ class MyView(context: Context?, weat:String?, Color :String?, Bul :String?, Logg
                         spawn_boss(0)
                     }
                 }
-                if((Score >3000) and (!boss2_spawned)){
+                if((Score >2000) and (!boss2_spawned)){
                     GlobalScope.launch {
                         boss2_spawned = true
                         spawn_boss(1)
@@ -628,7 +633,7 @@ class MyView(context: Context?, weat:String?, Color :String?, Bul :String?, Logg
 
                     }
                 }
-                if(enemy_visible[4]) {
+                /*if(enemy_visible[4]) {
                     down5 += 7+(increment_velocity)
                     if((lateral_movement[4]+array_position[4]>900f) and (dx_if_true[4] == true)){
                         dx_if_true[4] = false
@@ -643,7 +648,7 @@ class MyView(context: Context?, weat:String?, Color :String?, Bul :String?, Logg
                         drawBitmap(array_enemy_type[array_type[4]], array_position[4], 0f, null)
 
                     }
-                }
+                }*/
                 ///////////////////----------- MANAGE ENEMIES GO OUT OF THE SCREEN ----------////////////////////
                 if(down1 > 1720f){  //// reset down variable to respawn the enemies
                     down1 = 0f
@@ -670,14 +675,14 @@ class MyView(context: Context?, weat:String?, Color :String?, Bul :String?, Logg
                     lateral_movement[3] = 0f
                     justcollide[3] = false
                 }
-                if(down5 > 1720f){  //// reset down variable to respawn the enemies
+                /*if(down5 > 1720f){  //// reset down variable to respawn the enemies
                     down5 = 0f
                     enemy_visible[4] = false
                     ex_array[4] = true
                     lateral_movement[4] = 0f
                     dx_if_true[4] = true
                     justcollide[4] = false
-                }
+                }*/
                 ///// boss /////
                 if((boss_y[0] > 1720f)or(boss_y[0]<0f)){
                     boss_visible[0] = false
