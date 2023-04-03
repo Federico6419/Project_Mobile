@@ -10,7 +10,10 @@ import android.os.Looper
 import android.util.Log
 import android.view.View
 import android.widget.*
+import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.net.toUri
+import androidx.core.view.isVisible
+import androidx.recyclerview.widget.RecyclerView.LayoutManager
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.ktx.database
 import com.google.firebase.ktx.Firebase
@@ -72,8 +75,12 @@ class GameoverActivity : AppCompatActivity() {
                 else{
                     setContentView(R.layout.activity_gameover_signed)
 
+                    GlobalScope.launch {
+                        getLeaderB()
+                    }
+
                     //Set your record text
-                    val scoreReference = database.getReference("Users/$current_id/Score")    //Take the number of users
+                    val scoreReference = database.getReference("Users/$current_id/Score")
 
                     //Get the record
                     scoreReference.get().addOnSuccessListener {
@@ -90,6 +97,38 @@ class GameoverActivity : AppCompatActivity() {
 
                 val playAgainButton = findViewById(R.id.PlayAgainButton) as ImageButton
                 playAgainButton.setOnClickListener() {
+                    //Change all the views to invisible
+                    scoreView.visibility = View.INVISIBLE
+                    var recordView = findViewById(R.id.RecordText) as TextView
+                    recordView.visibility = View.INVISIBLE
+                    var rankingView = findViewById(R.id.RankingText) as TextView
+                    rankingView.visibility = View.INVISIBLE
+                    //Change all the views to invisible
+                    scoreView.visibility = View.INVISIBLE
+                    playAgainButton.visibility = View.INVISIBLE
+                    var firstRowView = findViewById(R.id.FirstRow) as TableLayout
+                    firstRowView.visibility = View.INVISIBLE
+                    var scrollView = findViewById(R.id.scroll) as ScrollView
+                    scrollView.visibility = View.INVISIBLE
+                    val returnMenuButton = findViewById(R.id.ReturnButton) as ImageButton
+                    returnMenuButton.visibility = View.INVISIBLE
+                    val homeTextView = findViewById(R.id.HomeText) as TextView
+                    homeTextView.visibility = View.INVISIBLE
+                    var progressBar = findViewById(R.id.progress_loader) as ProgressBar
+                    var loading = findViewById(R.id.LoadingText) as TextView
+                    progressBar.visibility = View.INVISIBLE
+                    loading.visibility = View.INVISIBLE
+                    val gameoverView = findViewById(R.id.Gameover) as ImageView
+                    gameoverView.visibility = View.INVISIBLE
+
+                    //Change loading game views to visible
+                    var progressView = findViewById(R.id.progress_loader_game) as ProgressBar
+                    progressView.visibility = View.VISIBLE
+                    var loadingGameView = findViewById(R.id.LoadingGame) as TextView
+                    loadingGameView.visibility = View.VISIBLE
+                    var view = findViewById(R.id.View) as ConstraintLayout
+                    view.setBackgroundColor(Color.BLUE)
+
                     intent = Intent(this, GameActivity::class.java)
                     intent.putExtra("Color", color)
                     intent.putExtra("Bullet", bul)
@@ -133,6 +172,36 @@ class GameoverActivity : AppCompatActivity() {
 
             val playAgainButton = findViewById(R.id.PlayAgainButton) as ImageButton
             playAgainButton.setOnClickListener() {
+                //Change all the views to invisible
+                scoreView.visibility = View.INVISIBLE
+                var logTextView = findViewById(R.id.LogText) as TextView
+                logTextView.visibility = View.INVISIBLE
+                signInButton.visibility = View.INVISIBLE
+                signUpButton.visibility = View.INVISIBLE
+                playAgainButton.visibility = View.INVISIBLE
+                var firstRowView = findViewById(R.id.FirstRow) as TableLayout
+                firstRowView.visibility = View.INVISIBLE
+                var scrollView = findViewById(R.id.scroll) as ScrollView
+                scrollView.visibility = View.INVISIBLE
+                val returnMenuButton = findViewById(R.id.ReturnButton) as ImageButton
+                returnMenuButton.visibility = View.INVISIBLE
+                val homeTextView = findViewById(R.id.HomeText) as TextView
+                homeTextView.visibility = View.INVISIBLE
+                var progressBar = findViewById(R.id.progress_loader) as ProgressBar
+                var loading = findViewById(R.id.LoadingText) as TextView
+                progressBar.visibility = View.INVISIBLE
+                loading.visibility = View.INVISIBLE
+                val gameoverView = findViewById(R.id.Gameover) as ImageView
+                gameoverView.visibility = View.INVISIBLE
+
+                //Change loading game views to visible
+                var progressView = findViewById(R.id.progress_loader_game) as ProgressBar
+                progressView.visibility = View.VISIBLE
+                var loadingGameView = findViewById(R.id.LoadingGame) as TextView
+                loadingGameView.visibility = View.VISIBLE
+                var view = findViewById(R.id.View) as ConstraintLayout
+                view.setBackgroundColor(Color.BLUE)
+
                 intent = Intent(this, GameActivity::class.java)
                 intent.putExtra("Color", color)
                 intent.putExtra("Bullet", bul)
@@ -158,6 +227,7 @@ class GameoverActivity : AppCompatActivity() {
 
         //Manage points after loading text
         var loading = findViewById(R.id.LoadingText) as TextView
+
         var numPoints = 1
         val timer = Timer()
         timer.scheduleAtFixedRate(object : TimerTask() {
@@ -169,6 +239,26 @@ class GameoverActivity : AppCompatActivity() {
                 })
             }
         }, 10, 600)
+
+        var ranking = 0
+        var isFinished = false
+        firebaseAuth.uid?.let {
+            var rankingText = findViewById(R.id.RankingText) as TextView
+
+            var numPointsRanking = 1
+            val timerRanking = Timer()
+            timerRanking.scheduleAtFixedRate(object : TimerTask() {
+                override fun run() {
+                    Handler(Looper.getMainLooper()).post(java.lang.Runnable {
+                        if(!isFinished) {
+                            if (numPointsRanking == 4) numPointsRanking = 1
+                            rankingText.text = "Your ranking: " + ".".repeat(numPointsRanking)
+                            numPointsRanking += 1
+                        }
+                    })
+                }
+            }, 10, 600)
+        }
 
         val flaskApi = RequestLeaderboard().retrofit.create(FlaskInterface::class.java)
         CoroutineScope(Dispatchers.IO).launch {
@@ -201,7 +291,17 @@ class GameoverActivity : AppCompatActivity() {
                             )
                             tr.setBackgroundColor(Color.GRAY)
                             var drawable = getDrawable(R.drawable.border)
-                            tr.setBackground(drawable)
+                            var drawableGreen = getDrawable(R.drawable.bordergreen)
+                            firebaseAuth.uid?.let {
+                                if(current_username == items.users?.get(tot)?.username.toString()) {
+                                    tr.setBackground(drawableGreen)
+                                    ranking = tot + 1
+                                } else{
+                                    tr.setBackground(drawable)
+                                }
+                            } ?: run {
+                                tr.setBackground(drawable)
+                            }
                             tr.setPadding(10, 0, 10, 0)
 
                             //Create a new column
@@ -288,6 +388,11 @@ class GameoverActivity : AppCompatActivity() {
                 }
                 progressBar.visibility = View.INVISIBLE
                 loading.visibility = View.INVISIBLE
+                firebaseAuth.uid?.let {
+                    var rankingText = findViewById(R.id.RankingText) as TextView
+                    isFinished = true
+                    rankingText.text = "Your ranking: " + ranking.toString() + "°"
+                }
             }
         }
     }
