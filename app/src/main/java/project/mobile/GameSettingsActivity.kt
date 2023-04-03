@@ -26,14 +26,6 @@ import com.google.gson.annotations.SerializedName
 import kotlinx.coroutines.*
 import java.util.*
 
-
-data class Difference_Json(
-    @SerializedName("winner")
-    var winner: String?,
-    @SerializedName("difference")
-    var difference: Int?
-)
-
 class GameSettingsActivity : AppCompatActivity(), LocationListener {
     private lateinit var firebaseAuth: FirebaseAuth         //Firebase Authenticatoin variable
     lateinit var locationManager : LocationManager          //Define Location Manager
@@ -247,12 +239,18 @@ class GameSettingsActivity : AppCompatActivity(), LocationListener {
         //Start button management
         val startButton = findViewById(R.id.StartButton) as ImageButton
         startButton.setOnClickListener() {
-            setContentView(R.layout.activity_game_settings_loading)
+            var processBar = findViewById(R.id.progress_loader) as ProgressBar
+            if (processBar.visibility == View.INVISIBLE) {
+                setContentView(R.layout.activity_game_settings_loading)
 
-            intent = Intent(this, GameActivity::class.java)
-            intent.putExtra("Color", color)
-            intent.putExtra("Bullet", bullet)
-            startActivity(intent)
+                intent = Intent(this, GameActivity::class.java)
+                intent.putExtra("Color", color)
+                intent.putExtra("Bullet", bullet)
+                startActivity(intent)
+            } else{
+                Toast.makeText(this@GameSettingsActivity, "Wait, downloading weather", Toast.LENGTH_SHORT)
+                    .show()
+            }
         }
         val backButton = findViewById(R.id.BackButton) as ImageButton
         backButton.setOnClickListener() {

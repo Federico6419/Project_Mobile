@@ -30,6 +30,9 @@ class GameoverActivity : AppCompatActivity() {
 
     lateinit var conxt : Context
 
+    var opponent = ""   //Opponent's name
+    var isOpponentSet = false
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
@@ -54,14 +57,16 @@ class GameoverActivity : AppCompatActivity() {
             //Get the opponent, if there is one
             opponentNameReference.get().addOnSuccessListener {
                 if (it.value != null) {
-                    Log.i("BUG", it.value.toString())
+                    opponent = it.value.toString()
+                    isOpponentSet = true
                     setContentView(R.layout.activity_gameover_opponent)
-                    var opponentView = findViewById(R.id.OpponentText) as TextView
-                    opponentView.text = "Opponent's record: " + it.value.toString()
 
                     /*GlobalScope.launch {
                         getDifference(current_username, opponent)
                     }*/
+
+                    var usernameText = findViewById(R.id.UsernameText) as TextView
+                    usernameText.text = current_username
 
                     //Set your record text
                     val scoreReference = database.getReference("Users/$current_id/Score")    //Take the number of users
@@ -69,7 +74,7 @@ class GameoverActivity : AppCompatActivity() {
                     //Get the record
                     scoreReference.get().addOnSuccessListener {
                         var recordView = findViewById(R.id.RecordText) as TextView
-                        recordView.text = "Your record: " + it.value.toString()
+                        recordView.text = "Record: " + it.value.toString()
                     }
                 }
                 else{
@@ -79,6 +84,9 @@ class GameoverActivity : AppCompatActivity() {
                         getLeaderB()
                     }
 
+                    var usernameText = findViewById(R.id.UsernameText) as TextView
+                    usernameText.text = current_username
+
                     //Set your record text
                     val scoreReference = database.getReference("Users/$current_id/Score")
 
@@ -86,14 +94,14 @@ class GameoverActivity : AppCompatActivity() {
                     scoreReference.get().addOnSuccessListener {
                         Log.i("BUG", it.value.toString())
                         var recordView = findViewById(R.id.RecordText) as TextView
-                        recordView.text = "Your record: " + it.value.toString()
+                        recordView.text = "Record: " + it.value.toString()
                     }
                 }
 
                 //Set your score text
                 var scoreView = findViewById(R.id.ScoreText) as TextView
                 Log.i("SCORE", score.toString())
-                scoreView.text = "Your score: " + score
+                scoreView.text = score
 
                 val playAgainButton = findViewById(R.id.PlayAgainButton) as ImageButton
                 playAgainButton.setOnClickListener() {
@@ -156,7 +164,7 @@ class GameoverActivity : AppCompatActivity() {
             //Set your score text
             var scoreView = findViewById(R.id.ScoreText) as TextView
             Log.i("SCORE", score.toString())
-            scoreView.text = "Your score: " + score
+            scoreView.text = score
 
             val signUpButton = findViewById(R.id.SignUpButton) as Button
             signUpButton.setOnClickListener() {
@@ -252,7 +260,7 @@ class GameoverActivity : AppCompatActivity() {
                     Handler(Looper.getMainLooper()).post(java.lang.Runnable {
                         if(!isFinished) {
                             if (numPointsRanking == 4) numPointsRanking = 1
-                            rankingText.text = "Your ranking: " + ".".repeat(numPointsRanking)
+                            rankingText.text = "Ranking: " + ".".repeat(numPointsRanking)
                             numPointsRanking += 1
                         }
                     })
@@ -278,8 +286,11 @@ class GameoverActivity : AppCompatActivity() {
                         val tl = findViewById(R.id.Table) as TableLayout
 
                         while (tot < items.numberOfUsers!!) {
-                            users.plus((items.users?.get(tot)?.username.toString()))
-                            scores.plus(items.users?.get(tot)?.score!!)
+                            var cur_user = items.users?.get(tot)?.username.toString()
+                            if(cur_user == opponent){
+                                var opponentText = findViewById(R.id.UsernameTextOpponent) as TextView
+                                opponentText.text = cur_user
+                            }
 
                             //Create a new row
                             var tr = TableRow(conxt)
@@ -292,10 +303,13 @@ class GameoverActivity : AppCompatActivity() {
                             tr.setBackgroundColor(Color.GRAY)
                             var drawable = getDrawable(R.drawable.border)
                             var drawableGreen = getDrawable(R.drawable.bordergreen)
+                            var drawableRed = getDrawable(R.drawable.borderred)
                             firebaseAuth.uid?.let {
                                 if(current_username == items.users?.get(tot)?.username.toString()) {
                                     tr.setBackground(drawableGreen)
                                     ranking = tot + 1
+                                } else if(current_username == opponent){
+                                    tr.setBackground(drawableRed)
                                 } else{
                                     tr.setBackground(drawable)
                                 }
@@ -337,9 +351,25 @@ class GameoverActivity : AppCompatActivity() {
                             userImageRef.getFile(localFile).addOnSuccessListener {
                                 // Local temp file has been created
                                 iv.setImageURI(localFile.toUri())
+                                if (current_username == cur_user) {
+                                    var profileImageView = findViewById(R.id.ProfileImage) as ImageView
+                                    profileImageView.setImageURI(localFile.toUri())
+                                } else if (isOpponentSet and (current_username == opponent)){
+                                    var profileImageOpponent = findViewById(R.id.ProfileImageOpponent) as ImageView
+                                    profileImageOpponent.setImageURI(localFile.toUri())
+                                }
                             }.addOnFailureListener {
                                 // Handle any errors
                                 iv.setImageResource(R.drawable.profileimage)
+                                firebaseAuth.uid?.let {
+                                    if (current_username == cur_user) {
+                                        var profileImageView = findViewById(R.id.ProfileImage) as ImageView
+                                        profileImageView.setImageResource(R.drawable.profileimage)
+                                    } else if (isOpponentSet and (current_username == opponent)){
+                                        var profileImageOpponent = findViewById(R.id.ProfileImageOpponent) as ImageView
+                                        profileImageOpponent.setImageResource(R.drawable.profileimage)
+                                    }
+                                }
                             }
                             iv.getLayoutParams().height = 250
                             iv.getLayoutParams().width = 250
@@ -391,7 +421,29 @@ class GameoverActivity : AppCompatActivity() {
                 firebaseAuth.uid?.let {
                     var rankingText = findViewById(R.id.RankingText) as TextView
                     isFinished = true
-                    rankingText.text = "Your ranking: " + ranking.toString() + "°"
+                    rankingText.text = "Ranking: " + ranking.toString() + "°"
+                }
+            }
+        }
+    }
+
+    suspend fun getDifference(username1: String, username2: String) {
+
+        val differenceApi = Request_Difference().retrofit.create(DifferenceInterface::class.java)
+        CoroutineScope(Dispatchers.IO).launch {
+
+            // Do the GET request and get response
+            var response = differenceApi.getDifference(username1, username2)
+
+            withContext(Dispatchers.Main) {
+                if (response.isSuccessful) {
+
+                    val items = response.body()
+                    if (items != null) {
+                        var winner = items.winner
+                        var difference = items.difference
+                        Log.i("DIFFERENCE", items.toString())
+                    }
                 }
             }
         }
