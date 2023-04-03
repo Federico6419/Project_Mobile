@@ -50,8 +50,7 @@ public var justExecuted = true
 lateinit var imageUri: Uri          //Variable that will contain the URI of the image
 
 @Suppress("DEPRECATED_IDENTITY_EQUALS")
-class MainActivity : AppCompatActivity(), LocationListener, LifecycleObserver {
-    lateinit var locationManager : LocationManager          //Define Location Manager
+class MainActivity : AppCompatActivity(), LifecycleObserver {
     private lateinit var firebaseAuth: FirebaseAuth         //Firebase Authenticatoin variable
     val storage = Firebase.storage      //Firebase Storage variable
 
@@ -61,6 +60,7 @@ class MainActivity : AppCompatActivity(), LocationListener, LifecycleObserver {
 
         firebaseAuth = FirebaseAuth.getInstance()   //Get instance from Firebase Authentication
 
+        Log.i("WEATHER", weather)
 
         //Music management
         music.playSoundMenu(this)
@@ -81,20 +81,7 @@ class MainActivity : AppCompatActivity(), LocationListener, LifecycleObserver {
         }
         ProcessLifecycleOwner.get().getLifecycle().addObserver(lifecycleEventObserver)
 
-        //Location Permission
-        if (ContextCompat.checkSelfPermission(this,
-                Manifest.permission.ACCESS_FINE_LOCATION) !== PackageManager.PERMISSION_GRANTED) {
-            ActivityCompat.requestPermissions(this,
-                arrayOf(Manifest.permission.ACCESS_FINE_LOCATION), 1)
-        } else {
-
-        }
-
-        locationManager = getSystemService(Context.LOCATION_SERVICE) as LocationManager
-
         supportActionBar?.setTitle("                     Death Planes")     //Define the name of the application
-
-        locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 1000, 5f,this)
 
         //If the previous user is logged, sign him out
         if((firebaseAuth.currentUser?.email != null) and justExecuted){
@@ -117,10 +104,6 @@ class MainActivity : AppCompatActivity(), LocationListener, LifecycleObserver {
                     //Show image
                     var changephotoButton = findViewById(R.id.iv_capture_button) as ImageButton
                     changephotoButton.setImageURI(imageUri)
-                    /*var bitmap = BitmapFactory.decodeFile(File(imageUri.getPath()).getAbsolutePath())
-                    val height: Int = bitmap.height
-                    val width: Int = bitmap.width
-                    changephotoButton.width = width*/
 
                     // Create a storage reference from our app
                     var storageRef = storage.reference
@@ -264,80 +247,5 @@ class MainActivity : AppCompatActivity(), LocationListener, LifecycleObserver {
 
         //Manage logout when exit from application
         firebaseAuth.signOut()          //Sign out from Firebase Authentication
-    }
-
-    //Ask current location
-    override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<String>, grantResults: IntArray) {
-        super.onRequestPermissionsResult(requestCode, permissions, grantResults)
-        when (requestCode) {
-            1 -> {
-                if (grantResults.isNotEmpty() && grantResults[0] ==
-                    PackageManager.PERMISSION_GRANTED) {
-                    if ((ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) === PackageManager.PERMISSION_GRANTED)) {
-                        Toast.makeText(this, "Permission Granted", Toast.LENGTH_SHORT).show()
-                    }
-                } else {
-                    //Toast.makeText(this, "Permission Denied", Toast.LENGTH_SHORT).show()
-                }
-                return
-            }
-        }
-    }
-
-    /////// function used to get the weather and so set the layout of the game ////////////////////////
-    suspend fun getW() {
-        //var retrofit = Request_Api.getInstance()
-        val weatherApi = Request_Api().retrofit.create(ApiInterface::class.java)
-        CoroutineScope(Dispatchers.IO).launch {
-
-            // Do the GET request and get response
-            var response = weatherApi.getWeather("5a8f72b7d96a46caba6120024222612", city,"no")
-
-            withContext(Dispatchers.Main) {
-                if (response.isSuccessful) {
-
-                    val items = response.body()
-                    if (items != null) {
-                        //Log.i("weather", items.current?.condition?.text.toString())
-                        weather = items.current?.condition?.text.toString()
-                        Log.i("weat", weather)
-                    }
-
-                } else {
-
-                    Log.e("RETROFIT_ERROR", response.code().toString())
-
-                }
-            }
-        }
-    }
-
-    override fun onLocationChanged(p0: Location) {
-        val location = Request_Api_Location().retrofit2.create(ApiInterface_Location::class.java)
-        CoroutineScope(Dispatchers.IO).launch {
-
-            // Do the GET request and get response
-            var response = location.getLocation(p0.latitude.toString(),p0.longitude.toString(),"f5167fb93df14a64ad6e6e3f28d05443")
-
-            withContext(Dispatchers.Main) {
-                if (response.isSuccessful) {
-
-                    val items = response.body()
-                    if (items != null) {
-                        Log.i("city", items.features?.get(0)?.properties?.city.toString())
-                        city = items.features?.get(0)?.properties?.city.toString()
-                        GlobalScope.launch {
-                            getW()
-                        }
-                    }
-
-                } else {
-
-                    Log.e("RETROFIT_ERROR OF LOCATION", response.code().toString())
-
-                }
-            }
-        }
-
     }
 }

@@ -122,7 +122,7 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             tools:layout_editor_absoluteX="40dp"
-            tools:layout_editor_absoluteY="200dp">
+            tools:layout_editor_absoluteY="280dp">
         </TableLayout>
     </ScrollView>
 
