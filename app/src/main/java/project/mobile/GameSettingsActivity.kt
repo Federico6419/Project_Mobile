@@ -40,18 +40,22 @@ class GameSettingsActivity : AppCompatActivity(), LocationListener {
 
         supportActionBar?.setTitle("                     Death Planes")     //Define the name of the application
 
-        //Location Permission
-        if (ContextCompat.checkSelfPermission(this,
-                Manifest.permission.ACCESS_FINE_LOCATION) !== PackageManager.PERMISSION_GRANTED) {
-            ActivityCompat.requestPermissions(this,
-                arrayOf(Manifest.permission.ACCESS_FINE_LOCATION), 1)
-        } else {
 
-        }
         locationManager = getSystemService(Context.LOCATION_SERVICE) as LocationManager
-        locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 1000, 5f,this)
 
-
+        if (ContextCompat.checkSelfPermission(this@GameSettingsActivity,
+                Manifest.permission.ACCESS_FINE_LOCATION) !==
+            PackageManager.PERMISSION_GRANTED) {
+            if (ActivityCompat.shouldShowRequestPermissionRationale(this@GameSettingsActivity,
+                    Manifest.permission.ACCESS_FINE_LOCATION)) {
+                ActivityCompat.requestPermissions(this@GameSettingsActivity,
+                    arrayOf(Manifest.permission.ACCESS_FINE_LOCATION), 1)
+            } else {
+                Log.i("ELSE", "OK")
+                ActivityCompat.requestPermissions(this@GameSettingsActivity,
+                    arrayOf(Manifest.permission.ACCESS_FINE_LOCATION), 1)
+            }
+        }
 
         var color = "red"
         var bullet = "normal"
@@ -210,7 +214,7 @@ class GameSettingsActivity : AppCompatActivity(), LocationListener {
                 override fun run() {
                     Handler(Looper.getMainLooper()).post(java.lang.Runnable {
                         if (numPoints == 4) numPoints = 1
-                        loading.text = "Downloading leaderboard" + ".".repeat(numPoints)
+                        loading.text = "Downloading weather" + ".".repeat(numPoints)
                         numPoints += 1
                     })
                 }
@@ -321,20 +325,21 @@ class GameSettingsActivity : AppCompatActivity(), LocationListener {
             }
         }
     }
-
-    //Ask current location
-
-    override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<String>, grantResults: IntArray) {
+    override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<String>,
+                                            grantResults: IntArray) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults)
         when (requestCode) {
             1 -> {
                 if (grantResults.isNotEmpty() && grantResults[0] ==
                     PackageManager.PERMISSION_GRANTED) {
-                    if ((ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) === PackageManager.PERMISSION_GRANTED)) {
+                    if ((ContextCompat.checkSelfPermission(this@GameSettingsActivity,
+                            Manifest.permission.ACCESS_FINE_LOCATION) ===
+                                PackageManager.PERMISSION_GRANTED)) {
                         Toast.makeText(this, "Permission Granted", Toast.LENGTH_SHORT).show()
+                        locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 1000, 5f, this)
                     }
                 } else {
-                    //Toast.makeText(this, "Permission Denied", Toast.LENGTH_SHORT).show()
+                    Toast.makeText(this, "Permission Denied", Toast.LENGTH_SHORT).show()
                 }
                 return
             }

@@ -61,9 +61,13 @@ class GameoverActivity : AppCompatActivity() {
                     isOpponentSet = true
                     setContentView(R.layout.activity_gameover_opponent)
 
-                    /*GlobalScope.launch {
+                    GlobalScope.launch {
                         getDifference(current_username, opponent)
-                    }*/
+                    }
+
+                    GlobalScope.launch {
+                        getLeaderB()
+                    }
 
                     var usernameText = findViewById(R.id.UsernameText) as TextView
                     usernameText.text = current_username
@@ -250,6 +254,8 @@ class GameoverActivity : AppCompatActivity() {
 
         var ranking = 0
         var isFinished = false
+        var isFinishedOpponent = false
+
         firebaseAuth.uid?.let {
             var rankingText = findViewById(R.id.RankingText) as TextView
 
@@ -266,6 +272,24 @@ class GameoverActivity : AppCompatActivity() {
                     })
                 }
             }, 10, 600)
+
+            if(isOpponentSet){
+                var rankingTextOpponent = findViewById(R.id.RankingTextOpponent) as TextView
+
+                var numPointsRankingOpponent  = 1
+                val timerRankingOpponent  = Timer()
+                timerRankingOpponent .scheduleAtFixedRate(object : TimerTask() {
+                    override fun run() {
+                        Handler(Looper.getMainLooper()).post(java.lang.Runnable {
+                            if(!isFinishedOpponent) {
+                                if (numPointsRankingOpponent  == 4) numPointsRankingOpponent  = 1
+                                rankingTextOpponent .text = "Ranking: " + ".".repeat(numPointsRankingOpponent )
+                                numPointsRankingOpponent  += 1
+                            }
+                        })
+                    }
+                }, 10, 600)
+            }
         }
 
         val flaskApi = RequestLeaderboard().retrofit.create(FlaskInterface::class.java)
@@ -308,7 +332,7 @@ class GameoverActivity : AppCompatActivity() {
                                 if(current_username == items.users?.get(tot)?.username.toString()) {
                                     tr.setBackground(drawableGreen)
                                     ranking = tot + 1
-                                } else if(current_username == opponent){
+                                } else if(cur_user == opponent){
                                     tr.setBackground(drawableRed)
                                 } else{
                                     tr.setBackground(drawable)
@@ -354,7 +378,7 @@ class GameoverActivity : AppCompatActivity() {
                                 if (current_username == cur_user) {
                                     var profileImageView = findViewById(R.id.ProfileImage) as ImageView
                                     profileImageView.setImageURI(localFile.toUri())
-                                } else if (isOpponentSet and (current_username == opponent)){
+                                } else if (isOpponentSet and (cur_user == opponent)){
                                     var profileImageOpponent = findViewById(R.id.ProfileImageOpponent) as ImageView
                                     profileImageOpponent.setImageURI(localFile.toUri())
                                 }
@@ -365,7 +389,7 @@ class GameoverActivity : AppCompatActivity() {
                                     if (current_username == cur_user) {
                                         var profileImageView = findViewById(R.id.ProfileImage) as ImageView
                                         profileImageView.setImageResource(R.drawable.profileimage)
-                                    } else if (isOpponentSet and (current_username == opponent)){
+                                    } else if (isOpponentSet and (cur_user == opponent)){
                                         var profileImageOpponent = findViewById(R.id.ProfileImageOpponent) as ImageView
                                         profileImageOpponent.setImageResource(R.drawable.profileimage)
                                     }
@@ -400,6 +424,13 @@ class GameoverActivity : AppCompatActivity() {
                             tv3.setPadding(80, 0, 0, 0)
                             tr.addView(tv3)
 
+                            if(isOpponentSet and (cur_user == opponent)){
+                                var recordOpponent = findViewById(R.id.RecordTextOpponent) as TextView
+                                recordOpponent.text = "Record: " + (items.users?.get(tot)?.score!!).toString()
+                                var rankingOpponent = findViewById(R.id.RankingTextOpponent) as TextView
+                                rankingOpponent.text = "Ranking: " + (tot + 1).toString() + "°"
+                            }
+
                             //Add the row to the table
                             tl.addView(
                                 tr,
@@ -421,6 +452,7 @@ class GameoverActivity : AppCompatActivity() {
                 firebaseAuth.uid?.let {
                     var rankingText = findViewById(R.id.RankingText) as TextView
                     isFinished = true
+                    isFinishedOpponent = true
                     rankingText.text = "Ranking: " + ranking.toString() + "°"
                 }
             }
@@ -443,6 +475,18 @@ class GameoverActivity : AppCompatActivity() {
                         var winner = items.winner
                         var difference = items.difference
                         Log.i("DIFFERENCE", items.toString())
+
+                        var winnerView = findViewById(R.id.WinnerText) as TextView
+                        if(winner == current_username) {
+                            winnerView.text = "You're beating " + opponent + " by " + difference + " points!"
+                            winnerView.setTextColor(Color.GREEN)
+                        } else if(winner == opponent) {
+                            winnerView.text = "You need " + difference + " points more to beat " + opponent + "!"
+                            winnerView.setTextColor(Color.RED)
+                        } else {
+                            winnerView.text = "You have the same record of " + opponent + "!"
+                            winnerView.setTextColor(Color.YELLOW)
+                        }
                     }
                 }
             }

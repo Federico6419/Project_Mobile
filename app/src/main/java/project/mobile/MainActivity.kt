@@ -12,10 +12,13 @@ import android.net.Uri
 import android.os.Build
 import android.os.Bundle
 import android.util.Log
+import android.view.animation.Animation
+import android.view.animation.AnimationUtils
 import android.widget.*
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
+import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.core.net.toUri
@@ -229,6 +232,7 @@ class MainActivity : AppCompatActivity(), LifecycleObserver {
         //Start button listener
         val startButton = findViewById(R.id.StartButton) as ImageButton
         startButton.setOnClickListener() {
+            //runFadeInAnimation()      //ANIMATION
             intent = Intent(this, GameSettingsActivity::class.java)
             startActivity(intent)
         }
@@ -248,4 +252,13 @@ class MainActivity : AppCompatActivity(), LifecycleObserver {
         //Manage logout when exit from application
         firebaseAuth.signOut()          //Sign out from Firebase Authentication
     }
+
+    ///////////ANIMATION
+    /*fun runFadeInAnimation() {
+        var a = AnimationUtils.loadAnimation(this, R.anim.fadein)
+        a.reset()
+        var ll = findViewById(R.id.Layout) as ConstraintLayout
+        ll.clearAnimation()
+        ll.startAnimation(a)
+    }*/
 }
