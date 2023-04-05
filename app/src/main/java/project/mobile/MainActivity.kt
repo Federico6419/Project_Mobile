@@ -99,41 +99,11 @@ class MainActivity : AppCompatActivity(), LifecycleObserver {
         uid?.let {               //If user id is not null, manage the listeners of the signed homepage
             setContentView(R.layout.activity_main_signed)
 
-            /// intent with new method to return photo after finish changePhotoProfile activity
-            var resultLauncher = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
-                if (result.resultCode == RESULT_OK) {
-                    imageUri = result.data!!.getStringExtra("Image")?.toUri()!!
+            var hasphoto = false
 
-                    //Show image
-                    var changephotoButton = findViewById(R.id.iv_capture_button) as ImageButton
-                    changephotoButton.setImageURI(imageUri)
+            //////////download the image of the user from storage and set to the userimage view
 
-                    // Create a storage reference from our app
-                    var storageRef = storage.reference
-
-                    var file = imageUri
-
-                    val imageRef = storageRef.child("Images/$current_username")
-                    var uploadTask = file?.let { imageRef.putFile(it) }
-
-                    // Register observers to listen for when the download is done or if it fails
-                    if (uploadTask != null) {
-                        uploadTask.addOnFailureListener {
-                            Log.i("STORAGE", "Failed")
-                        }.addOnSuccessListener { taskSnapshot ->
-                            Log.i("STORAGE", "Success")
-                        }
-                    }
-                }
-            }
-            ////change photo profile intent
             val changephotoButton = findViewById(R.id.iv_capture_button) as ImageButton
-            changephotoButton.setOnClickListener() {
-                intent = Intent(this, ChangePhotoProfile::class.java)
-                resultLauncher.launch(intent)
-            }
-
-            //var imageView = findViewById(R.id.iv_capture) as ImageView
 
             // Create a storage reference from our app
             var storageRef = storage.reference
@@ -148,7 +118,7 @@ class MainActivity : AppCompatActivity(), LifecycleObserver {
                 // Local temp file has been created
                 userimage = localFile.toUri()
                 changephotoButton.setImageURI(userimage)
-                //imageView.setImageURI(userimage)
+                hasphoto = true
                 Log.i("prova",it.toString())
             }.addOnFailureListener {
                 // Handle any errors
@@ -156,6 +126,14 @@ class MainActivity : AppCompatActivity(), LifecycleObserver {
                 changephotoButton.setImageResource(R.drawable.profileimage)
                 Log.i("error",it.toString())
             }
+
+
+            ////modify photo profile intent
+            changephotoButton.setOnClickListener() {
+                intent = Intent(this, ModifyPhoto::class.java)
+                startActivity(intent)
+            }
+
 
             val usernameText: TextView = findViewById(R.id.Username) as TextView
             usernameText.text = current_username
