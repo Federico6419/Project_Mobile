@@ -25,6 +25,12 @@ class ModifyPhoto : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_modify_photo)
 
+        val houseButton = findViewById(R.id.HouseButton) as ImageButton
+        houseButton.setOnClickListener() {
+            intent = Intent(this, MainActivity::class.java)
+            startActivity(intent)
+        }
+
         val ChangePhotoButton = findViewById(R.id.ChangeButton) as Button
 
         val PhotoButton = findViewById(R.id.PhotoButton) as Button
@@ -76,6 +82,22 @@ class ModifyPhoto : AppCompatActivity() {
         ////submit intent
         val SubmitButton = findViewById(R.id.SubmitButton) as Button
         SubmitButton.setOnClickListener() {
+            //save image on storage
+            var storageRef = storage.reference
+
+            var file = userimage
+
+            val imageRef = storageRef.child("Images/$current_username")
+            var uploadTask = file?.let { imageRef.putFile(it) }
+
+            // Register observers to listen for when the download is done or if it fails
+            if (uploadTask != null) {
+                uploadTask.addOnFailureListener {
+                    Log.i("STORAGE", "Failed")
+                }.addOnSuccessListener { taskSnapshot ->
+                    Log.i("STORAGE", "Success")
+                }
+            }
             intent = Intent(this, MainActivity::class.java)
             startActivity(intent)
         }
@@ -99,22 +121,6 @@ class ModifyPhoto : AppCompatActivity() {
                     SubmitButton.visibility = View.VISIBLE
                     SubmitButton.isClickable = true
 
-                    //save image on storage
-                    var storageRef = storage.reference
-
-                    var file = userimage
-
-                    val imageRef = storageRef.child("Images/$current_username")
-                    var uploadTask = file?.let { imageRef.putFile(it) }
-
-                    // Register observers to listen for when the download is done or if it fails
-                    if (uploadTask != null) {
-                        uploadTask.addOnFailureListener {
-                            Log.i("STORAGE", "Failed")
-                        }.addOnSuccessListener { taskSnapshot ->
-                            Log.i("STORAGE", "Success")
-                        }
-                    }
 
                     /// show remove button
                     RemoveButton.visibility = View.VISIBLE
