@@ -29,7 +29,16 @@ import androidx.core.graphics.withTranslation
 import com.google.firebase.auth.FirebaseAuth
 import java.util.*
 import kotlin.math.atan2
+import kotlin.properties.Delegates
 
+//Variable that says if the game is restarting
+var isRestarted = false
+/*//Variable that says if the game is restarting
+var isRestarted :Boolean? by Delegates.observable(false) { property, oldValue, newValue ->
+
+    setConentView
+
+}*/
 
 class GameActivity : AppCompatActivity() {
     private lateinit var firebaseAuth: FirebaseAuth         //Firebase Authenticatoin variable
@@ -72,6 +81,11 @@ class GameActivity : AppCompatActivity() {
         }
 
         setContentView(MyView(this, weather, color, bul, logged, packageName))
+
+        while(!isRestarted){
+        }
+        isRestarted = false
+        setContentView(R.layout.activity_game_settings_loading)
     }
 
 }
