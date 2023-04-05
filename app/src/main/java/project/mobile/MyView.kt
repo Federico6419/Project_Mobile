@@ -1949,7 +1949,7 @@ class MyView(context: Context?, weat:String?, Color :String?, Bul :String?, Logg
                     PAUSE = true
                     music.pauseSound()
                     start = false
-                }else if(PAUSE and ((event.getX()>=276.9873f) and (event.getX()<=801.958f) and (event.getY()>=735.9387f)and (event.getY()<843.93066f))){
+                }else if(PAUSE and ((event.getX()>=276.9873f) and (event.getX()<=801.958f) and (event.getY()>=710.93933f)and (event.getY()<843.93066f))){
                     start = true
                     music.playSoundGame(context)
                     PAUSE = false
@@ -1957,12 +1957,12 @@ class MyView(context: Context?, weat:String?, Color :String?, Bul :String?, Logg
                 }else if(PAUSE and ((event.getX()>=276.9873f) and (event.getX()<=801.958f) and (event.getY()>=902.94006f)and (event.getY()<1044.942f))){
                     music.stopSound()
                     PAUSE = false
-                    isRestarted = true
-                    val intent = Intent(context, GameActivity::class.java)
+                    val intent = Intent(context, GameSettingsActivity::class.java)
                     intent.putExtra("Color", col)
                     intent.putExtra("Bullet", bul)
+                    intent.putExtra("Restarted", "1")
                     startActivity(context, intent, null)
-                } else if(PAUSE and((event.getX()>130f)and (event.getX()<930f)and (event.getY()>1300f)and (event.getY()<1500f))){
+                } else if(PAUSE and((event.getX()>=276.9873f)and (event.getX()<=801.958f)and (event.getY()>1118.924f)and (event.getY()<1264.9231f))){
                     PAUSE = false
                     music.stopSound()
                     val intent = Intent(context, MainActivity::class.java)

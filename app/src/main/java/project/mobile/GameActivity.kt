@@ -31,15 +31,6 @@ import java.util.*
 import kotlin.math.atan2
 import kotlin.properties.Delegates
 
-//Variable that says if the game is restarting
-var isRestarted = false
-/*//Variable that says if the game is restarting
-var isRestarted :Boolean? by Delegates.observable(false) { property, oldValue, newValue ->
-
-    setConentView
-
-}*/
-
 class GameActivity : AppCompatActivity() {
     private lateinit var firebaseAuth: FirebaseAuth         //Firebase Authenticatoin variable
 
@@ -59,9 +50,9 @@ class GameActivity : AppCompatActivity() {
         music = MusicManager()       //Music variable(I've restarted music to avoid crashes
         music.playSoundGame(this)
         //Mute management
-        if(muted) {
+        if (muted) {
             music.setVolume(0.0f, 0.0f)
-        } else{
+        } else {
             music.setVolume(1.0f, 1.0f)
         }
 
@@ -81,43 +72,5 @@ class GameActivity : AppCompatActivity() {
         }
 
         setContentView(MyView(this, weather, color, bul, logged, packageName))
-
-        while(!isRestarted){
-        }
-        isRestarted = false
-        setContentView(R.layout.activity_game_settings_loading)
-    }
-
-}
-
-suspend fun getDifference(username1: String?, username2: String?) {
-    val differenceApi = Request_Difference().retrofit.create(DifferenceInterface::class.java)
-    CoroutineScope(Dispatchers.IO).launch {
-
-        // Do the GET request and get response
-        var response = differenceApi.getDifference(username1, username2)
-
-        Log.i("opponent", username2.toString())
-
-        var winner = ""
-        var difference = 0
-
-        withContext(Dispatchers.Main) {
-            if (response.isSuccessful) {
-
-                val items = response.body()
-                if (items != null) {
-                    winner = items.winner.toString()
-                    difference = items.difference!!
-                }
-                Log.i("opponent", winner)
-                Log.i("opponent", difference.toString())
-
-            } else {
-
-                Log.e("RETROFIT_ERROR", response.code().toString())
-
-            }
-        }
     }
 }
