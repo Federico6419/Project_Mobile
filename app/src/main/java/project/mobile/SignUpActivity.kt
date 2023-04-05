@@ -100,6 +100,8 @@ class SignUpActivity : AppCompatActivity() {
             //Set the standard profile image
             val profileImage = findViewById(R.id.ProfileImage) as ImageView
             profileImage.setImageResource(R.drawable.profileimage)
+            profileImage.getLayoutParams().height = 250
+            profileImage.getLayoutParams().width = 250
 
             //Reinitialize image uri variable
             imageChosen = false
@@ -124,6 +126,8 @@ class SignUpActivity : AppCompatActivity() {
                 //Show image
                 val profileImage = findViewById(R.id.ProfileImage) as ImageView
                 profileImage.setImageURI(imageUri)
+                profileImage.getLayoutParams().height = 300
+                profileImage.getLayoutParams().width = 200
 
                 //Show Change Button
                 val changeButton = findViewById(R.id.ChangeButton) as Button
@@ -155,6 +159,8 @@ class SignUpActivity : AppCompatActivity() {
 
                     //Set the standard profile image
                     profileImage.setImageResource(R.drawable.profileimage)
+                    profileImage.getLayoutParams().height = 250
+                    profileImage.getLayoutParams().width = 250
 
                     //Reinitialize image uri variable
                     imageChosen = false
@@ -197,6 +203,8 @@ class SignUpActivity : AppCompatActivity() {
                 //Show image
                 val profileImage = findViewById(R.id.ProfileImage) as ImageView
                 profileImage.setImageURI(imageUri)
+                profileImage.getLayoutParams().height = 300
+                profileImage.getLayoutParams().width = 200
 
                 //Show Change Button
                 val changeButton = findViewById(R.id.ChangeButton) as Button
@@ -228,6 +236,8 @@ class SignUpActivity : AppCompatActivity() {
 
                     //Set the standard profile image
                     profileImage.setImageResource(R.drawable.profileimage)
+                    profileImage.getLayoutParams().height = 250
+                    profileImage.getLayoutParams().width = 250
 
                     //Reinitialize image uri variable
                     imageChosen = false

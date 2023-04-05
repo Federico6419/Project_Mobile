@@ -124,6 +124,8 @@ class MainActivity : AppCompatActivity(), LifecycleObserver {
                 // Handle any errors
                 //imageView.setImageResource(R.drawable.profileimage)
                 changephotoButton.setImageResource(R.drawable.profileimage)
+                changephotoButton.getLayoutParams().height = 230
+                changephotoButton.getLayoutParams().width = 230
                 Log.i("error",it.toString())
             }
 
