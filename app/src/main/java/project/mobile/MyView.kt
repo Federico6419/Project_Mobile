@@ -214,17 +214,22 @@ class MyView(context: Context?, weat:String?, Color :String?, Bul :String?, Logg
 
     /////////////*************************////////////////////
 
-    init{
+    init {
         ////////////////ESPLOSIONE
         retreiver = MediaMetadataRetriever()
 
-        retreiver.setDataSource(context, Uri.parse("android.resource://"
-                + packagename + "/" + R.raw.explosion))
+        retreiver.setDataSource(
+            context, Uri.parse(
+                "android.resource://"
+                        + packagename + "/" + R.raw.explosion
+            )
+        )
 
         var i = 0
 
         while (i < 1000000) {
-            var bitmap = retreiver.getFrameAtTime(i.toLong(), MediaMetadataRetriever.OPTION_CLOSEST)!!
+            var bitmap =
+                retreiver.getFrameAtTime(i.toLong(), MediaMetadataRetriever.OPTION_CLOSEST)!!
 
             //Add transparent background
             val width: Int = bitmap.getWidth()
@@ -255,68 +260,103 @@ class MyView(context: Context?, weat:String?, Color :String?, Bul :String?, Logg
 
         var layout = R.drawable.background_sun2
 
-        Log.i("Weather",weat.toString())
-        if((weat=="Overcast") or (weat=="Partly cloudy")or(weat=="Cloudy")){ // Background when cloudy
+        Log.i("Weather", weat.toString())
+        if ((weat == "Overcast") or (weat == "Partly cloudy") or (weat == "Cloudy")) { // Background when cloudy
             layout = R.drawable.rainybackground
-        } else if((weat=="Sunny")or(weat=="Clear")) {//sfondo soleggiato
+        } else if ((weat == "Sunny") or (weat == "Clear")) {//sfondo soleggiato
             layout = R.drawable.background_sun2
-        } else if((weat=="Patchy rain possible") or (weat=="Light rain") or(weat=="Patchy light rain") or (weat=="Moderate rain at times") or (weat=="Moderate rain") or (weat=="Heavy rain at times")  or (weat=="Heavy rain") or (weat=="Light freezing rain") or (weat=="Torrential rain shower") or(weat=="Moderate or heavy rain with thunder") or(weat=="Patchy light rain with thunder")){//sfondo piovoso
+        } else if ((weat == "Patchy rain possible") or (weat == "Light rain") or (weat == "Patchy light rain") or (weat == "Moderate rain at times") or (weat == "Moderate rain") or (weat == "Heavy rain at times") or (weat == "Heavy rain") or (weat == "Light freezing rain") or (weat == "Torrential rain shower") or (weat == "Moderate or heavy rain with thunder") or (weat == "Patchy light rain with thunder")) {//sfondo piovoso
             layout = R.drawable.rainybackground
-        }else if((weat=="Heavy snow") or(weat=="Patchy heavy snow")or(weat=="Moderate or heavy snow with thunder")or(weat=="Patchy light snow with thunder")){
+        } else if ((weat == "Heavy snow") or (weat == "Patchy heavy snow") or (weat == "Moderate or heavy snow with thunder") or (weat == "Patchy light snow with thunder")) {
             layout = R.drawable.snowybackground
-        } else{//if found something we don t have
+        } else {//if found something we don t have
             layout = R.drawable.background_sun2
         }
 
-        size*=160*resources.displayMetrics.density
+        size *= 160 * resources.displayMetrics.density
         val sensorManager = context?.getSystemService(Context.SENSOR_SERVICE) as SensorManager
         sensorManager.registerListener(
             this,  //use this since MyView implements the listener interface
             sensorManager.getDefaultSensor(Sensor.TYPE_ROTATION_VECTOR),
-            SensorManager.SENSOR_DELAY_FASTEST)
+            SensorManager.SENSOR_DELAY_FASTEST
+        )
         setOnTouchListener(this)
-        background = ResourcesCompat.getDrawable(resources,layout,
-            null)?.toBitmap(size.toInt(),size.toInt())!!
+        background = ResourcesCompat.getDrawable(
+            resources, layout,
+            null
+        )?.toBitmap(size.toInt(), size.toInt())!!
         //// airplane
-        if(Color=="red"){
-            airplane= ResourcesCompat.getDrawable(resources,R.drawable.airplane,
-                null)?.toBitmap(sizeA.toInt(),sizeA.toInt())!!
+        if (Color == "red") {
+            airplane = ResourcesCompat.getDrawable(
+                resources, R.drawable.airplane,
+                null
+            )?.toBitmap(sizeA.toInt(), sizeA.toInt())!!
 
-            airplaneLeft = ResourcesCompat.getDrawable(resources,R.drawable.airplaneleft,
-                null)?.toBitmap(sizeA.toInt(),sizeA.toInt())!!
+            airplaneLeft = ResourcesCompat.getDrawable(
+                resources, R.drawable.airplaneleft,
+                null
+            )?.toBitmap(sizeA.toInt(), sizeA.toInt())!!
 
-            airplaneRight = ResourcesCompat.getDrawable(resources,R.drawable.airplaneright,
-                null)?.toBitmap(sizeA.toInt(),sizeA.toInt())!!
-        }else if(Color == "blue"){
-            airplane= ResourcesCompat.getDrawable(resources,R.drawable.airplaneblue,
-                null)?.toBitmap(sizeA.toInt(),sizeA.toInt())!!
-            airplaneLeft = ResourcesCompat.getDrawable(resources,R.drawable.airplaneblueleft,
-                null)?.toBitmap(sizeA.toInt(),sizeA.toInt())!!
+            airplaneRight = ResourcesCompat.getDrawable(
+                resources, R.drawable.airplaneright,
+                null
+            )?.toBitmap(sizeA.toInt(), sizeA.toInt())!!
+        } else if (Color == "blue") {
+            airplane = ResourcesCompat.getDrawable(
+                resources, R.drawable.airplaneblue,
+                null
+            )?.toBitmap(sizeA.toInt(), sizeA.toInt())!!
+            airplaneLeft = ResourcesCompat.getDrawable(
+                resources, R.drawable.airplaneblueleft,
+                null
+            )?.toBitmap(sizeA.toInt(), sizeA.toInt())!!
 
-            airplaneRight = ResourcesCompat.getDrawable(resources,R.drawable.airplaneblueright,
-                null)?.toBitmap(sizeA.toInt(),sizeA.toInt())!!
-        }else if(Color =="green"){
-            airplane= ResourcesCompat.getDrawable(resources,R.drawable.airplanegreen,
-                null)?.toBitmap(sizeA.toInt(),sizeA.toInt())!!
+            airplaneRight = ResourcesCompat.getDrawable(
+                resources, R.drawable.airplaneblueright,
+                null
+            )?.toBitmap(sizeA.toInt(), sizeA.toInt())!!
+        } else if (Color == "green") {
+            airplane = ResourcesCompat.getDrawable(
+                resources, R.drawable.airplanegreen,
+                null
+            )?.toBitmap(sizeA.toInt(), sizeA.toInt())!!
 
-            airplaneLeft = ResourcesCompat.getDrawable(resources,R.drawable.airplanegreenleft,
-                null)?.toBitmap(sizeA.toInt(),sizeA.toInt())!!
+            airplaneLeft = ResourcesCompat.getDrawable(
+                resources, R.drawable.airplanegreenleft,
+                null
+            )?.toBitmap(sizeA.toInt(), sizeA.toInt())!!
 
-            airplaneRight = ResourcesCompat.getDrawable(resources,R.drawable.airplanegreenright,
-                null)?.toBitmap(sizeA.toInt(),sizeA.toInt())!!
+            airplaneRight = ResourcesCompat.getDrawable(
+                resources, R.drawable.airplanegreenright,
+                null
+            )?.toBitmap(sizeA.toInt(), sizeA.toInt())!!
         }
         ///// bullet
-        if(Bul == "normal"){
-            bullet = ResourcesCompat.getDrawable(resources,R.drawable.bullet,
-                null)?.toBitmap(widthBullet.toInt(),heighBullet.toInt())!!
-        }else if(Bul == "laser"){
-            bullet = ResourcesCompat.getDrawable(resources,R.drawable.laser_bullet2,
-                null)?.toBitmap(widthBullet.toInt(),heighBullet.toInt())!!
+        if (Bul == "normal") {
+            bullet = ResourcesCompat.getDrawable(
+                resources, R.drawable.bullet,
+                null
+            )?.toBitmap(widthBullet.toInt(), heighBullet.toInt())!!
+        } else if (Bul == "laser") {
+            bullet = ResourcesCompat.getDrawable(
+                resources, R.drawable.laserbullet,
+                null
+            )?.toBitmap(widthBullet.toInt(), heighBullet.toInt())!!
         }
 
-        //Bullet available
-        bulletAvailable = ResourcesCompat.getDrawable(resources,R.drawable.bullet,
-            null)?.toBitmap(40, 80)!!
+        if (Bul == "normal"){
+            //Bullet available
+            bulletAvailable = ResourcesCompat.getDrawable(
+                resources, R.drawable.bullet,
+                null
+            )?.toBitmap(40, 80)!!
+        } else {
+            //Bullet available
+            bulletAvailable = ResourcesCompat.getDrawable(
+                resources, R.drawable.laserbullet,
+                null
+                )?.toBitmap(40, 80)!!
+        }
 
             //// enemies //////
         enemy_type1 = ResourcesCompat.getDrawable(resources,R.drawable.enemy1,
@@ -712,7 +752,11 @@ class MyView(context: Context?, weat:String?, Color :String?, Bul :String?, Logg
                             is_shot[0] = false
                             bullet_position_x[0] = res
                             bullet_position_y[0] = (1400f+up[0])
-                            music.playShootSound(context)
+                            if(bul == "normal") {
+                                music.playShootSound(context)
+                            } else{
+                                music.playLaserSound(context)
+                            }
                         } else {
                             drawBitmap(bullet, res, 1400f, null)
                             if((up[0])<-1400f){
@@ -737,7 +781,11 @@ class MyView(context: Context?, weat:String?, Color :String?, Bul :String?, Logg
                             is_shot[1] = false
                             bullet_position_x[1] =res2
                             bullet_position_y[1] = (1400f+up[1])
-                            music.playShootSound(context)
+                            if(bul == "normal") {
+                                music.playShootSound(context)
+                            } else{
+                                music.playLaserSound(context)
+                            }
                         } else {
                             drawBitmap(bullet, res2, 1400f, null)
                             if((up[1])<-1400f){
@@ -762,7 +810,11 @@ class MyView(context: Context?, weat:String?, Color :String?, Bul :String?, Logg
                             is_shot[2] = false
                             bullet_position_x[2] = res3
                             bullet_position_y[2] = (1400f+up[2])
-                            music.playShootSound(context)
+                            if(bul == "normal") {
+                                music.playShootSound(context)
+                            } else{
+                                music.playLaserSound(context)
+                            }
                         } else {
                             drawBitmap(bullet, res3, 1400f, null)
                             Log.i("SCONTRO", bullet_position_y[2].toString()+", "+(enemy_position_y[0] + 150f).toString())
