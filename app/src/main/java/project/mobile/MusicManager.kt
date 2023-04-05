@@ -201,6 +201,51 @@ public class MusicManager {
         }
     }
 
+    fun playLaserSound(conxt: Context) {
+        if(!muted) {
+            if (shootPlayer1 == null) {
+                shootPlayer1 = MediaPlayer.create(conxt, R.raw.lasersound)
+                shootPlayer1!!.start()
+                isShooting1 = true
+                shootPlayer1!!.setOnCompletionListener() {
+                    isShooting1 = false
+                }
+            } else if (!isShooting1) {
+                shootPlayer1!!.start()
+                isShooting1 = true
+                shootPlayer1!!.setOnCompletionListener() {
+                    isShooting1 = false
+                }
+            } else if (shootPlayer2 == null) {
+                shootPlayer2 = MediaPlayer.create(conxt, R.raw.lasersound)
+                shootPlayer2!!.start()
+                isShooting2 = true
+                shootPlayer2!!.setOnCompletionListener() {
+                    isShooting2 = false
+                }
+            } else if (!isShooting2) {
+                shootPlayer2!!.start()
+                isShooting2 = true
+                shootPlayer2!!.setOnCompletionListener() {
+                    isShooting2 = false
+                }
+            } else if (shootPlayer3 == null) {
+                shootPlayer3 = MediaPlayer.create(conxt, R.raw.lasersound)
+                shootPlayer3!!.start()
+                isShooting3 = true
+                shootPlayer3!!.setOnCompletionListener() {
+                    isShooting3 = false
+                }
+            } else if (!isShooting3) {
+                shootPlayer3!!.start()
+                isShooting3 = true
+                shootPlayer3!!.setOnCompletionListener() {
+                    isShooting3 = false
+                }
+            }
+        }
+    }
+
     fun playChooseSound(conxt: Context) {
         if(!muted) {
             if (choosePlayer1 == null) {
