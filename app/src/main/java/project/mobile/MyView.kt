@@ -112,10 +112,13 @@ class MyView(context: Context?, weat:String?, Color :String?, Bul :String?, Logg
     var boss2 : Bitmap
     var heart : Bitmap
     var skull : Bitmap
+
+    var pause_menu : Bitmap
     var pause_button : Bitmap
+    /*
     var resume_button : Bitmap
     var quit_button : Bitmap
-    var pause_label : Bitmap
+    var pause_label : Bitmap*/
 
     var array_position = arrayOf<Float>(0f,0f,0f,0f,0f)
     var enemy_position_y = arrayOf<Float>(0f,0f,0f,0f,0f)
@@ -375,14 +378,16 @@ class MyView(context: Context?, weat:String?, Color :String?, Bul :String?, Logg
             null)?.toBitmap(sizeHeart.toInt(),sizeHeart.toInt())!!
         skull = ResourcesCompat.getDrawable(resources,R.drawable.skull,
             null)?.toBitmap(120,120)!!
+        pause_menu = ResourcesCompat.getDrawable(resources,R.drawable.pausemenu,
+            null)?.toBitmap(1070, 1070)!!
         pause_button = ResourcesCompat.getDrawable(resources,R.drawable.pausebutton,
             null)?.toBitmap(200, 200)!!
-        resume_button = ResourcesCompat.getDrawable(resources,R.drawable.resume_button,
+        /*resume_button = ResourcesCompat.getDrawable(resources,R.drawable.resume_button,
             null)?.toBitmap(800,200)!!
         quit_button = ResourcesCompat.getDrawable(resources,R.drawable.quit_button,
             null)?.toBitmap(800,200)!!
         pause_label = ResourcesCompat.getDrawable(resources,R.drawable.pauselabel,
-            null)?.toBitmap(800,200)!!
+            null)?.toBitmap(800,200)!!*/
         ///// first spawn of enemies /////
         GlobalScope.launch {
             spawn_enemy(0)
@@ -1864,17 +1869,18 @@ class MyView(context: Context?, weat:String?, Color :String?, Bul :String?, Logg
 
                 //////////////// PAUSE AND GAMEOVER MANAGEMENT //////////////////////////////
             }else if(PAUSE and !start){
-                val message="GAME PAUSED"
+                /*val message="GAME PAUSED"
                 val textPaint = Paint().also {
                     it.color = Color.parseColor("#000000")
                     it.strokeWidth = 100f
                     it.textSize=130f
-                }
+                }*/
                 drawBitmap(background,0f,0f,null)
-                canvas.drawBitmap(pause_label,130f,300f,null)
+                canvas.drawBitmap(pause_menu,5f,350f,null)
+                /*canvas.drawBitmap(pause_label,130f,300f,null)
                 canvas.drawBitmap(resume_button,130f,1000f,null)
                 canvas.drawBitmap(quit_button,130f,1300f,null)
-                drawText(message,100f,300f,textPaint)
+                drawText(message,100f,300f,textPaint)*/
             }else if(!PAUSE and !start) {
                 ///////// gameover ////////////
                 gameover = true
@@ -1936,18 +1942,27 @@ class MyView(context: Context?, weat:String?, Color :String?, Bul :String?, Logg
     override fun onTouch(v: View?, event: MotionEvent?): Boolean {
         when (event?.action) {
             MotionEvent.ACTION_DOWN -> {
+                Log.i("POSITION", event.getX().toString() + ", " + event.getY().toString())
                 //Log.i("BUTTON",event.getRawX().toString())
                 ///when touch the pause button start the onPause of the activity
                 if((!PAUSE) and (((event.getX()>860f) and (event.getX()<1060)) and ((event.getY()>1700f) and (event.getY()<1900)))){
                     PAUSE = true
                     music.pauseSound()
                     start = false
-                }else if(PAUSE and ((event.getX()>130f)and (event.getX()<930f)and (event.getY()>1000f)and (event.getY()<1200f))){
+                }else if(PAUSE and ((event.getX()>=276.9873f) and (event.getX()<=801.958f) and (event.getY()>=735.9387f)and (event.getY()<843.93066f))){
                     start = true
                     music.playSoundGame(context)
                     PAUSE = false
                     return_to_game = true
-                }else if(PAUSE and((event.getX()>130f)and (event.getX()<930f)and (event.getY()>1300f)and (event.getY()<1500f))){
+                }else if(PAUSE and ((event.getX()>=276.9873f) and (event.getX()<=801.958f) and (event.getY()>=902.94006f)and (event.getY()<1044.942f))){
+                    music.stopSound()
+                    PAUSE = false
+                    isRestarted = true
+                    val intent = Intent(context, GameActivity::class.java)
+                    intent.putExtra("Color", col)
+                    intent.putExtra("Bullet", bul)
+                    startActivity(context, intent, null)
+                } else if(PAUSE and((event.getX()>130f)and (event.getX()<930f)and (event.getY()>1300f)and (event.getY()<1500f))){
                     PAUSE = false
                     music.stopSound()
                     val intent = Intent(context, MainActivity::class.java)
