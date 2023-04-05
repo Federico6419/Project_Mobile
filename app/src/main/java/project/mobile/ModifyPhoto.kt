@@ -96,10 +96,10 @@ class ModifyPhoto : AppCompatActivity() {
                     Log.i("STORAGE", "Failed")
                 }.addOnSuccessListener { taskSnapshot ->
                     Log.i("STORAGE", "Success")
+                    intent = Intent(this, MainActivity::class.java)
+                    startActivity(intent)
                 }
             }
-            intent = Intent(this, MainActivity::class.java)
-            startActivity(intent)
         }
 
 
