@@ -106,11 +106,23 @@ class SignInActivity : AppCompatActivity() {
                                                     username = it.value.toString()
 
                                                     //Intent to the home page
-                                                    val intent = Intent(this, MainActivity::class.java)
-                                                    current_username = username
-                                                    current_id = id
-                                                    current_score = score.toInt()
-                                                    startActivity(intent)
+                                                    var signInGameSettings = intent.getStringExtra("SignInGameSettings")
+                                                    if(signInGameSettings == "1"){
+                                                        val intent = Intent(this, GameSettingsActivity::class.java)
+                                                        current_username = username
+                                                        current_id = id
+                                                        current_score = score.toInt()
+                                                        startActivity(intent)
+                                                        finish()
+                                                    } else {
+                                                        val intent =
+                                                            Intent(this, MainActivity::class.java)
+                                                        current_username = username
+                                                        current_id = id
+                                                        current_score = score.toInt()
+                                                        startActivity(intent)
+                                                        finish()
+                                                    }
                                                 }
                                             }
                                         }
@@ -131,6 +143,7 @@ class SignInActivity : AppCompatActivity() {
         houseButton.setOnClickListener() {
             intent = Intent(this, MainActivity::class.java)
             startActivity(intent)
+            finish()
         }
     }
 

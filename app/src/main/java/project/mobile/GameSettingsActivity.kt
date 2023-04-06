@@ -155,6 +155,7 @@ class GameSettingsActivity : AppCompatActivity(), LocationListener {
                 val signUpButton = findViewById(R.id.SignUpButton) as Button
                 signUpButton.setOnClickListener {
                     intent = Intent(this, SignUpActivity::class.java)
+                    intent.putExtra("SignUpGameSettings", "1")
                     startActivity(intent)
                 }
 
@@ -162,6 +163,7 @@ class GameSettingsActivity : AppCompatActivity(), LocationListener {
                 val signInButton = findViewById(R.id.SignInButton) as Button
                 signInButton.setOnClickListener() {
                     intent = Intent(this, SignInActivity::class.java)
+                    intent.putExtra("SignInGameSettings", "1")
                     startActivity(intent)
                 }
             }

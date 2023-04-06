@@ -1,8 +1,12 @@
 package project.mobile
 
+import android.app.Activity
 import android.content.Context
 import android.content.Intent
-import android.graphics.*
+import android.graphics.Bitmap
+import android.graphics.Canvas
+import android.graphics.Color
+import android.graphics.Paint
 import android.hardware.Sensor
 import android.hardware.SensorEvent
 import android.hardware.SensorEventListener2
@@ -18,7 +22,9 @@ import androidx.core.graphics.drawable.toBitmap
 import androidx.core.graphics.withTranslation
 import com.google.firebase.database.ktx.database
 import com.google.firebase.ktx.Firebase
-import kotlinx.coroutines.*
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
 import java.util.*
 import kotlin.math.atan2
 
@@ -1896,12 +1902,12 @@ class MyView(context: Context?, weat:String?, Color :String?, Bul :String?, Logg
                 plane_x = 500f
                 hearts = 3
                 val intent = Intent(context, GameoverActivity::class.java)
-                //intent.putExtra("Opponent", opponent)
                 intent.putExtra("Color", col)
                 intent.putExtra("Bullet", bul)
                 intent.putExtra("Score", Score.toString())
                 music.stopSound()
                 startActivity(context, intent, null)
+                (context as Activity).finish()
 
                 Score = 0
             }

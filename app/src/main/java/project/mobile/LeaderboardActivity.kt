@@ -49,6 +49,7 @@ class LeaderboardActivity : AppCompatActivity() {
             houseButton.setOnClickListener() {
                 intent = Intent(this, MainActivity::class.java)
                 startActivity(intent)
+                finish()
             }
 
         } ?: run {
@@ -56,6 +57,7 @@ class LeaderboardActivity : AppCompatActivity() {
             houseButton.setOnClickListener() {
                 intent = Intent(this, MainActivity::class.java)
                 startActivity(intent)
+                finish()
             }
         }
     }

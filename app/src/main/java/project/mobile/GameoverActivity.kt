@@ -145,6 +145,7 @@ class GameoverActivity : AppCompatActivity() {
                     intent.putExtra("Color", color)
                     intent.putExtra("Bullet", bul)
                     startActivity(intent)
+                    finish()
                 }
 
                 val returnMenuButton = findViewById(R.id.ReturnButton) as ImageButton
@@ -152,9 +153,11 @@ class GameoverActivity : AppCompatActivity() {
                     uid?.let {
                         intent = Intent(this, MainActivity::class.java)
                         startActivity(intent)
+                        finish()
                     } ?: run {
                         intent = Intent(this, MainActivity::class.java)
                         startActivity(intent)
+                        finish()
                     }
                 }
             }
@@ -174,12 +177,14 @@ class GameoverActivity : AppCompatActivity() {
             signUpButton.setOnClickListener() {
                 intent = Intent(this, SignUpActivity::class.java)
                 startActivity(intent)
+                finish()
             }
 
             val signInButton = findViewById(R.id.SignInButton) as Button
             signInButton.setOnClickListener() {
                 intent = Intent(this, SignInActivity::class.java)
                 startActivity(intent)
+                finish()
             }
 
             val playAgainButton = findViewById(R.id.PlayAgainButton) as ImageButton
@@ -218,6 +223,7 @@ class GameoverActivity : AppCompatActivity() {
                 intent.putExtra("Color", color)
                 intent.putExtra("Bullet", bul)
                 startActivity(intent)
+                finish()
             }
 
             val returnMenuButton = findViewById(R.id.ReturnButton) as ImageButton
@@ -225,9 +231,11 @@ class GameoverActivity : AppCompatActivity() {
                 uid?.let {
                     intent = Intent(this, MainActivity::class.java)
                     startActivity(intent)
+                    finish()
                 } ?: run {
                     intent = Intent(this, MainActivity::class.java)
                     startActivity(intent)
+                    finish()
                 }
             }
         }

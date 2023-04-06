@@ -374,12 +374,22 @@ class SignUpActivity : AppCompatActivity() {
                                                         firebaseAuth.signInWithEmailAndPassword(email, password)
                                                             .addOnCompleteListener {
                                                                 if (it.isSuccessful) {
-                                                                    intent =
-                                                                        Intent(this, MainActivity::class.java)
-                                                                    current_username = username
-                                                                    current_id = numberOfUsers.toString()
-                                                                    current_score = 0
-                                                                    startActivity(intent)
+                                                                    var signUpGameSettings = intent.getStringExtra("SignUpGameSettings")
+                                                                    if(signUpGameSettings == "1") {
+                                                                        val intent = Intent(this, GameSettingsActivity::class.java)
+                                                                        current_username = username
+                                                                        current_id = numberOfUsers.toString()
+                                                                        current_score = 0
+                                                                        startActivity(intent)
+                                                                        finish()
+                                                                    } else {
+                                                                        intent = Intent(this, MainActivity::class.java)
+                                                                        current_username = username
+                                                                        current_id = numberOfUsers.toString()
+                                                                        current_score = 0
+                                                                        startActivity(intent)
+                                                                        finish()
+                                                                    }
                                                                 } else {
                                                                     Toast.makeText(
                                                                         this,
@@ -396,12 +406,22 @@ class SignUpActivity : AppCompatActivity() {
                                             firebaseAuth.signInWithEmailAndPassword(email, password)
                                                 .addOnCompleteListener {
                                                     if (it.isSuccessful) {
-                                                        intent =
-                                                            Intent(this, MainActivity::class.java)
-                                                        current_username = username
-                                                        current_id = numberOfUsers.toString()
-                                                        current_score = 0
-                                                        startActivity(intent)
+                                                        var signUpGameSettings = intent.getStringExtra("SignUpGameSettings")
+                                                        if(signUpGameSettings == "1") {
+                                                            val intent = Intent(this, GameSettingsActivity::class.java)
+                                                            current_username = username
+                                                            current_id = numberOfUsers.toString()
+                                                            current_score = 0
+                                                            startActivity(intent)
+                                                            finish()
+                                                        } else {
+                                                            intent = Intent(this, MainActivity::class.java)
+                                                            current_username = username
+                                                            current_id = numberOfUsers.toString()
+                                                            current_score = 0
+                                                            startActivity(intent)
+                                                            finish()
+                                                        }
                                                     } else {
                                                         Toast.makeText(
                                                             this,
@@ -424,6 +444,7 @@ class SignUpActivity : AppCompatActivity() {
         houseButton.setOnClickListener() {
             intent = Intent(this, MainActivity::class.java)
             startActivity(intent)
+            finish()
         }
     }
 

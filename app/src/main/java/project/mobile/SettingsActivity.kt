@@ -89,6 +89,7 @@ class SettingsActivity : AppCompatActivity() {
                                 referenceUser.setValue(user)
                                 current_username = user
                                 startActivity(intent)
+                                finish()
                             }
                         }
                     }
@@ -119,6 +120,7 @@ class SettingsActivity : AppCompatActivity() {
 
                 intent.putExtra("Email", email)
                 startActivity(intent)
+                finish()
             }
         }
 
@@ -155,6 +157,7 @@ class SettingsActivity : AppCompatActivity() {
                     Toast.makeText(this, "PASSWORD CHANGED CORRECTLY", Toast.LENGTH_SHORT).show()
 
                     startActivity(intent)
+                    finish()
                 }?.addOnFailureListener {
                     Toast.makeText(this, "PASSWORD TOO SHORT", Toast.LENGTH_SHORT).show()
                 }
@@ -191,6 +194,7 @@ class SettingsActivity : AppCompatActivity() {
                     //Execute the intent
                     val intent = Intent(this, MainActivity::class.java)
                     startActivity(intent)
+                    finish()
                 } else {       //If this is not the last id
                     //Get Username
                     val referenceUser = database.getReference("Users/$numberOfUsers/Username")
@@ -261,6 +265,7 @@ class SettingsActivity : AppCompatActivity() {
                                         //Execute the intent
                                         val intent = Intent(this, MainActivity::class.java)
                                         startActivity(intent)
+                                        finish()
                                     }
                                 }
                             }
@@ -273,6 +278,7 @@ class SettingsActivity : AppCompatActivity() {
         houseButton.setOnClickListener() {
             intent = Intent(this, MainActivity::class.java)
             startActivity(intent)
+            finish()
         }
     }
 

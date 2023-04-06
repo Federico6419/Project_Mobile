@@ -29,6 +29,7 @@ class ModifyPhoto : AppCompatActivity() {
         houseButton.setOnClickListener() {
             intent = Intent(this, MainActivity::class.java)
             startActivity(intent)
+            finish()
         }
 
         val ChangePhotoButton = findViewById(R.id.ChangeButton) as Button
@@ -98,6 +99,7 @@ class ModifyPhoto : AppCompatActivity() {
                     Log.i("STORAGE", "Success")
                     intent = Intent(this, MainActivity::class.java)
                     startActivity(intent)
+                    finish()
                 }
             }
         }
@@ -164,9 +166,5 @@ class ModifyPhoto : AppCompatActivity() {
                 resultLauncher.launch(intent)
             }
         }
-
-
-
-
     }
 }
