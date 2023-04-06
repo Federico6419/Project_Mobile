@@ -102,7 +102,7 @@
         android:id="@+id/FirstRow"
         android:layout_width="match_parent"
         android:layout_height="450dp"
-        android:layout_marginTop="350dp"
+        android:layout_marginTop="340dp"
         android:paddingLeft="40dp"
         android:paddingRight="40dp"
         app:layout_constraintBottom_toBottomOf="parent"
@@ -142,7 +142,7 @@
         android:layout_height="620dp"
         android:paddingLeft="40dp"
         android:paddingRight="40dp"
-        android:paddingTop="385dp"
+        android:paddingTop="365dp"
         tools:ignore="MissingConstraints">
 
         <TableLayout
@@ -167,7 +167,7 @@
         app:layout_constraintHorizontal_bias="0.237"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.967" />
+        app:layout_constraintVertical_bias="0.977" />
 
     <ImageButton
         android:id="@+id/ReturnButton"
@@ -180,7 +180,7 @@
         app:layout_constraintHorizontal_bias="0.750"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.943" />
+        app:layout_constraintVertical_bias="0.973" />
 
     <TextView
         android:id="@+id/HomeText"
@@ -195,7 +195,7 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintHorizontal_bias="0.750"
-        app:layout_constraintVertical_bias="0.971"
+        app:layout_constraintVertical_bias="0.995"
         tools:ignore="MissingConstraints" />
 
     <ProgressBar

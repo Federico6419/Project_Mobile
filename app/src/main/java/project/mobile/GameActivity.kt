@@ -39,6 +39,8 @@ class GameActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
+        supportActionBar?.setTitle("                     Death Planes")     //Define the name of the application
+
         firebaseAuth = FirebaseAuth.getInstance()   //Get instance from Firebase Authentication
 
         val color = intent.getStringExtra("Color")

@@ -38,6 +38,8 @@ class GameSettingsActivity : AppCompatActivity(), LocationListener {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
+        supportActionBar?.setTitle("                     Death Planes")     //Define the name of the application
+
         var isRestarted = intent.getStringExtra("Restarted")
         if(isRestarted == "1"){
             setContentView(R.layout.activity_game_settings_loading)
@@ -48,9 +50,6 @@ class GameSettingsActivity : AppCompatActivity(), LocationListener {
         } else {
 
             firebaseAuth = FirebaseAuth.getInstance()   //Get instance from Firebase Authentication
-
-            supportActionBar?.setTitle("                     Death Planes")     //Define the name of the application
-
 
             locationManager = getSystemService(Context.LOCATION_SERVICE) as LocationManager
 
