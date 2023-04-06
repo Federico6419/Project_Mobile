@@ -271,15 +271,15 @@ class MyView(context: Context?, weat:String?, Color :String?, Bul :String?, Logg
 
         Log.i("Weather", weat.toString())
         if ((weat == "Overcast") or (weat == "Partly cloudy") or (weat == "Cloudy")) { // Background when cloudy
-            layout = R.drawable.rainybackground
-        } else if ((weat == "Sunny") or (weat == "Clear")) {//sfondo soleggiato
+            layout = R.drawable.backgroundcloudy
+        } else if ((weat == "Sunny") or (weat == "Clear")) {    //Sunny background
             layout = R.drawable.background_sun2
         } else if ((weat == "Patchy rain possible") or (weat == "Light rain") or (weat == "Patchy light rain") or (weat == "Moderate rain at times") or (weat == "Moderate rain") or (weat == "Heavy rain at times") or (weat == "Heavy rain") or (weat == "Light freezing rain") or (weat == "Torrential rain shower") or (weat == "Moderate or heavy rain with thunder") or (weat == "Patchy light rain with thunder")) {//sfondo piovoso
-            layout = R.drawable.rainybackground
+            layout = R.drawable.backgroundcloudy
         } else if ((weat == "Heavy snow") or (weat == "Patchy heavy snow") or (weat == "Moderate or heavy snow with thunder") or (weat == "Patchy light snow with thunder")) {
-            layout = R.drawable.snowybackground
-        } else {//if found something we don t have
-            layout = R.drawable.background_sun2
+            layout = R.drawable.backgroundsnowy
+        } else {    //If it found something we don t have
+            layout = R.drawable.backgroundcloudy
         }
 
         size *= 160 * resources.displayMetrics.density
@@ -1875,18 +1875,8 @@ class MyView(context: Context?, weat:String?, Color :String?, Bul :String?, Logg
 
                 //////////////// PAUSE AND GAMEOVER MANAGEMENT //////////////////////////////
             }else if(PAUSE and !start){
-                /*val message="GAME PAUSED"
-                val textPaint = Paint().also {
-                    it.color = Color.parseColor("#000000")
-                    it.strokeWidth = 100f
-                    it.textSize=130f
-                }*/
                 drawBitmap(background,0f,0f,null)
                 canvas.drawBitmap(pause_menu,5f,350f,null)
-                /*canvas.drawBitmap(pause_label,130f,300f,null)
-                canvas.drawBitmap(resume_button,130f,1000f,null)
-                canvas.drawBitmap(quit_button,130f,1300f,null)
-                drawText(message,100f,300f,textPaint)*/
             }else if(!PAUSE and !start) {
                 ///////// gameover ////////////
                 gameover = true
