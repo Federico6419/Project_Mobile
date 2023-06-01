@@ -45,6 +45,7 @@ class MyView(context: Context?, weat:String?, Color :String?, Bul :String?, Logg
     var shotboss = arrayOf<Boolean>(false,false)
     var boss_bullet_position_x=arrayOf<Float>(0f,0f,0f)
     var boss_bullet_position_y=arrayOf<Float>(0f,0f,0f)
+    var is_visible_boss_bullet=arrayOf<Boolean>(false,false,false)
     //var just_shot = false ///to avoid multiple collision of single bullet of the boss
     var justcollide = arrayOf<Boolean>(false,false,false,false,false) // to avoid multiple collision of single enemy
     var just_shot_bullet =  arrayOf<Boolean>(false,false,false) // to avoid multiple collision of single bullet of our airplane
@@ -860,15 +861,20 @@ class MyView(context: Context?, weat:String?, Color :String?, Bul :String?, Logg
                     upboss[0]+= 20f
                     withTranslation(0f, upboss[0]) {
                         if (shotboss[0]) {
+                            is_visible_boss_bullet[0]=true
                             drawBitmap(bullet, lateral_movement_boss[0]+boss_x[0]+90f, (boss_y[0]+200f), null)
                             resboss = lateral_movement_boss[0]+boss_x[0]+90f
                             resbossy = (boss_y[0]+200f)
                             shotboss[0] = false
                             boss_bullet_position_x[0] = resboss
                             boss_bullet_position_y[0] = (resbossy)
+                            music.playShootBossSound(context)
                         } else {
-                            drawBitmap(bullet, resboss, (resbossy), null)
+                            if(is_visible_boss_bullet[0]) {
+                                drawBitmap(bullet, resboss, (resbossy), null)
+                            }
                             if((upboss[0])>1400f){
+                                is_visible_boss_bullet[0] = true
                                 upboss[0] = 0f
                                 shotboss[0]= true
                                 just_shot_bullet_boss[0] = false
@@ -883,15 +889,20 @@ class MyView(context: Context?, weat:String?, Color :String?, Bul :String?, Logg
                     withTranslation(0f, upboss[1]) {
                         upboss[1]+= 10f
                         if (shotboss[1]) {
+                            is_visible_boss_bullet[1]=true
                             drawBitmap(bullet, lateral_movement_boss[1]+boss_x[1]+90f, (boss_y[1]+200f), null)
                             resboss2_1 = lateral_movement_boss[1]+boss_x[1]+90f
                             resbossy2_1 = (upboss[1]+boss_y[1]+200f)
                             shotboss[1] = false
                             boss_bullet_position_x[1] = resboss2_1
                             boss_bullet_position_y[1] = (resbossy2_1)
+                            music.playShootBossSound(context)
                         } else {
-                            drawBitmap(bullet, resboss2_1, (resbossy2_1), null)
+                            if(is_visible_boss_bullet[1]) {
+                                drawBitmap(bullet, resboss2_1, (resbossy2_1), null)
+                            }
                             if((upboss[1])>1400f){
+                                is_visible_boss_bullet[1] = true
                                 upboss[1] = 0f
                                 shotboss[1]= true
                                 just_shot_bullet_boss[1]= false
@@ -907,15 +918,20 @@ class MyView(context: Context?, weat:String?, Color :String?, Bul :String?, Logg
                     withTranslation(0f, upboss[1]) {
                         upboss[1]+= 10f
                         if (shotboss[1]) {
+                            is_visible_boss_bullet[2]=true
                             drawBitmap(bullet, lateral_movement_boss[1]+boss_x[1]+90f,(boss_y[1]+200f), null)
                             resboss2_2 = lateral_movement_boss[1]+boss_x[1]+90f
                             resbossy2_2 = (upboss[1]+boss_y[1]+200f)
                             shotboss[1] = false
                             boss_bullet_position_x[1] = resboss2_2
                             boss_bullet_position_y[1] = (resbossy2_2)
-                        }else {
-                            drawBitmap(bullet, resboss2_2, (resbossy2_2), null)
+                            music.playShootBossSound(context)
+                        }else{
+                            if(is_visible_boss_bullet[2]) {
+                                drawBitmap(bullet, resboss2_2, (resbossy2_2), null)
+                            }
                             if((upboss[1])>1400f){
+                                is_visible_boss_bullet[2]=true
                                 upboss[1] = 0f
                                 shotboss[1]= true
                                 just_shot_bullet_boss[2] = false
@@ -995,11 +1011,13 @@ class MyView(context: Context?, weat:String?, Color :String?, Bul :String?, Logg
                 if((boss_bullet_position_x[0]>= plane_x-15f) and (boss_bullet_position_x[0]<=plane_x+165f)
                     and(boss_bullet_position_y[0] <= plane_y+190f)and(boss_bullet_position_y[0] >= plane_y-15f)){
                     if(just_shot_bullet_boss[0]==false) {////// to avoid multiple collision of same bullet
+                        is_visible_boss_bullet[0]=false
                         if (hearts == 1) {
                             final_explosion = false
                         } else {
                             hearts -= 1
                             just_shot_bullet_boss[0]=true
+                            music.playBulletBossCollisionSound(context)
                         }
                     }
                 }
@@ -1007,22 +1025,26 @@ class MyView(context: Context?, weat:String?, Color :String?, Bul :String?, Logg
                 if((boss_bullet_position_x[1]>= plane_x-15f) and (boss_bullet_position_x[1]<=plane_x+165f)
                     and(boss_bullet_position_y[1] <= plane_y+190f)and(boss_bullet_position_y[1] >= plane_y-15f)){
                     if(just_shot_bullet_boss[1]==false) {
+                        is_visible_boss_bullet[1]=false
                         if (hearts == 1) {
                             final_explosion = false
                         } else {
                             hearts -= 1
                             just_shot_bullet_boss[1]=true
+                            music.playBulletBossCollisionSound(context)
                         }
                     }
                 }
                 if((boss_bullet_position_x[2] >=plane_x -15f) and (boss_bullet_position_x[2] <=plane_x +165f)and
                     (boss_bullet_position_y[2] <=plane_y +190f) and(boss_bullet_position_y[2] >=plane_y -15f)){
                     if(just_shot_bullet_boss[2]==false) {
+                        is_visible_boss_bullet[2]=false
                         if (hearts == 1) {
                             final_explosion = false
                         } else {
                             hearts -= 1
                             just_shot_bullet_boss[2]=true
+                            music.playBulletBossCollisionSound(context)
                         }
                     }
                 }
@@ -1658,8 +1680,9 @@ class MyView(context: Context?, weat:String?, Color :String?, Bul :String?, Logg
                                 isExpBul1_Boss[0] = true
                                 expPos1_Boss[0][0] = boss_x[0]+lateral_movement_boss[0]
                                 expPos1_Boss[0][1] = boss_y[0]
+                                music.playBossDeathSound(context)
                             } else {
-                                Log.i("prova", life_boss[0].toString())
+                                Log.i("provaB", life_boss[0].toString())
                                 life_boss[0] -= 1
                                 music.playHitBossSound(context)
                             }
@@ -1680,8 +1703,9 @@ class MyView(context: Context?, weat:String?, Color :String?, Bul :String?, Logg
                                 isExpBul1_Boss[0] = true
                                 expPos1_Boss[0][0] = boss_x[0]+lateral_movement_boss[0]
                                 expPos1_Boss[0][1] = boss_y[0]
+                                music.playBossDeathSound(context)
                             } else {
-                                Log.i("prova", life_boss[0].toString())
+                                Log.i("provaB", life_boss[0].toString())
                                 life_boss[0] -= 1
                                 music.playHitBossSound(context)
                             }
@@ -1702,8 +1726,9 @@ class MyView(context: Context?, weat:String?, Color :String?, Bul :String?, Logg
                                 isExpBul1_Boss[0] = true
                                 expPos1_Boss[0][0] = boss_x[0]+lateral_movement_boss[0]
                                 expPos1_Boss[0][1] = boss_y[0]
+                                music.playBossDeathSound(context)
                             } else {
-                                Log.i("prova", life_boss[0].toString())
+                                Log.i("provaB", life_boss[0].toString())
                                 life_boss[0] -= 1
                                 music.playHitBossSound(context)
                             }
@@ -1722,6 +1747,7 @@ class MyView(context: Context?, weat:String?, Color :String?, Bul :String?, Logg
                             isExpBul1_Boss[1] = true
                             expPos1_Boss[1][0] = boss_x[1]+lateral_movement_boss[1]
                             expPos1_Boss[1][1] = boss_y[1]
+                            music.playBossDeathSound(context)
                         }else{
                             life_boss[1] -= 1
                             music.playHitBossSound(context)
@@ -1739,6 +1765,7 @@ class MyView(context: Context?, weat:String?, Color :String?, Bul :String?, Logg
                             isExpBul1_Boss[1] = true
                             expPos1_Boss[1][0] = boss_x[1]
                             expPos1_Boss[1][1] = boss_y[1]
+                            music.playBossDeathSound(context)
                         }else{
                             life_boss[1] -= 1
                             music.playHitBossSound(context)
@@ -1756,6 +1783,7 @@ class MyView(context: Context?, weat:String?, Color :String?, Bul :String?, Logg
                             isExpBul1_Boss[1] = true
                             expPos1_Boss[1][0] = boss_x[1]
                             expPos1_Boss[1][1] = boss_y[1]
+                            music.playBossDeathSound(context)
                         }else{
                             life_boss[1] -= 1
                             music.playHitBossSound(context)

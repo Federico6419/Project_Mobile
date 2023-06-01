@@ -25,8 +25,13 @@ public class MusicManager {
     var choosePlayer3: MediaPlayer? = null              //Choose sound variable
     var hitBossPlayer1: MediaPlayer? = null                   //Hit boss sound variable
     var hitBossPlayer2: MediaPlayer? = null                   //Hit boss sound variable
-    var hitBossPlayer3: MediaPlayer? = null                   //Hit boss sound variable
+    var finalExplosionBossPlayer: MediaPlayer? = null         //Boss death sound variable
     var finalExplosionPlayer: MediaPlayer? = null             //Gameover explosion sound variable
+    var shootBossPlayer1 : MediaPlayer? = null               //Shoot bullet boss sound variable
+    var shootBossPlayer2 : MediaPlayer? = null               //Shoot bullet boss sound variable
+    var hitByBossPlayer1 : MediaPlayer? = null               //Hit by bullet boss sound variable
+    var hitByBossPlayer2 : MediaPlayer? = null               //Hit by bullet boss sound variable
+
 
     var isplaying1 = false
     var isplaying2 = false
@@ -46,9 +51,17 @@ public class MusicManager {
 
     var isHitBoss1 = false
     var isHitBoss2 = false
-    var isHitBoss3 = false
+    var isDeadBoss = false
 
     var isPlayingFinalExplosion = false
+
+    var isShotBoss1 = false
+    var isShotBoss2 = false
+
+    var isHitByBoss1 = false
+    var isHitByBoss2 = false
+
+
 
     fun playSoundMenu(conxt: Context) {
         if (mMediaPlayer == null) {
@@ -328,18 +341,18 @@ public class MusicManager {
                 hitBossPlayer2!!.setOnCompletionListener() {
                     isHitBoss2 = false
                 }
-            } else if (hitBossPlayer3 == null) {
-                hitBossPlayer3 = MediaPlayer.create(conxt, R.raw.bosshitsound)
-                hitBossPlayer3!!.start()
-                isHitBoss3 = true
-                hitBossPlayer3!!.setOnCompletionListener {
-                    isHitBoss3 = false
-                }
-            } else if (!isHitBoss3) {
-                hitBossPlayer3!!.start()
-                isHitBoss3 = true
-                hitBossPlayer3!!.setOnCompletionListener() {
-                    isHitBoss3 = false
+            }
+        }
+    }
+
+    fun playBossDeathSound(conxt: Context) {
+        if(!muted) {
+            if (finalExplosionBossPlayer == null) {
+                finalExplosionBossPlayer = MediaPlayer.create(conxt, R.raw.explosionsound)
+                finalExplosionBossPlayer!!.start()
+                isDeadBoss = true
+                finalExplosionBossPlayer!!.setOnCompletionListener() {
+                    isDeadBoss = false
                 }
             }
         }
@@ -379,5 +392,70 @@ public class MusicManager {
     }
 
 
+    fun playShootBossSound(conxt: Context) {
+        if(!muted) {
+            if (shootBossPlayer1 == null) {
+                shootBossPlayer1 = MediaPlayer.create(conxt, R.raw.shootsound)
+                shootBossPlayer1!!.start()
+                isShotBoss1 = true
+                shootBossPlayer1!!.setOnCompletionListener() {
+                    isShotBoss1 = false
+                }
+            } else if (!isShooting1) {
+                shootBossPlayer1!!.start()
+                isShotBoss1 = true
+                shootBossPlayer1!!.setOnCompletionListener() {
+                    isShotBoss1 = false
+                }
+            } else if (shootPlayer2 == null) {
+                shootBossPlayer2 = MediaPlayer.create(conxt, R.raw.shootsound)
+                shootBossPlayer2!!.start()
+                isShotBoss2 = true
+                shootBossPlayer2!!.setOnCompletionListener() {
+                    isShotBoss2 = false
+                }
+            } else if (!isShooting2) {
+                shootBossPlayer2!!.start()
+                isShotBoss2 = true
+                shootBossPlayer2!!.setOnCompletionListener() {
+                    isShotBoss2 = false
+                }
+            }
+        }
+    }
+
+    fun playBulletBossCollisionSound(conxt: Context) {
+        if(!muted) {
+            if (collisionPlayer1 == null) {
+                hitBossPlayer1 = MediaPlayer.create(conxt, R.raw.hitsound)
+                hitBossPlayer1!!.start()
+                isHitBoss1 = true
+                hitBossPlayer1!!.setOnCompletionListener() {
+                    isHitBoss1 = false
+                }
+            } else if (!isColliding1) {
+                hitBossPlayer1!!.start()
+                hitPlayer1!!.start()
+                isHitBoss1 = true
+                hitBossPlayer1!!.setOnCompletionListener() {
+                    isHitBoss1 = false
+                }
+            } else if (collisionPlayer2 == null) {
+                hitBossPlayer2 = MediaPlayer.create(conxt, R.raw.hitsound)
+                hitBossPlayer2!!.start()
+                isHitBoss2 = true
+                hitBossPlayer2!!.setOnCompletionListener() {
+                    isHitBoss2 = false
+                }
+            } else if (!isColliding2) {
+                hitBossPlayer2!!.start()
+                hitPlayer2!!.start()
+                isHitBoss2 = true
+                hitBossPlayer2!!.setOnCompletionListener() {
+                    isHitBoss2 = false
+                }
+            }
+        }
+    }
 }
 
