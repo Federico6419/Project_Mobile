@@ -55,6 +55,8 @@ class MyView(context: Context?, weat:String?, Color :String?, Bul :String?, Logg
 
     var final_explosion = true
 
+    var count_to_exit = 0/// to await a second before go to gameover
+
     var res = 0f
     var res2 = 0f
     var res3 = 0f
@@ -1902,8 +1904,11 @@ class MyView(context: Context?, weat:String?, Color :String?, Bul :String?, Logg
                         expFrameFinal = expFrameFinal + 1
                     } else {
                         //expFrameFinal = 0
+                        count_to_exit += 1
                         Log.i("prova","ciao else")
-                        start = false
+                        if(count_to_exit ==200) {
+                            start = false
+                        }
                     }
                 }
                 //////////////// PAUSE AND GAMEOVER MANAGEMENT //////////////////////////////
