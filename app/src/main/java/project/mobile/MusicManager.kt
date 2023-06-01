@@ -23,6 +23,10 @@ public class MusicManager {
     var choosePlayer1 : MediaPlayer? = null              //Choose sound variable
     var choosePlayer2 : MediaPlayer? = null              //Choose sound variable
     var choosePlayer3: MediaPlayer? = null              //Choose sound variable
+    var hitBossPlayer1: MediaPlayer? = null                   //Hit boss sound variable
+    var hitBossPlayer2: MediaPlayer? = null                   //Hit boss sound variable
+    var hitBossPlayer3: MediaPlayer? = null                   //Hit boss sound variable
+    var finalExplosionPlayer: MediaPlayer? = null             //Gameover explosion sound variable
 
     var isplaying1 = false
     var isplaying2 = false
@@ -40,6 +44,11 @@ public class MusicManager {
     var isChoosing2 = false
     var isChoosing3 = false
 
+    var isHitBoss1 = false
+    var isHitBoss2 = false
+    var isHitBoss3 = false
+
+    var isPlayingFinalExplosion = false
 
     fun playSoundMenu(conxt: Context) {
         if (mMediaPlayer == null) {
@@ -291,6 +300,64 @@ public class MusicManager {
         }
     }
 
+    fun playHitBossSound(conxt: Context) {
+        if(!muted) {
+            if (hitBossPlayer1 == null) {
+                hitBossPlayer1 = MediaPlayer.create(conxt, R.raw.bosshitsound)
+                hitBossPlayer1!!.start()
+                isHitBoss1 = true
+                hitBossPlayer1!!.setOnCompletionListener() {
+                    isHitBoss1 = false
+                }
+            } else if (!isHitBoss1) {
+                hitBossPlayer1!!.start()
+                isHitBoss1 = true
+                hitBossPlayer1!!.setOnCompletionListener() {
+                    isHitBoss1 = false
+                }
+            } else if (hitBossPlayer2 == null) {
+                hitBossPlayer2 = MediaPlayer.create(conxt, R.raw.bosshitsound)
+                hitBossPlayer2!!.start()
+                isHitBoss2 = true
+                hitBossPlayer2!!.setOnCompletionListener {
+                    isHitBoss2 = false
+                }
+            } else if (!isHitBoss2) {
+                hitBossPlayer2!!.start()
+                isHitBoss2 = true
+                hitBossPlayer2!!.setOnCompletionListener() {
+                    isHitBoss2 = false
+                }
+            } else if (hitBossPlayer3 == null) {
+                hitBossPlayer3 = MediaPlayer.create(conxt, R.raw.bosshitsound)
+                hitBossPlayer3!!.start()
+                isHitBoss3 = true
+                hitBossPlayer3!!.setOnCompletionListener {
+                    isHitBoss3 = false
+                }
+            } else if (!isHitBoss3) {
+                hitBossPlayer3!!.start()
+                isHitBoss3 = true
+                hitBossPlayer3!!.setOnCompletionListener() {
+                    isHitBoss3 = false
+                }
+            }
+        }
+    }
+
+    fun playFinalExplosionSound(conxt: Context) {
+        if(!muted) {
+            if (finalExplosionPlayer == null) {
+                finalExplosionPlayer = MediaPlayer.create(conxt, R.raw.explosionsound)
+                finalExplosionPlayer!!.start()
+                isPlayingFinalExplosion = true
+                finalExplosionPlayer!!.setOnCompletionListener() {
+                    isPlayingFinalExplosion = false
+                }
+            }
+        }
+    }
+
     fun pauseSound() {
         if (mMediaPlayer?.isPlaying == true) mMediaPlayer?.pause()
     }
@@ -310,5 +377,7 @@ public class MusicManager {
     fun releasePlayer(){
         mMediaPlayer?.release()
     }
+
+
 }
 

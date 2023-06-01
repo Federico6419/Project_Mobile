@@ -1659,6 +1659,7 @@ class MyView(context: Context?, weat:String?, Color :String?, Bul :String?, Logg
                             } else {
                                 Log.i("prova", life_boss[0].toString())
                                 life_boss[0] -= 1
+                                music.playHitBossSound(context)
                             }
                         }
                     }
@@ -1680,6 +1681,7 @@ class MyView(context: Context?, weat:String?, Color :String?, Bul :String?, Logg
                             } else {
                                 Log.i("prova", life_boss[0].toString())
                                 life_boss[0] -= 1
+                                music.playHitBossSound(context)
                             }
                         }
                     }
@@ -1701,6 +1703,7 @@ class MyView(context: Context?, weat:String?, Color :String?, Bul :String?, Logg
                             } else {
                                 Log.i("prova", life_boss[0].toString())
                                 life_boss[0] -= 1
+                                music.playHitBossSound(context)
                             }
                         }
                     }
@@ -1719,6 +1722,7 @@ class MyView(context: Context?, weat:String?, Color :String?, Bul :String?, Logg
                             expPos1_Boss[1][1] = boss_y[1]
                         }else{
                             life_boss[1] -= 1
+                            music.playHitBossSound(context)
                         }
                     }
                 }
@@ -1735,6 +1739,7 @@ class MyView(context: Context?, weat:String?, Color :String?, Bul :String?, Logg
                             expPos1_Boss[1][1] = boss_y[1]
                         }else{
                             life_boss[1] -= 1
+                            music.playHitBossSound(context)
                         }
                     }
                 }
@@ -1751,6 +1756,7 @@ class MyView(context: Context?, weat:String?, Color :String?, Bul :String?, Logg
                             expPos1_Boss[1][1] = boss_y[1]
                         }else{
                             life_boss[1] -= 1
+                            music.playHitBossSound(context)
                         }
                     }
                 }
@@ -1885,7 +1891,7 @@ class MyView(context: Context?, weat:String?, Color :String?, Bul :String?, Logg
                         Log.i("prova","ciao")
                         if(expFrameFinal == 0){
                             //If there is an explosion play its sound
-                            //music.playExplosionSound(context)
+                            music.playFinalExplosionSound(context)
                         }
                         drawBitmap(
                             bitmapVideo.get(expFrameFinal / 2),
