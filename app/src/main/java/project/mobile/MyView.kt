@@ -53,6 +53,8 @@ class MyView(context: Context?, weat:String?, Color :String?, Bul :String?, Logg
     //Is the bullet shot in this moment
     var is_shot = arrayOf(false, false, false)
 
+    var final_explosion = true
+
     var res = 0f
     var res2 = 0f
     var res3 = 0f
@@ -220,6 +222,9 @@ class MyView(context: Context?, weat:String?, Color :String?, Bul :String?, Logg
 
     //Array that contains the positions of the explosions with bullet 1
     var expPos3_Boss = arrayOf(floatArrayOf(0f, 0f), floatArrayOf(0f, 0f))
+
+    ///////// EXPLOSION AFTER OUR PLANE DEATH //////////
+    var expFrameFinal = 0
 
     /////////////*************************////////////////////
 
@@ -450,28 +455,30 @@ class MyView(context: Context?, weat:String?, Color :String?, Bul :String?, Logg
                 canvas.drawText(message,0,message.length,50f,80f,textPaint)
 
                 ///////draw the airplane with constraint on the x axe /////////
-                if((roll<-0.701f)){
-                    withTranslation(-495f, 0f) {
-                        drawBitmap(airplane, 500f, 1400f, null) }
-                    plane_x = 0f
-                }else if ((roll>0.701f)or((roll *(500f/0.701f)+500f)>925f)){
-                    withTranslation(425f, 0f) {
-                        drawBitmap(airplane, 500f, 1400f, null) }
-                    plane_x = 925f
-                }else{
-                    if((roll *(500f/0.701f)+500f)<925f){ /// to avoid airplane goes too much on the right, outside the screen
-                        withTranslation(roll *(500f/0.701f), 0f) {
-                            if (roll > oldRoll + 0.001) {
-                                Log.i("OLDROLL", oldRoll.toString())
-                                drawBitmap(airplaneRight, 500f, 1400f, null)
-                            } else if (roll < oldRoll - 0.001) {
-                                Log.i("OLDROLL", oldRoll.toString())
-                                drawBitmap(airplaneLeft, 500f, 1400f, null)
-                            } else {
-                                drawBitmap(airplane, 500f, 1400f, null)
+                if(expFrameFinal ==0){
+                    if((roll<-0.701f)){
+                        withTranslation(-495f, 0f) {
+                            drawBitmap(airplane, 500f, 1400f, null) }
+                        plane_x = 0f
+                    }else if ((roll>0.701f)or((roll *(500f/0.701f)+500f)>925f)){
+                        withTranslation(425f, 0f) {
+                            drawBitmap(airplane, 500f, 1400f, null) }
+                        plane_x = 925f
+                    }else {
+                        if ((roll * (500f / 0.701f) + 500f) < 925f) { /// to avoid airplane goes too much on the right, outside the screen
+                            withTranslation(roll * (500f / 0.701f), 0f) {
+                                if (roll > oldRoll + 0.001) {
+                                    Log.i("OLDROLL", oldRoll.toString())
+                                    drawBitmap(airplaneRight, 500f, 1400f, null)
+                                } else if (roll < oldRoll - 0.001) {
+                                    Log.i("OLDROLL", oldRoll.toString())
+                                    drawBitmap(airplaneLeft, 500f, 1400f, null)
+                                } else {
+                                    drawBitmap(airplane, 500f, 1400f, null)
+                                }
                             }
+                            plane_x = 500f + roll * (500f / 0.701f)
                         }
-                        plane_x = 500f + roll *(500f/0.701f)
                     }
                 }
 
@@ -922,7 +929,7 @@ class MyView(context: Context?, weat:String?, Color :String?, Bul :String?, Logg
                 if( (array_position[0]>= plane_x-140f)and(array_position[0]<=plane_x+140f)and(enemy_position_y[0] <= plane_y+300f)and(enemy_position_y[0] >= plane_y-150f)){
                     if(!justcollide[0]) {
                         if (hearts == 1) {
-                            start = false
+                            final_explosion = false
                         } else {
                             Log.i("COLPITO", "1")
                             music.playCollisionSound(context)
@@ -947,7 +954,7 @@ class MyView(context: Context?, weat:String?, Color :String?, Bul :String?, Logg
                     Log.i("COLPITO", "3")
                     if(!justcollide[2]) {
                         if (hearts == 1) {
-                            start = false
+                            final_explosion = false
                         } else {
                             music.playCollisionSound(context)
                             hearts -= 1
@@ -959,7 +966,7 @@ class MyView(context: Context?, weat:String?, Color :String?, Bul :String?, Logg
                     Log.i("COLPITO", "4")
                     if(!justcollide[3]) {
                         if (hearts == 1) {
-                            start = false
+                            final_explosion = false
                         } else {
                             music.playCollisionSound(context)
                             hearts -= 1
@@ -971,7 +978,7 @@ class MyView(context: Context?, weat:String?, Color :String?, Bul :String?, Logg
                     Log.i("COLPITO", "SI")
                     if(!justcollide[4]) {
                         if (hearts == 1) {
-                            start = false
+                            final_explosion = false
                         } else {
                             music.playCollisionSound(context)
                             hearts -= 1
@@ -987,7 +994,7 @@ class MyView(context: Context?, weat:String?, Color :String?, Bul :String?, Logg
                     and(boss_bullet_position_y[0] <= plane_y+190f)and(boss_bullet_position_y[0] >= plane_y-15f)){
                     if(just_shot_bullet_boss[0]==false) {////// to avoid multiple collision of same bullet
                         if (hearts == 1) {
-                            start = false
+                            final_explosion = false
                         } else {
                             hearts -= 1
                             just_shot_bullet_boss[0]=true
@@ -999,7 +1006,7 @@ class MyView(context: Context?, weat:String?, Color :String?, Bul :String?, Logg
                     and(boss_bullet_position_y[1] <= plane_y+190f)and(boss_bullet_position_y[1] >= plane_y-15f)){
                     if(just_shot_bullet_boss[1]==false) {
                         if (hearts == 1) {
-                            start = false
+                            final_explosion = false
                         } else {
                             hearts -= 1
                             just_shot_bullet_boss[1]=true
@@ -1010,7 +1017,7 @@ class MyView(context: Context?, weat:String?, Color :String?, Bul :String?, Logg
                     (boss_bullet_position_y[2] <=plane_y +190f) and(boss_bullet_position_y[2] >=plane_y -15f)){
                     if(just_shot_bullet_boss[2]==false) {
                         if (hearts == 1) {
-                            start = false
+                            final_explosion = false
                         } else {
                             hearts -= 1
                             just_shot_bullet_boss[2]=true
@@ -1872,17 +1879,38 @@ class MyView(context: Context?, weat:String?, Color :String?, Bul :String?, Logg
                 }
 
                 ///////////////////////////***************************************************/////////////////////////////////////
-
+                /////////// after death we have explosion and then can go to the gameover page
+                if(!final_explosion){
+                    if (expFrameFinal < 18) {
+                        Log.i("prova","ciao")
+                        if(expFrameFinal == 0){
+                            //If there is an explosion play its sound
+                            //music.playExplosionSound(context)
+                        }
+                        drawBitmap(
+                            bitmapVideo.get(expFrameFinal / 2),
+                            plane_x,
+                            plane_y,
+                            null
+                        )
+                        expFrameFinal = expFrameFinal + 1
+                    } else {
+                        //expFrameFinal = 0
+                        Log.i("prova","ciao else")
+                        start = false
+                    }
+                }
                 //////////////// PAUSE AND GAMEOVER MANAGEMENT //////////////////////////////
             }else if(PAUSE and !start){
                 drawBitmap(background,0f,0f,null)
                 canvas.drawBitmap(pause_menu,5f,350f,null)
             }else if(!PAUSE and !start) {
-                ///////// gameover ////////////
+            ///////// gameover ////////////
                 gameover = true
-                if((Score > old_score) and (logged)){
+                if ((Score > old_score) and (logged)) {
                     //Connecting to Firebase Database
-                    val database = Firebase.database("https://mobileproject2-50486-default-rtdb.europe-west1.firebasedatabase.app/")
+                    val database =
+                        Firebase.database("https://mobileproject2-50486-default-rtdb.europe-west1.firebasedatabase.app/")
 
                     val referenceOldScore = database.getReference("Users/$current_id/Score")
                     referenceOldScore.setValue(Score.toString())
@@ -1891,6 +1919,7 @@ class MyView(context: Context?, weat:String?, Color :String?, Bul :String?, Logg
                 }
                 plane_x = 500f
                 hearts = 3
+
                 val intent = Intent(context, GameoverActivity::class.java)
                 intent.putExtra("Color", col)
                 intent.putExtra("Bullet", bul)

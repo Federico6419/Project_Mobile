@@ -25,6 +25,7 @@ class ModifyPhoto : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_modify_photo)
 
+
         val houseButton = findViewById(R.id.HouseButton) as ImageButton
         houseButton.setOnClickListener() {
             intent = Intent(this, MainActivity::class.java)
