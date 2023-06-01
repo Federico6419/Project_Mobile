@@ -34,7 +34,7 @@
         app:layout_constraintHorizontal_bias="0.500"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.10"
+        app:layout_constraintVertical_bias="0.11"
         tools:ignore="MissingConstraints" />
 
     <TextView
@@ -73,7 +73,7 @@
         android:fontFamily="sans-serif-black"
         android:text=""
         android:textColor="@color/white"
-        android:textSize="22dp"
+        android:textSize="18dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.25"
@@ -100,7 +100,7 @@
         android:layout_height="wrap_content"
         android:fontFamily="sans-serif-black"
         android:textColor="@color/white"
-        android:textSize="22dp"
+        android:textSize="18dp"
         android:gravity="right"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"

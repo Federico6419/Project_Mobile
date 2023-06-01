@@ -23,6 +23,9 @@ class ModifyPhoto : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
+        supportActionBar?.setTitle("                     Death Planes")     //Define the name of the application
+
         setContentView(R.layout.activity_modify_photo)
 
 
@@ -61,6 +64,8 @@ class ModifyPhoto : AppCompatActivity() {
 
             /// show photoprofile generica
             showimage.setImageResource(R.drawable.profileimage)
+            showimage.getLayoutParams().height = 200
+            showimage.getLayoutParams().width = 200
 
             // Create a storage reference from our app
             val storageRefDelete = storage.reference
@@ -119,6 +124,8 @@ class ModifyPhoto : AppCompatActivity() {
 
                     //Show image
                     showimage.setImageURI(userimage)
+                    showimage.getLayoutParams().height = 300
+                    showimage.getLayoutParams().width = 200
 
                     //// show submit button
                     SubmitButton.visibility = View.VISIBLE
@@ -135,6 +142,8 @@ class ModifyPhoto : AppCompatActivity() {
         if(userimage!=null){
             //Show image
             showimage.setImageURI(userimage)
+            showimage.getLayoutParams().height = 300
+            showimage.getLayoutParams().width = 200
 
             /// hide take photo button
             val PhotoButton = findViewById(R.id.PhotoButton) as Button

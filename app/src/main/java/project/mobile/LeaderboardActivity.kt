@@ -14,6 +14,7 @@ import android.widget.*
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.net.toUri
 import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.database.ktx.database
 import com.google.firebase.ktx.Firebase
 import com.google.firebase.storage.ktx.storage
 import kotlinx.coroutines.*
@@ -33,12 +34,14 @@ class LeaderboardActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
+        supportActionBar?.setTitle("                     Death Planes")     //Define the name of the application
+
         setContentView(R.layout.activity_leaderboard)
 
         conxt = this
 
         firebaseAuth = FirebaseAuth.getInstance()   //Get instance from Firebase Authentication
-
 
         GlobalScope.launch {
             getLeaderB()
@@ -80,6 +83,24 @@ class LeaderboardActivity : AppCompatActivity() {
             }
         }, 10, 600)
 
+        //Connecting to Firebase Database
+        val database = Firebase.database("https://mobileproject2-50486-default-rtdb.europe-west1.firebasedatabase.app/")
+
+        //Take the opponent, if there is one
+        var opponent = ""
+        var isOpponentSet = false
+        firebaseAuth.uid?.let {
+            val opponentNameReference =
+                database.getReference("Users/$current_id/Opponent")    //Take the number of users
+            //Get the opponent, if there is one
+            opponentNameReference.get().addOnSuccessListener {
+                if (it.value != null) {
+                    opponent = it.value.toString()
+                    isOpponentSet = true
+                }
+            }
+        }
+
 
         val flaskApi = RequestLeaderboard().retrofit.create(FlaskInterface::class.java)
         CoroutineScope(Dispatchers.IO).launch {
@@ -113,10 +134,14 @@ class LeaderboardActivity : AppCompatActivity() {
 
                             var drawable = getDrawable(R.drawable.border)
                             var drawableGreen = getDrawable(R.drawable.bordergreen)
+                            var drawableRed = getDrawable(R.drawable.borderred)
                             firebaseAuth.uid?.let {
                                 if(current_username == items.users?.get(tot)?.username.toString()) {
                                     tr.setBackground(drawableGreen)
-                                } else{
+                                }else if(isOpponentSet and (opponent == items.users?.get(tot)?.username.toString())){
+                                    tr.setBackground(drawableRed)
+                                }
+                                else{
                                     tr.setBackground(drawable)
                                 }
                             } ?: run {
