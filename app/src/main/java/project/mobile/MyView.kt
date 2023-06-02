@@ -113,7 +113,7 @@ class MyView(context: Context?, weat:String?, Color :String?, Bul :String?, Logg
     var widthBullet = 20f
     var heighBullet = 40f
     var sizeBoss = 200f
-    var sizeHeart = 50f
+    var sizeHeart = 70f
     var background : Bitmap
     lateinit var airplane : Bitmap
     lateinit var airplaneLeft : Bitmap
@@ -127,6 +127,7 @@ class MyView(context: Context?, weat:String?, Color :String?, Bul :String?, Logg
     var boss1_hit : Bitmap
     var boss2 : Bitmap
     var heart : Bitmap
+    var blackheart : Bitmap
     var skull : Bitmap
 
     var pause_menu : Bitmap
@@ -397,6 +398,8 @@ class MyView(context: Context?, weat:String?, Color :String?, Bul :String?, Logg
         ///// hearts////
         heart = ResourcesCompat.getDrawable(resources,R.drawable.heart,
             null)?.toBitmap(sizeHeart.toInt(),sizeHeart.toInt())!!
+        blackheart = ResourcesCompat.getDrawable(resources,R.drawable.blackheart,
+            null)?.toBitmap(sizeHeart.toInt(),sizeHeart.toInt())!!
         skull = ResourcesCompat.getDrawable(resources,R.drawable.skull,
             null)?.toBitmap(120,120)!!
         pause_menu = ResourcesCompat.getDrawable(resources,R.drawable.pausemenu,
@@ -495,15 +498,22 @@ class MyView(context: Context?, weat:String?, Color :String?, Bul :String?, Logg
                 ///////end draw airplane /////////
                 //-------- draw hearts -------//
                 if(hearts == 3){
-                    drawBitmap(heart, 900f, 30f, null)
-                    drawBitmap(heart, 950f, 30f, null)
-                    drawBitmap(heart, 1000f, 30f, null)
+                    drawBitmap(heart, 830f, 30f, null)
+                    drawBitmap(heart, 910f, 30f, null)
+                    drawBitmap(heart, 990f, 30f, null)
                 }else if(hearts==2){
-                    drawBitmap(heart, 900f, 30f, null)
-                    drawBitmap(heart, 950f, 30f, null)
+                    drawBitmap(blackheart, 830f, 30f, null)
+                    drawBitmap(heart, 910f, 30f, null)
+                    drawBitmap(heart, 990f, 30f, null)
                     // se vogliamo possiamo metter cuore vuoto
+                }else if(hearts == 1){
+                    drawBitmap(blackheart, 830f, 30f, null)
+                    drawBitmap(blackheart, 910f, 30f, null)
+                    drawBitmap(heart, 990f, 30f, null)
                 }else{
-                    drawBitmap(heart, 900f, 30f, null)
+                    drawBitmap(blackheart, 830f, 30f, null)
+                    drawBitmap(blackheart, 910f, 30f, null)
+                    drawBitmap(blackheart, 990f, 30f, null)
                 }
                 //------ end draw hearts ------//
                 //------ draw bullet a disposizione -------//
@@ -966,6 +976,7 @@ class MyView(context: Context?, weat:String?, Color :String?, Bul :String?, Logg
                     if(!justcollide[0]) {
                         if (hearts == 1) {
                             final_explosion = false
+                            hearts -= 1
                         } else {
                             Log.i("COLPITO", "1")
                             music.playCollisionSound(context)
@@ -991,6 +1002,7 @@ class MyView(context: Context?, weat:String?, Color :String?, Bul :String?, Logg
                     if(!justcollide[2]) {
                         if (hearts == 1) {
                             final_explosion = false
+                            hearts -= 1
                         } else {
                             music.playCollisionSound(context)
                             hearts -= 1
@@ -1003,6 +1015,7 @@ class MyView(context: Context?, weat:String?, Color :String?, Bul :String?, Logg
                     if(!justcollide[3]) {
                         if (hearts == 1) {
                             final_explosion = false
+                            hearts -= 1
                         } else {
                             music.playCollisionSound(context)
                             hearts -= 1
@@ -1015,6 +1028,7 @@ class MyView(context: Context?, weat:String?, Color :String?, Bul :String?, Logg
                     if(!justcollide[4]) {
                         if (hearts == 1) {
                             final_explosion = false
+                            hearts -= 1
                         } else {
                             music.playCollisionSound(context)
                             hearts -= 1
@@ -1032,6 +1046,7 @@ class MyView(context: Context?, weat:String?, Color :String?, Bul :String?, Logg
                         is_visible_boss_bullet[0]=false
                         if (hearts == 1) {
                             final_explosion = false
+                            hearts -= 1
                         } else {
                             hearts -= 1
                             just_shot_bullet_boss[0]=true
@@ -1046,6 +1061,7 @@ class MyView(context: Context?, weat:String?, Color :String?, Bul :String?, Logg
                         is_visible_boss_bullet[1]=false
                         if (hearts == 1) {
                             final_explosion = false
+                            hearts -= 1
                         } else {
                             hearts -= 1
                             just_shot_bullet_boss[1]=true
@@ -1059,6 +1075,7 @@ class MyView(context: Context?, weat:String?, Color :String?, Bul :String?, Logg
                         is_visible_boss_bullet[2]=false
                         if (hearts == 1) {
                             final_explosion = false
+                            hearts -= 1
                         } else {
                             hearts -= 1
                             just_shot_bullet_boss[2]=true
@@ -1964,7 +1981,6 @@ class MyView(context: Context?, weat:String?, Color :String?, Bul :String?, Logg
                 /////////// after death we have explosion and then can go to the gameover page
                 if(!final_explosion){
                     if (expFrameFinal < 18) {
-                        Log.i("prova","ciao")
                         if(expFrameFinal == 0){
                             //If there is an explosion play its sound
                             music.playFinalExplosionSound(context)
@@ -1979,7 +1995,6 @@ class MyView(context: Context?, weat:String?, Color :String?, Bul :String?, Logg
                     } else {
                         //expFrameFinal = 0
                         count_to_exit += 1
-                        Log.i("prova","ciao else")
                         if(count_to_exit ==200) {
                             start = false
                         }
