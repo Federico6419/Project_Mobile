@@ -95,6 +95,10 @@ class MyView(context: Context?, weat:String?, Color :String?, Bul :String?, Logg
     var boss_y = arrayOf<Float>(0f,0f)
     var boss_visible = arrayOf<Boolean>(false,false,false)
 
+    var boss_hit = arrayOf<Boolean>(false,false)
+
+    var timeout_boss_hit = 0
+
     var ex_array = arrayOf<Boolean>(true,true,true,true,true)
 
     var start:Boolean = true
@@ -120,6 +124,7 @@ class MyView(context: Context?, weat:String?, Color :String?, Bul :String?, Logg
     var enemy_type2 : Bitmap
     var enemy_type3 : Bitmap
     var boss1 : Bitmap
+    var boss1_hit : Bitmap
     var boss2 : Bitmap
     var heart : Bitmap
     var skull : Bitmap
@@ -385,6 +390,8 @@ class MyView(context: Context?, weat:String?, Color :String?, Bul :String?, Logg
         /// boss /////
         boss1 = ResourcesCompat.getDrawable(resources,R.drawable.boss1,
             null)?.toBitmap(sizeBoss.toInt(),sizeBoss.toInt())!!
+        boss1_hit = ResourcesCompat.getDrawable(resources,R.drawable.boss1hit,
+            null)?.toBitmap(sizeBoss.toInt(),sizeBoss.toInt())!!
         boss2 = ResourcesCompat.getDrawable(resources,R.drawable.boss_finale,
             null)?.toBitmap(sizeBoss.toInt(),sizeBoss.toInt())!!
         ///// hearts////
@@ -597,11 +604,22 @@ class MyView(context: Context?, weat:String?, Color :String?, Bul :String?, Logg
                     if(dx_if_true_boss[0]==false){lateral_movement_boss[0] =lateral_movement_boss[0]-random_x}
 
                     withTranslation (lateral_movement_boss[0],boss_y[0]) {
-                        drawBitmap(boss1, boss_x[0], 0f, null)
-
+                        if(boss_hit[0]){
+                            timeout_boss_hit += 1
+                            if(timeout_boss_hit == 100){
+                                boss_hit[0] = false
+                                timeout_boss_hit = 0
+                            }
+                            if((timeout_boss_hit < 20) or ((40 < timeout_boss_hit) and (timeout_boss_hit < 60)) or ((80 < timeout_boss_hit) and (timeout_boss_hit < 100))) {
+                                drawBitmap(boss1_hit, boss_x[0], 0f, null)
+                            }
+                            else{
+                                drawBitmap(boss1, boss_x[0], 0f, null)
+                            }
+                        } else {
+                            drawBitmap(boss1, boss_x[0], 0f, null)
+                        }
                     }
-
-                    //drawBitmap(boss1, boss_x[0], 0f, null)
                 }
                 /////////------------------- manage position of boss 2 ------------////////////
                 if(boss_visible[1]){
@@ -1665,76 +1683,104 @@ class MyView(context: Context?, weat:String?, Color :String?, Bul :String?, Logg
                 //////////////////////***************************************************//////////////////////////////////////////
 
                 ///////////////******** MANAGE COLLISION OUR BULLETS TO BOSS 1 *******////////////////
-                if((bullet_position_x[0]>=boss_x[0]+lateral_movement_boss[0]-15f)and(bullet_position_x[0]<=boss_x[0]+lateral_movement_boss[0]+215f)and(bullet_position_y[0]<=boss_y[0]+215f)and(bullet_position_y[0]>=boss_y[0]-15f)) {
-                    if(!just_shot_bullet[0]){
-                        just_shot_bullet[0] = true
-                        if(life_boss[0]>0) {
-                            ////// check if boss have still some lives, otherwise set the boss invisible(dead)
-                            if (life_boss[0] == 1) {
-                                Log.i("prova", life_boss[0].toString())
-                                life_boss[0] -= 1
-                                boss_visible[0] = false
-                                Score += 200
-                                beat_boss1 = true
-                                numKills += 1
-                                isExpBul1_Boss[0] = true
-                                expPos1_Boss[0][0] = boss_x[0]+lateral_movement_boss[0]
-                                expPos1_Boss[0][1] = boss_y[0]
-                                music.playBossDeathSound(context)
-                            } else {
-                                Log.i("provaB", life_boss[0].toString())
-                                life_boss[0] -= 1
-                                music.playHitBossSound(context)
+                if(is_visible_bul[0]) {
+                    if ((bullet_position_x[0] >= boss_x[0] + lateral_movement_boss[0] - 15f) and (bullet_position_x[0] <= boss_x[0] + lateral_movement_boss[0] + 215f) and (bullet_position_y[0] <= boss_y[0] + 215f) and (bullet_position_y[0] >= boss_y[0] - 15f)) {
+                        if (!just_shot_bullet[0]) {
+                            just_shot_bullet[0] = true
+                            if (life_boss[0] > 0) {
+                                is_visible_bul[0]=false
+                                if (bullet_available < 3) {
+                                    bullet_available += 1       //Bullet retruns available
+                                }
+                                up[0]=0f
+                                ////// check if boss have still some lives, otherwise set the boss invisible(dead)
+                                if (life_boss[0] == 1) {
+                                    life_boss[0] -= 1
+                                    boss_visible[0] = false
+                                    Score += 200
+                                    beat_boss1 = true
+                                    numKills += 1
+                                    isExpBul1_Boss[0] = true
+                                    expPos1_Boss[0][0] = boss_x[0] + lateral_movement_boss[0]
+                                    expPos1_Boss[0][1] = boss_y[0]
+                                    music.playBossDeathSound(context)
+                                } else {
+                                    just_shot_bullet[0] = false
+                                    if(!boss_hit[0]) {
+                                        life_boss[0] -= 1
+                                        music.playHitBossSound(context)
+                                        boss_hit[0] = true
+                                    }
+                                }
                             }
                         }
                     }
                 }
-                if((bullet_position_x[1]>=boss_x[0]+lateral_movement_boss[0]-15f)and(bullet_position_x[1]<=boss_x[0]+lateral_movement_boss[0]+215f)and(bullet_position_y[1]<=boss_y[0]+215f)and(bullet_position_y[1]>=boss_y[0]-15f)) {
-                    if(!just_shot_bullet[1]){
-                        just_shot_bullet[1] = true
-                        if(life_boss[0]>0) {
-                            if (life_boss[0] == 1) {
-                                Log.i("prova", life_boss[0].toString())
-                                life_boss[0] -= 1
-                                boss_visible[0] = false
-                                Score += 200
-                                beat_boss1 = true
-                                numKills += 1
-                                isExpBul1_Boss[0] = true
-                                expPos1_Boss[0][0] = boss_x[0]+lateral_movement_boss[0]
-                                expPos1_Boss[0][1] = boss_y[0]
-                                music.playBossDeathSound(context)
-                            } else {
-                                Log.i("provaB", life_boss[0].toString())
-                                life_boss[0] -= 1
-                                music.playHitBossSound(context)
+                if(is_visible_bul[1]) {
+                    if ((bullet_position_x[1] >= boss_x[0] + lateral_movement_boss[0] - 15f) and (bullet_position_x[1] <= boss_x[0] + lateral_movement_boss[0] + 215f) and (bullet_position_y[1] <= boss_y[0] + 215f) and (bullet_position_y[1] >= boss_y[0] - 15f)) {
+                        if (!just_shot_bullet[1]) {
+                            just_shot_bullet[1] = true
+                            if (life_boss[0] > 0) {
+                                is_visible_bul[1]=false
+                                if (bullet_available < 3) {
+                                    bullet_available += 1       //Bullet retruns available
+                                }
+                                up[1]=0f
+                                if (life_boss[0] == 1) {
+                                    life_boss[0] -= 1
+                                    boss_visible[0] = false
+                                    Score += 200
+                                    beat_boss1 = true
+                                    numKills += 1
+                                    isExpBul1_Boss[0] = true
+                                    expPos1_Boss[0][0] = boss_x[0] + lateral_movement_boss[0]
+                                    expPos1_Boss[0][1] = boss_y[0]
+                                    music.playBossDeathSound(context)
+                                } else {
+                                    just_shot_bullet[1] = false
+                                    if(!boss_hit[0]) {
+                                        life_boss[0] -= 1
+                                        music.playHitBossSound(context)
+                                        boss_hit[0] = true
+                                    }
+                                }
                             }
                         }
                     }
                 }
-                if((bullet_position_x[2]>=boss_x[0]+lateral_movement_boss[0]-15f)and(bullet_position_x[2]<=boss_x[0]+lateral_movement_boss[0]+215f)and(bullet_position_y[2]<=boss_y[0]+215f)and(bullet_position_y[2]>=boss_y[0]-15f)) {
-                    if(!just_shot_bullet[2]){
-                        just_shot_bullet[2] = true
-                        if(life_boss[0]>0) {
-                            if (life_boss[0]== 1) {
-                                Log.i("prova", life_boss[0].toString())
-                                life_boss[0] -= 1
-                                boss_visible[0] = false
-                                Score += 200
-                                beat_boss1 = true
-                                numKills += 1
-                                isExpBul1_Boss[0] = true
-                                expPos1_Boss[0][0] = boss_x[0]+lateral_movement_boss[0]
-                                expPos1_Boss[0][1] = boss_y[0]
-                                music.playBossDeathSound(context)
-                            } else {
-                                Log.i("provaB", life_boss[0].toString())
-                                life_boss[0] -= 1
-                                music.playHitBossSound(context)
+                if(is_visible_bul[2]) {
+                    if ((bullet_position_x[2] >= boss_x[0] + lateral_movement_boss[0] - 15f) and (bullet_position_x[2] <= boss_x[0] + lateral_movement_boss[0] + 215f) and (bullet_position_y[2] <= boss_y[0] + 215f) and (bullet_position_y[2] >= boss_y[0] - 15f)) {
+                        if (!just_shot_bullet[2]) {
+                            just_shot_bullet[2] = true
+                            if (life_boss[0] > 0) {
+                                is_visible_bul[2]=false
+                                if (bullet_available < 3) {
+                                    bullet_available += 1       //Bullet retruns available
+                                }
+                                up[2]=0f
+                                if (life_boss[0] == 1) {
+                                    life_boss[0] -= 1
+                                    boss_visible[0] = false
+                                    Score += 200
+                                    beat_boss1 = true
+                                    numKills += 1
+                                    isExpBul1_Boss[0] = true
+                                    expPos1_Boss[0][0] = boss_x[0] + lateral_movement_boss[0]
+                                    expPos1_Boss[0][1] = boss_y[0]
+                                    music.playBossDeathSound(context)
+                                } else {
+                                    just_shot_bullet[2] = false
+                                    if(!boss_hit[0]) {
+                                        life_boss[0] -= 1
+                                        music.playHitBossSound(context)
+                                        boss_hit[0] = true
+                                    }
+                                }
                             }
                         }
                     }
                 }
+
                 //////////******** OUR BULLET HIT BOSS 2 *******////////////////
                 if((bullet_position_x[0]>=boss_x[1]+lateral_movement_boss[1]-15f)and(bullet_position_x[0]<=boss_x[1]+lateral_movement_boss[1]+215f)and(bullet_position_y[0]<=boss_y[1]+215f)and(bullet_position_y[0]>=boss_y[1]-15f)) {
                     if(!just_shot_bullet[0]){
@@ -1797,7 +1843,7 @@ class MyView(context: Context?, weat:String?, Color :String?, Bul :String?, Logg
                 if (isExpBul1_Boss[0]) {
                     if (expFrame1_Boss[0] < 18) {
                         if(expFrame1_Boss[0] == 0){
-                            just_shot_bullet_boss[0] = false
+                            just_shot_bullet[0] = false
                             //If there is an explosion play its sound
                             music.playExplosionSound(context)
                         }
@@ -1817,7 +1863,7 @@ class MyView(context: Context?, weat:String?, Color :String?, Bul :String?, Logg
                 if (isExpBul1_Boss[1]) {
                     if (expFrame1_Boss[1] < 18) {
                         if(expFrame1_Boss[1] == 0){
-                            just_shot_bullet_boss[1] = false
+                            just_shot_bullet[1] = false
                             //If there is an explosion play its sound
                             music.playExplosionSound(context)
                         }
@@ -1837,7 +1883,7 @@ class MyView(context: Context?, weat:String?, Color :String?, Bul :String?, Logg
                 if (isExpBul2_Boss[0]) {
                     if (expFrame2_Boss[0] < 18) {
                         if(expFrame2_Boss[0] == 0){
-                            just_shot_bullet_boss[0] = false
+                            just_shot_bullet[0] = false
                             //If there is an explosion play its sound
                             music.playExplosionSound(context)
                         }
@@ -1857,7 +1903,7 @@ class MyView(context: Context?, weat:String?, Color :String?, Bul :String?, Logg
                 if (isExpBul2_Boss[1]) {
                     if (expFrame2_Boss[1] < 18) {
                         if(expFrame2_Boss[1] == 0){
-                            just_shot_bullet_boss[1] = false
+                            just_shot_bullet[1] = false
                             //If there is an explosion play its sound
                             music.playExplosionSound(context)
                         }
@@ -1877,7 +1923,7 @@ class MyView(context: Context?, weat:String?, Color :String?, Bul :String?, Logg
                 if (isExpBul3_Boss[0]) {
                     if (expFrame3_Boss[0] < 18) {
                         if(expFrame3_Boss[0] == 0){
-                            just_shot_bullet_boss[0] = false
+                            just_shot_bullet[0] = false
                             //If there is an explosion play its sound
                             music.playExplosionSound(context)
                         }
@@ -1897,7 +1943,7 @@ class MyView(context: Context?, weat:String?, Color :String?, Bul :String?, Logg
                 if (isExpBul3_Boss[1]) {
                     if (expFrame3_Boss[1] < 18) {
                         if(expFrame3_Boss[1] == 0){
-                            just_shot_bullet_boss[1] = false
+                            just_shot_bullet[1] = false
                             //If there is an explosion play its sound
                             music.playExplosionSound(context)
                         }

@@ -407,7 +407,7 @@ public class MusicManager {
                 shootBossPlayer1!!.setOnCompletionListener() {
                     isShotBoss1 = false
                 }
-            } else if (shootPlayer2 == null) {
+            } else if (shootBossPlayer2 == null) {
                 shootBossPlayer2 = MediaPlayer.create(conxt, R.raw.shootsound)
                 shootBossPlayer2!!.start()
                 isShotBoss2 = true
