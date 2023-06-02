@@ -69,12 +69,14 @@ class GameSettingsActivity : AppCompatActivity(), LocationListener {
                         arrayOf(Manifest.permission.ACCESS_FINE_LOCATION), 1
                     )
                 } else {
-                    Log.i("ELSE", "OK")
                     ActivityCompat.requestPermissions(
                         this@GameSettingsActivity,
                         arrayOf(Manifest.permission.ACCESS_FINE_LOCATION), 1
                     )
                 }
+            } else{
+                locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 1000, 0f, this)
+                locationManager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, 1000, 0f, this)
             }
 
             var color = "red"
@@ -301,6 +303,7 @@ class GameSettingsActivity : AppCompatActivity(), LocationListener {
         while(!isExecuted){}
 
         val weatherApi = Request_Api().retrofit.create(ApiInterface::class.java)
+
         CoroutineScope(Dispatchers.IO).launch {
 
             // Do the GET request and get response
@@ -333,6 +336,7 @@ class GameSettingsActivity : AppCompatActivity(), LocationListener {
     }
 
     override fun onLocationChanged(p0: Location) {
+        Log.i("WARIO", p0.toString())
         val location = Request_Api_Location().retrofit2.create(ApiInterface_Location::class.java)
         CoroutineScope(Dispatchers.IO).launch {
 
@@ -343,6 +347,7 @@ class GameSettingsActivity : AppCompatActivity(), LocationListener {
                 if (response.isSuccessful) {
 
                     val items = response.body()
+
                     if (items != null) {
                         Log.i("city", items.features?.get(0)?.properties?.city.toString())
                         city = items.features?.get(0)?.properties?.city.toString()
@@ -368,7 +373,8 @@ class GameSettingsActivity : AppCompatActivity(), LocationListener {
                             Manifest.permission.ACCESS_FINE_LOCATION) ===
                                 PackageManager.PERMISSION_GRANTED)) {
                         Toast.makeText(this, "Permission Granted", Toast.LENGTH_SHORT).show()
-                        locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 1000, 5f, this)
+                        locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 1000, 0f, this)
+                        locationManager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, 1000, 0f, this)
                     }
                 } else {
                     Toast.makeText(this, "Permission Denied", Toast.LENGTH_SHORT).show()
