@@ -397,8 +397,8 @@ class GameoverActivity : AppCompatActivity() {
                                     if (current_username == cur_user) {
                                         var profileImageView = findViewById(R.id.ProfileImage) as ImageView
                                         profileImageView.setImageResource(R.drawable.profileimage)
-                                        profileImageView.getLayoutParams().height = 250
-                                        profileImageView.getLayoutParams().width = 250
+                                        profileImageView.getLayoutParams().height = 120
+                                        profileImageView.getLayoutParams().width = 120
                                     } else if (isOpponentSet and (cur_user == opponent)){
                                         var profileImageOpponent = findViewById(R.id.ProfileImageOpponent) as ImageView
                                         profileImageOpponent.setImageResource(R.drawable.profileimage)
