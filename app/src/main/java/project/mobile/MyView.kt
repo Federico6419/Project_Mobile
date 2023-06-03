@@ -449,7 +449,9 @@ class MyView(context: Context?, weat:String?, Color :String?, Bul :String?, Logg
                     change_score = true
                 }
                 if((current_time %2== 0) and(change_score == true)){
-                    Score += 10
+                    if(final_explosion) {
+                        Score += 10
+                    }
                     change_score = false
                 }
                 Log.i("TIME",current_time.toString())
@@ -517,15 +519,15 @@ class MyView(context: Context?, weat:String?, Color :String?, Bul :String?, Logg
                 }
                 //------ end draw hearts ------//
                 //------ draw bullet a disposizione -------//
-                if(bullet_available == 3){
+                if((bullet_available == 3) and (final_explosion)){
                     drawBitmap(bulletAvailable, 500f, 1720f, null)
                     drawBitmap(bulletAvailable, 550f, 1720f, null)
                     drawBitmap(bulletAvailable, 600f, 1720f, null)
-                }else if(bullet_available==2){
+                }else if((bullet_available==2) and (final_explosion)){
                     drawBitmap(bulletAvailable, 500f, 1720f, null)
                     drawBitmap(bulletAvailable, 550f, 1720f, null)
                     // se vogliamo possiamo metter cuore vuoto
-                }else if(bullet_available==1){
+                }else if((bullet_available==1) and (final_explosion)){
                     drawBitmap(bulletAvailable, 500f, 1720f, null)
                 }
                 //------ end draw bullet a disposizione -------//
@@ -792,7 +794,7 @@ class MyView(context: Context?, weat:String?, Color :String?, Bul :String?, Logg
                 enemy_position_y[4]= down5
                 ////// enemy bitmap ///////
                 /////// enemy end //////////
-                if(is_visible_bul[0]) {
+                if(is_visible_bul[0] and final_explosion) {
                     up[0] -= 40f
                     withTranslation(0f, up[0]) {
                         if (is_shot[0]) {
@@ -821,7 +823,7 @@ class MyView(context: Context?, weat:String?, Color :String?, Bul :String?, Logg
                         }
                     }
                 }
-                if(is_visible_bul[1]) {
+                if(is_visible_bul[1] and final_explosion) {
                     up[1] -= 40f
                     withTranslation(0f, up[1]) {
                         if (is_shot[1]) {
@@ -850,7 +852,7 @@ class MyView(context: Context?, weat:String?, Color :String?, Bul :String?, Logg
                         }
                     }
                 }
-                if(is_visible_bul[2]){
+                if(is_visible_bul[2] and final_explosion){
                     up[2] -= 40f
                     withTranslation(0f, up[2]) {
                         if (is_shot[2]) {
@@ -988,7 +990,8 @@ class MyView(context: Context?, weat:String?, Color :String?, Bul :String?, Logg
                 if( (array_position[1]>= plane_x-140f)and(array_position[1]<=plane_x+140f)and(enemy_position_y[1] <= plane_y+300f)and(enemy_position_y[1] >= plane_y-150f)){
                     if(!justcollide[1]) {
                         if (hearts == 1) {
-                            start = false
+                            final_explosion = false
+                            hearts -= 1
                         } else {
                             Log.i("COLPITO", "2")
                             music.playCollisionSound(context)
@@ -1995,7 +1998,7 @@ class MyView(context: Context?, weat:String?, Color :String?, Bul :String?, Logg
                     } else {
                         //expFrameFinal = 0
                         count_to_exit += 1
-                        if(count_to_exit ==200) {
+                        if(count_to_exit ==100) {
                             start = false
                         }
                     }
