@@ -31,6 +31,21 @@
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="0.499" />
 
+
+    <ImageButton
+        android:id="@+id/iv_capture_button"
+        android:layout_width="75dp"
+        android:layout_height="100dp"
+        android:background="@null"
+        android:clickable="true"
+        android:scaleType="fitXY"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.086"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.025" />
+
     <ImageButton
         android:id="@+id/LeaderboardButton"
         android:layout_width="299dp"
@@ -72,34 +87,23 @@
         app:layout_constraintVertical_bias="0.971" />
 
 
-    <ImageButton
-        android:id="@+id/iv_capture_button"
-        android:layout_width="75dp"
-        android:layout_height="100dp"
-        android:clickable="true"
-        android:scaleType="fitXY"
-        android:background="@null"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.049"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.041" />
-
     <TextView
         android:id="@+id/Username"
-        android:layout_width="188dp"
-        android:layout_height="47dp"
+        android:layout_width="141dp"
+        android:layout_height="32dp"
         android:fontFamily="sans-serif-black"
-        android:text=""
+        android:text="francesco"
+        android:textAlignment="center"
+        android:textAppearance="@style/TextAppearance.AppCompat.Body1"
         android:textColor="@color/white"
         android:textSize="25dp"
+        android:textStyle="bold"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.556"
+        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.076" />
+        app:layout_constraintVertical_bias="0.169" />
 
     <ImageButton
         android:id="@+id/LogOutButton"
@@ -110,10 +114,10 @@
         android:src="@drawable/logoutbutton"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.915"
+        app:layout_constraintHorizontal_bias="0.929"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.041" />
+        app:layout_constraintVertical_bias="0.039" />
 
     <TextView
         android:layout_width="wrap_content"
@@ -124,10 +128,10 @@
         android:textSize="18dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.910"
+        app:layout_constraintHorizontal_bias="0.93"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.140"
+        app:layout_constraintVertical_bias="0.135"
         tools:ignore="MissingConstraints" />
 
     <ImageButton
@@ -158,5 +162,7 @@
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="0.971"
         tools:ignore="MissingConstraints" />
+
+
 
 </androidx.constraintlayout.widget.ConstraintLayout>
