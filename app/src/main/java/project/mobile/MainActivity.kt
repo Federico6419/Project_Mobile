@@ -45,12 +45,12 @@ public var muted = false                //Mute boolean variable
 public var current_username = ""        //Username of the current user
 public var current_id = ""              //ID of the current user
 public var current_score = 0           //Score of the current user
-public var userimage: Uri? = null
+public var userimage: Uri? = null       //Variable that will contain the URI of the image
 
 //Variable that says if the application is executed in this moment
 public var justExecuted = true
 
-lateinit var imageUri: Uri          //Variable that will contain the URI of the image
+var hasphoto = false
 
 @Suppress("DEPRECATED_IDENTITY_EQUALS")
 class MainActivity : AppCompatActivity(), LifecycleObserver {
@@ -99,34 +99,37 @@ class MainActivity : AppCompatActivity(), LifecycleObserver {
         uid?.let {               //If user id is not null, manage the listeners of the signed homepage
             setContentView(R.layout.activity_main_signed)
 
-            var hasphoto = false
-
-            //////////download the image of the user from storage and set to the userimage view
-
             val changephotoButton = findViewById(R.id.iv_capture_button) as ImageButton
 
-            // Create a storage reference from our app
-            var storageRef = storage.reference
-
-            // Create a reference with an initial file path and name
-            val userImageRef = storageRef.child("Images/"+ current_username)
-            //val userImageRef = storageRef.child("Images/166395")
-
-            val localFile = File.createTempFile("images", "jpg")
-
-            userImageRef.getFile(localFile).addOnSuccessListener {
-                // Local temp file has been created
-                userimage = localFile.toUri()
+            if(hasphoto){
                 changephotoButton.setImageURI(userimage)
-                hasphoto = true
-                Log.i("prova",it.toString())
-            }.addOnFailureListener {
-                // Handle any errors
-                //imageView.setImageResource(R.drawable.profileimage)
-                changephotoButton.setImageResource(R.drawable.profileimage)
-                changephotoButton.getLayoutParams().height = 230
-                changephotoButton.getLayoutParams().width = 230
-                Log.i("error",it.toString())
+            }else {
+                //////////download the image of the user from storage and set to the userimage view
+
+
+                // Create a storage reference from our app
+                var storageRef = storage.reference
+
+                // Create a reference with an initial file path and name
+                val userImageRef = storageRef.child("Images/" + current_username)
+                //val userImageRef = storageRef.child("Images/166395")
+
+                val localFile = File.createTempFile("images", "jpg")
+
+                userImageRef.getFile(localFile).addOnSuccessListener {
+                    // Local temp file has been created
+                    userimage = localFile.toUri()
+                    changephotoButton.setImageURI(userimage)
+                    hasphoto = true
+                    Log.i("prova", it.toString())
+                }.addOnFailureListener {
+                    // Handle any errors
+                    //imageView.setImageResource(R.drawable.profileimage)
+                    changephotoButton.setImageResource(R.drawable.profileimage)
+                    changephotoButton.getLayoutParams().height = 230
+                    changephotoButton.getLayoutParams().width = 230
+                    Log.i("error", it.toString())
+                }
             }
 
 
