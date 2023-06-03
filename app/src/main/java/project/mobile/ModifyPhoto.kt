@@ -125,7 +125,7 @@ class ModifyPhoto : AppCompatActivity() {
                     //Show image
                     showimage.setImageURI(userimage)
                     showimage.getLayoutParams().height = 300
-                    showimage.getLayoutParams().width = 200
+                    showimage.getLayoutParams().width = 240
 
                     //// show submit button
                     SubmitButton.visibility = View.VISIBLE
@@ -143,7 +143,7 @@ class ModifyPhoto : AppCompatActivity() {
             //Show image
             showimage.setImageURI(userimage)
             showimage.getLayoutParams().height = 300
-            showimage.getLayoutParams().width = 200
+            showimage.getLayoutParams().width = 240
 
             /// hide take photo button
             val PhotoButton = findViewById(R.id.PhotoButton) as Button
