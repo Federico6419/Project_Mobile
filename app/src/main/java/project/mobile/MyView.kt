@@ -493,7 +493,7 @@ class MyView(context: Context?, weat:String?, Color :String?, Bul :String?, Logg
                 canvas.drawText(message,0,message.length,50f,80f,textPaint)
 
                 ///////draw the airplane with constraint on the x axe /////////
-                if(damaged_count == 100){
+                if(damaged_count == 105){
                     damaged = false
                     damaged_count = 0
                 }
@@ -504,7 +504,7 @@ class MyView(context: Context?, weat:String?, Color :String?, Bul :String?, Logg
                                 drawBitmap(airplane, 500f, 1400f, null)
                             }else{
                                 damaged_count += 1
-                                if((damaged_count<20) or ((40<damaged_count) and (damaged_count<60)) or ((80<damaged_count) and (damaged_count<100))) {
+                                if((damaged_count<15) or ((30<damaged_count) and (damaged_count<45)) or ((60<damaged_count) and (damaged_count<75)) or ((90<damaged_count) and (damaged_count<105))) {
                                     drawBitmap(airplaneDamaged, 500f, 1400f, null)
                                 } else{
                                     drawBitmap(airplane, 500f, 1400f, null)
@@ -518,7 +518,7 @@ class MyView(context: Context?, weat:String?, Color :String?, Bul :String?, Logg
                                 drawBitmap(airplane, 500f, 1400f, null)
                             } else{
                                 damaged_count += 1
-                                if((damaged_count<20) or ((40<damaged_count) and (damaged_count<60)) or ((80<damaged_count) and (damaged_count<100))) {
+                                if((damaged_count<15) or ((30<damaged_count) and (damaged_count<45)) or ((60<damaged_count) and (damaged_count<75)) or ((90<damaged_count) and (damaged_count<105))) {
                                     drawBitmap(airplaneDamaged, 500f, 1400f, null)
                                 } else{
                                     drawBitmap(airplane, 500f, 1400f, null)
@@ -534,7 +534,7 @@ class MyView(context: Context?, weat:String?, Color :String?, Bul :String?, Logg
                                         drawBitmap(airplaneRight, 500f, 1400f, null)
                                     } else{
                                         damaged_count += 1
-                                        if((damaged_count<20) or ((40<damaged_count) and (damaged_count<60)) or ((80<damaged_count) and (damaged_count<100))) {
+                                        if((damaged_count<15) or ((30<damaged_count) and (damaged_count<45)) or ((60<damaged_count) and (damaged_count<75)) or ((90<damaged_count) and (damaged_count<105))) {
                                             drawBitmap(airplaneRightDamaged, 500f, 1400f, null)
                                         } else{
                                             drawBitmap(airplaneRight, 500f, 1400f, null)
@@ -545,7 +545,7 @@ class MyView(context: Context?, weat:String?, Color :String?, Bul :String?, Logg
                                         drawBitmap(airplaneLeft, 500f, 1400f, null)
                                     } else{
                                         damaged_count += 1
-                                        if((damaged_count<20) or ((40<damaged_count) and (damaged_count<60)) or ((80<damaged_count) and (damaged_count<100))) {
+                                        if((damaged_count<15) or ((30<damaged_count) and (damaged_count<45)) or ((60<damaged_count) and (damaged_count<75)) or ((90<damaged_count) and (damaged_count<105))) {
                                             drawBitmap(airplaneLeftDamaged, 500f, 1400f, null)
                                         } else{
                                             drawBitmap(airplaneLeft, 500f, 1400f, null)
@@ -556,7 +556,7 @@ class MyView(context: Context?, weat:String?, Color :String?, Bul :String?, Logg
                                         drawBitmap(airplane, 500f, 1400f, null)
                                     } else{
                                         damaged_count += 1
-                                        if((damaged_count<20) or ((40<damaged_count) and (damaged_count<60)) or ((80<damaged_count) and (damaged_count<100))) {
+                                        if((damaged_count<15) or ((30<damaged_count) and (damaged_count<45)) or ((60<damaged_count) and (damaged_count<75)) or ((90<damaged_count) and (damaged_count<105))) {
                                             drawBitmap(airplaneDamaged, 500f, 1400f, null)
                                         } else{
                                             drawBitmap(airplane, 500f, 1400f, null)
@@ -1046,7 +1046,7 @@ class MyView(context: Context?, weat:String?, Color :String?, Bul :String?, Logg
 
 
                 //////////////////  ------------- MANAGE COLLISION OUR PLANE WITH ENEMIES   ----------------- ////////////////
-                if( (array_position[0]>= plane_x-140f)and(array_position[0]<=plane_x+140f)and(enemy_position_y[0] <= plane_y+300f)and(enemy_position_y[0] >= plane_y-150f)){
+                if( (array_position[0]>= plane_x-140f)and(array_position[0]<=plane_x+140f)and(enemy_position_y[0] <= plane_y+150f)and(enemy_position_y[0] >= plane_y-150f)){
                     if(!justcollide[0]) {
                         if(!damaged) {
                             if (hearts == 1) {
@@ -1062,7 +1062,7 @@ class MyView(context: Context?, weat:String?, Color :String?, Bul :String?, Logg
                             }
                     }
                 }
-                if( (array_position[1]>= plane_x-140f)and(array_position[1]<=plane_x+140f)and(enemy_position_y[1] <= plane_y+300f)and(enemy_position_y[1] >= plane_y-150f)){
+                if( (array_position[1]>= plane_x-140f)and(array_position[1]<=plane_x+140f)and(enemy_position_y[1] <= plane_y+150f)and(enemy_position_y[1] >= plane_y-150f)){
                     if(!justcollide[1]) {
                         if(!damaged) {
                             if (hearts == 1) {
@@ -1078,7 +1078,7 @@ class MyView(context: Context?, weat:String?, Color :String?, Bul :String?, Logg
                             }
                     }
                 }
-                if( (array_position[2]>= plane_x-140f)and(array_position[2]<=plane_x+140f)and(enemy_position_y[2] <= plane_y+300f)and(enemy_position_y[2] >= plane_y-150f)){
+                if( (array_position[2]>= plane_x-140f)and(array_position[2]<=plane_x+140f)and(enemy_position_y[2] <= plane_y+150f)and(enemy_position_y[2] >= plane_y-150f)){
                     if(!justcollide[2]) {
                         if(!damaged) {
                             if (hearts == 1) {
@@ -1093,7 +1093,7 @@ class MyView(context: Context?, weat:String?, Color :String?, Bul :String?, Logg
                         }
                     }
                 }
-                if( (array_position[3]+lateral_movement[3]>= plane_x-140f)and(array_position[3]+lateral_movement[3]<=plane_x+140f)and(enemy_position_y[3] <= plane_y+300f)and(enemy_position_y[3] >= plane_y-150f)){
+                if( (array_position[3]+lateral_movement[3]>= plane_x-140f)and(array_position[3]+lateral_movement[3]<=plane_x+140f)and(enemy_position_y[3] <= plane_y+150f)and(enemy_position_y[3] >= plane_y-150f)){
                     if(!justcollide[3]) {
                         if(!damaged) {
                             if (hearts == 1) {
