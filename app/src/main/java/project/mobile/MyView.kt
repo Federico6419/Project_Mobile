@@ -98,6 +98,10 @@ class MyView(context: Context?, weat:String?, Color :String?, Bul :String?, Logg
     var boss_hit = arrayOf<Boolean>(false,false)
 
     var timeout_boss_hit = 0
+    
+    var damaged = false
+    
+    var damaged_count = 0
 
     var ex_array = arrayOf<Boolean>(true,true,true,true,true)
 
@@ -118,6 +122,9 @@ class MyView(context: Context?, weat:String?, Color :String?, Bul :String?, Logg
     lateinit var airplane : Bitmap
     lateinit var airplaneLeft : Bitmap
     lateinit var airplaneRight : Bitmap
+    lateinit var airplaneDamaged : Bitmap
+    lateinit var airplaneLeftDamaged : Bitmap
+    lateinit var airplaneRightDamaged : Bitmap
     lateinit var bullet : Bitmap
     lateinit var bulletAvailable : Bitmap
     var enemy_type1 : Bitmap
@@ -354,6 +361,22 @@ class MyView(context: Context?, weat:String?, Color :String?, Bul :String?, Logg
                 null
             )?.toBitmap(sizeA.toInt(), sizeA.toInt())!!
         }
+
+        /////   DAMAGED AIRPLANE DRAWABLE   /////
+        airplaneDamaged = ResourcesCompat.getDrawable(
+            resources, R.drawable.airplanedamage,
+            null
+        )?.toBitmap(sizeA.toInt(), sizeA.toInt())!!
+
+        airplaneLeftDamaged = ResourcesCompat.getDrawable(
+            resources, R.drawable.airplaneleftdamaged,
+            null
+        )?.toBitmap(sizeA.toInt(), sizeA.toInt())!!
+
+        airplaneRightDamaged = ResourcesCompat.getDrawable(
+            resources, R.drawable.airplanerightdamaged,
+            null
+        )?.toBitmap(sizeA.toInt(), sizeA.toInt())!!
         ///// bullet
         if (Bul == "normal") {
             bullet = ResourcesCompat.getDrawable(
@@ -470,26 +493,75 @@ class MyView(context: Context?, weat:String?, Color :String?, Bul :String?, Logg
                 canvas.drawText(message,0,message.length,50f,80f,textPaint)
 
                 ///////draw the airplane with constraint on the x axe /////////
+                if(damaged_count == 100){
+                    damaged = false
+                    damaged_count = 0
+                }
                 if(expFrameFinal ==0){
                     if((roll<-0.701f)){
                         withTranslation(-495f, 0f) {
-                            drawBitmap(airplane, 500f, 1400f, null) }
+                            if (!damaged) {
+                                drawBitmap(airplane, 500f, 1400f, null)
+                            }else{
+                                damaged_count += 1
+                                if((damaged_count<20) or ((40<damaged_count) and (damaged_count<60)) or ((80<damaged_count) and (damaged_count<100))) {
+                                    drawBitmap(airplaneDamaged, 500f, 1400f, null)
+                                } else{
+                                    drawBitmap(airplane, 500f, 1400f, null)
+                                }
+                            }
+                        }
                         plane_x = 0f
                     }else if ((roll>0.701f)or((roll *(500f/0.701f)+500f)>925f)){
                         withTranslation(425f, 0f) {
-                            drawBitmap(airplane, 500f, 1400f, null) }
+                            if (!damaged) {
+                                drawBitmap(airplane, 500f, 1400f, null)
+                            } else{
+                                damaged_count += 1
+                                if((damaged_count<20) or ((40<damaged_count) and (damaged_count<60)) or ((80<damaged_count) and (damaged_count<100))) {
+                                    drawBitmap(airplaneDamaged, 500f, 1400f, null)
+                                } else{
+                                    drawBitmap(airplane, 500f, 1400f, null)
+                                }
+                            }
+                        }
                         plane_x = 925f
                     }else {
                         if ((roll * (500f / 0.701f) + 500f) < 925f) { /// to avoid airplane goes too much on the right, outside the screen
                             withTranslation(roll * (500f / 0.701f), 0f) {
                                 if (roll > oldRoll + 0.001) {
-                                    Log.i("OLDROLL", oldRoll.toString())
-                                    drawBitmap(airplaneRight, 500f, 1400f, null)
+                                    if(!damaged) {
+                                        drawBitmap(airplaneRight, 500f, 1400f, null)
+                                    } else{
+                                        damaged_count += 1
+                                        if((damaged_count<20) or ((40<damaged_count) and (damaged_count<60)) or ((80<damaged_count) and (damaged_count<100))) {
+                                            drawBitmap(airplaneRightDamaged, 500f, 1400f, null)
+                                        } else{
+                                            drawBitmap(airplaneRight, 500f, 1400f, null)
+                                        }
+                                    }
                                 } else if (roll < oldRoll - 0.001) {
-                                    Log.i("OLDROLL", oldRoll.toString())
-                                    drawBitmap(airplaneLeft, 500f, 1400f, null)
+                                    if(!damaged) {
+                                        drawBitmap(airplaneLeft, 500f, 1400f, null)
+                                    } else{
+                                        damaged_count += 1
+                                        if((damaged_count<20) or ((40<damaged_count) and (damaged_count<60)) or ((80<damaged_count) and (damaged_count<100))) {
+                                            drawBitmap(airplaneLeftDamaged, 500f, 1400f, null)
+                                        } else{
+                                            drawBitmap(airplaneLeft, 500f, 1400f, null)
+                                        }
+                                    }
                                 } else {
-                                    drawBitmap(airplane, 500f, 1400f, null)
+                                    if(!damaged) {
+                                        drawBitmap(airplane, 500f, 1400f, null)
+                                    } else{
+                                        damaged_count += 1
+                                        if((damaged_count<20) or ((40<damaged_count) and (damaged_count<60)) or ((80<damaged_count) and (damaged_count<100))) {
+                                            drawBitmap(airplaneDamaged, 500f, 1400f, null)
+                                        } else{
+                                            drawBitmap(airplane, 500f, 1400f, null)
+                                        }
+                                    }
                                 }
                             }
                             plane_x = 500f + roll * (500f / 0.701f)
@@ -976,67 +1048,79 @@ class MyView(context: Context?, weat:String?, Color :String?, Bul :String?, Logg
                 //////////////////  ------------- MANAGE COLLISION OUR PLANE WITH ENEMIES   ----------------- ////////////////
                 if( (array_position[0]>= plane_x-140f)and(array_position[0]<=plane_x+140f)and(enemy_position_y[0] <= plane_y+300f)and(enemy_position_y[0] >= plane_y-150f)){
                     if(!justcollide[0]) {
-                        if (hearts == 1) {
-                            final_explosion = false
-                            hearts -= 1
-                        } else {
-                            Log.i("COLPITO", "1")
-                            music.playCollisionSound(context)
-                            hearts -= 1
-                            justcollide[0] = true
-                        }
+                        if(!damaged) {
+                            if (hearts == 1) {
+                                final_explosion = false
+                                hearts -= 1
+                            } else {
+                                Log.i("COLPITO", "1")
+                                music.playCollisionSound(context)
+                                hearts -= 1
+                                justcollide[0] = true
+                                damaged = true
+                            }
+                            }
                     }
                 }
                 if( (array_position[1]>= plane_x-140f)and(array_position[1]<=plane_x+140f)and(enemy_position_y[1] <= plane_y+300f)and(enemy_position_y[1] >= plane_y-150f)){
                     if(!justcollide[1]) {
-                        if (hearts == 1) {
-                            final_explosion = false
-                            hearts -= 1
-                        } else {
-                            Log.i("COLPITO", "2")
-                            music.playCollisionSound(context)
-                            hearts -= 1
-                            justcollide[1] = true
-                        }
+                        if(!damaged) {
+                            if (hearts == 1) {
+                                final_explosion = false
+                                hearts -= 1
+                            } else {
+                                Log.i("COLPITO", "2")
+                                music.playCollisionSound(context)
+                                hearts -= 1
+                                justcollide[1] = true
+                                damaged = true
+                            }
+                            }
                     }
                 }
                 if( (array_position[2]>= plane_x-140f)and(array_position[2]<=plane_x+140f)and(enemy_position_y[2] <= plane_y+300f)and(enemy_position_y[2] >= plane_y-150f)){
-                    Log.i("COLPITO", "3")
                     if(!justcollide[2]) {
-                        if (hearts == 1) {
-                            final_explosion = false
-                            hearts -= 1
-                        } else {
-                            music.playCollisionSound(context)
-                            hearts -= 1
-                            justcollide[2] = true
+                        if(!damaged) {
+                            if (hearts == 1) {
+                                final_explosion = false
+                                hearts -= 1
+                            } else {
+                                music.playCollisionSound(context)
+                                hearts -= 1
+                                justcollide[2] = true
+                                damaged = true
+                            }
                         }
                     }
                 }
                 if( (array_position[3]+lateral_movement[3]>= plane_x-140f)and(array_position[3]+lateral_movement[3]<=plane_x+140f)and(enemy_position_y[3] <= plane_y+300f)and(enemy_position_y[3] >= plane_y-150f)){
-                    Log.i("COLPITO", "4")
                     if(!justcollide[3]) {
-                        if (hearts == 1) {
-                            final_explosion = false
-                            hearts -= 1
-                        } else {
-                            music.playCollisionSound(context)
-                            hearts -= 1
-                            justcollide[3] = true
+                        if(!damaged) {
+                            if (hearts == 1) {
+                                final_explosion = false
+                                hearts -= 1
+                            } else {
+                                music.playCollisionSound(context)
+                                hearts -= 1
+                                justcollide[3] = true
+                                damaged = true
+                            }
                         }
                     }
                 }
                 if( (lateral_movement[4]+array_position[4]>= plane_x-15f)and(lateral_movement[4]+array_position[4]<=plane_x+15f)and(enemy_position_y[4] == plane_y)){
-                    Log.i("COLPITO", "SI")
                     if(!justcollide[4]) {
-                        if (hearts == 1) {
-                            final_explosion = false
-                            hearts -= 1
-                        } else {
-                            music.playCollisionSound(context)
-                            hearts -= 1
-                            justcollide[4] = true
-                        }
+                        if(!damaged) {
+                            if (hearts == 1) {
+                                final_explosion = false
+                                hearts -= 1
+                            } else {
+                                music.playCollisionSound(context)
+                                hearts -= 1
+                                justcollide[4] = true
+                                damaged = true
+                            }
+                            }
                     }
                 }
                 ////////////////  ------------------------------------------- ////////////////////
@@ -1047,14 +1131,17 @@ class MyView(context: Context?, weat:String?, Color :String?, Bul :String?, Logg
                     and(boss_bullet_position_y[0] <= plane_y+190f)and(boss_bullet_position_y[0] >= plane_y-15f)){
                     if(just_shot_bullet_boss[0]==false) {////// to avoid multiple collision of same bullet
                         is_visible_boss_bullet[0]=false
-                        if (hearts == 1) {
-                            final_explosion = false
-                            hearts -= 1
-                        } else {
-                            hearts -= 1
-                            just_shot_bullet_boss[0]=true
-                            music.playBulletBossCollisionSound(context)
-                        }
+                        if (!damaged) {
+                            if (hearts == 1) {
+                                final_explosion = false
+                                hearts -= 1
+                            } else {
+                                hearts -= 1
+                                just_shot_bullet_boss[0] = true
+                                music.playBulletBossCollisionSound(context)
+                                damaged = true
+                            }
+                            }
                     }
                 }
                 ///////boss 2 bullets
@@ -1062,14 +1149,17 @@ class MyView(context: Context?, weat:String?, Color :String?, Bul :String?, Logg
                     and(boss_bullet_position_y[1] <= plane_y+190f)and(boss_bullet_position_y[1] >= plane_y-15f)){
                     if(just_shot_bullet_boss[1]==false) {
                         is_visible_boss_bullet[1]=false
-                        if (hearts == 1) {
-                            final_explosion = false
-                            hearts -= 1
-                        } else {
-                            hearts -= 1
-                            just_shot_bullet_boss[1]=true
-                            music.playBulletBossCollisionSound(context)
-                        }
+                        if(!damaged) {
+                            if (hearts == 1) {
+                                final_explosion = false
+                                hearts -= 1
+                            } else {
+                                hearts -= 1
+                                just_shot_bullet_boss[1] = true
+                                music.playBulletBossCollisionSound(context)
+                                damaged = true
+                            }
+                            }
                     }
                 }
                 if((boss_bullet_position_x[2] >=plane_x -15f) and (boss_bullet_position_x[2] <=plane_x +165f)and
@@ -1083,6 +1173,7 @@ class MyView(context: Context?, weat:String?, Color :String?, Bul :String?, Logg
                             hearts -= 1
                             just_shot_bullet_boss[2]=true
                             music.playBulletBossCollisionSound(context)
+                            damaged = true
                         }
                     }
                 }
