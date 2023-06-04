@@ -97,6 +97,8 @@ class MyView(context: Context?, weat:String?, Color :String?, Bul :String?, Logg
 
     var boss_hit = arrayOf<Boolean>(false,false)
 
+    var spawned = false
+
     var timeout_boss_hit = 0
     
     var damaged = false
@@ -644,19 +646,23 @@ class MyView(context: Context?, weat:String?, Color :String?, Bul :String?, Logg
                         spawn_enemy(4)
                     }
                 }*/
+
+
                 //////////////////////// spawn bosses //////////////////
-                if((Score >500) and  (!boss1_spawned)){
+                //if((Score % 500 >= 0) and (Score % 500 <= 50) and !((Score >= 0) and (Score<=500)) and (!boss1_spawned)){
+                if((Score>=500) and (!boss1_spawned)){
                     GlobalScope.launch {
                         boss1_spawned = true
+                        //boss_visible=true
                         spawn_boss(0)
                     }
                 }
-                if((Score >2000) and (!boss2_spawned)){
+                /*if((Score >2000) and (!boss2_spawned)){
                     GlobalScope.launch {
                         boss2_spawned = true
                         spawn_boss(1)
                     }
-                }
+                }*/
                 ///////////------------------ manage position of boss 1 -------------///////////////
                 if((boss_visible[0])and(!beat_boss1)){
                     //// permette al boss di muoversi avanti e indietro per count volte lungo asse y
@@ -1806,6 +1812,7 @@ class MyView(context: Context?, weat:String?, Color :String?, Bul :String?, Logg
                                 up[0]=0f
                                 ////// check if boss have still some lives, otherwise set the boss invisible(dead)
                                 if (life_boss[0] == 1) {
+                                    just_shot_bullet[0] = false
                                     life_boss[0] -= 1
                                     boss_visible[0] = false
                                     Score += 200
@@ -1815,6 +1822,7 @@ class MyView(context: Context?, weat:String?, Color :String?, Bul :String?, Logg
                                     expPos1_Boss[0][0] = boss_x[0] + lateral_movement_boss[0]
                                     expPos1_Boss[0][1] = boss_y[0]
                                     music.playBossDeathSound(context)
+                                    //boss1_spawned = false
                                 } else {
                                     just_shot_bullet[0] = false
                                     if(!boss_hit[0]) {
@@ -1838,6 +1846,7 @@ class MyView(context: Context?, weat:String?, Color :String?, Bul :String?, Logg
                                 }
                                 up[1]=0f
                                 if (life_boss[0] == 1) {
+                                    just_shot_bullet[1] = false
                                     life_boss[0] -= 1
                                     boss_visible[0] = false
                                     Score += 200
@@ -1847,6 +1856,7 @@ class MyView(context: Context?, weat:String?, Color :String?, Bul :String?, Logg
                                     expPos1_Boss[0][0] = boss_x[0] + lateral_movement_boss[0]
                                     expPos1_Boss[0][1] = boss_y[0]
                                     music.playBossDeathSound(context)
+                                    //boss1_spawned = false
                                 } else {
                                     just_shot_bullet[1] = false
                                     if(!boss_hit[0]) {
@@ -1870,6 +1880,7 @@ class MyView(context: Context?, weat:String?, Color :String?, Bul :String?, Logg
                                 }
                                 up[2]=0f
                                 if (life_boss[0] == 1) {
+                                    just_shot_bullet[2] = false
                                     life_boss[0] -= 1
                                     boss_visible[0] = false
                                     Score += 200
@@ -1879,6 +1890,7 @@ class MyView(context: Context?, weat:String?, Color :String?, Bul :String?, Logg
                                     expPos1_Boss[0][0] = boss_x[0] + lateral_movement_boss[0]
                                     expPos1_Boss[0][1] = boss_y[0]
                                     music.playBossDeathSound(context)
+                                    //boss1_spawned = false
                                 } else {
                                     just_shot_bullet[2] = false
                                     if(!boss_hit[0]) {
