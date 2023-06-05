@@ -676,7 +676,7 @@ class MyView(context: Context?, weat:String?, Color :String?, Bul :String?, Logg
                 if((boss_visible[0])) {
                     //// after tot times the boss go away
                     if (count_boss[0] == 28) {
-                        boss_y[0] -= 10f
+                        boss_y[0] -= 15f
                         withTranslation(lateral_movement_boss[0], boss_y[0]) {
                             if (boss_hit[0]) {
                                 timeout_boss_hit += 1
