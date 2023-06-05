@@ -93,7 +93,7 @@ class MyView(context: Context?, weat:String?, Color :String?, Bul :String?, Logg
 
     var boss_x = arrayOf<Float>(0f,0f)
     var boss_y = arrayOf<Float>(0f,0f)
-    var boss_visible = arrayOf<Boolean>(false,false,false)
+    var boss_visible = arrayOf<Boolean>(false,false)
 
     var boss_hit = arrayOf<Boolean>(false,false)
 
@@ -649,10 +649,17 @@ class MyView(context: Context?, weat:String?, Color :String?, Bul :String?, Logg
 
 
                 //////////////////////// spawn bosses //////////////////
-                //if((Score % 500 >= 0) and (Score % 500 <= 50) and !((Score >= 0) and (Score<=500)) and (!boss1_spawned)){
-                if((Score>=500) and (!boss1_spawned)){
+                if(((Score >=500) and (Score<=580) and !((Score >= 0) and (Score<=500)) and (!boss1_spawned)) or((Score % 1000>= 0) and (Score % 1000 <= 50) and !((Score >= 0) and (Score<=500)) and (!boss1_spawned))){
+                //if((Score>=500) and (!boss1_spawned)){
                     GlobalScope.launch {
                         boss1_spawned = true
+                        //set to the initial value position variables and booleans
+                        boss_y[0] = 0f
+                        up_if_true[0]= false
+                        boss_x[0] = 0f
+                        dx_if_true_boss[0] = true
+                        lateral_movement_boss[0] = 0f
+                        life_boss[0] = 3
                         //boss_visible=true
                         spawn_boss(0)
                     }
@@ -664,7 +671,7 @@ class MyView(context: Context?, weat:String?, Color :String?, Bul :String?, Logg
                     }
                 }*/
                 ///////////------------------ manage position of boss 1 -------------///////////////
-                if((boss_visible[0])and(!beat_boss1)){
+                if((boss_visible[0])){
                     //// permette al boss di muoversi avanti e indietro per count volte lungo asse y
                     if((boss_y[0]>1000f) and(!up_if_true[0]) and (count_boss[0]<4)){
                         up_if_true[0] = true
@@ -684,7 +691,7 @@ class MyView(context: Context?, weat:String?, Color :String?, Bul :String?, Logg
                     }
                     /////// incremento lungo asse x a seconda se va a dx o sx
                     if(current_time%4==0){
-                        random_x = ((5..15).random()).toFloat()
+                        random_x = ((5..14).random()).toFloat()
                         change =((0..2).random())
                         /*if(change == 0) {
                             dx_if_true_boss[0] = !dx_if_true_boss[0]
@@ -1800,7 +1807,7 @@ class MyView(context: Context?, weat:String?, Color :String?, Bul :String?, Logg
                 //////////////////////***************************************************//////////////////////////////////////////
 
                 ///////////////******** MANAGE COLLISION OUR BULLETS TO BOSS 1 *******////////////////
-                if(is_visible_bul[0]) {
+                if((is_visible_bul[0]) and(boss_visible[0])) {
                     if ((bullet_position_x[0] >= boss_x[0] + lateral_movement_boss[0] - 15f) and (bullet_position_x[0] <= boss_x[0] + lateral_movement_boss[0] + 215f) and (bullet_position_y[0] <= boss_y[0] + 215f) and (bullet_position_y[0] >= boss_y[0] - 15f)) {
                         if (!just_shot_bullet[0]) {
                             just_shot_bullet[0] = true
@@ -1822,7 +1829,7 @@ class MyView(context: Context?, weat:String?, Color :String?, Bul :String?, Logg
                                     expPos1_Boss[0][0] = boss_x[0] + lateral_movement_boss[0]
                                     expPos1_Boss[0][1] = boss_y[0]
                                     music.playBossDeathSound(context)
-                                    //boss1_spawned = false
+                                    boss1_spawned = false
                                 } else {
                                     just_shot_bullet[0] = false
                                     if(!boss_hit[0]) {
@@ -1835,7 +1842,7 @@ class MyView(context: Context?, weat:String?, Color :String?, Bul :String?, Logg
                         }
                     }
                 }
-                if(is_visible_bul[1]) {
+                if((is_visible_bul[1])and(boss_visible[0])) {
                     if ((bullet_position_x[1] >= boss_x[0] + lateral_movement_boss[0] - 15f) and (bullet_position_x[1] <= boss_x[0] + lateral_movement_boss[0] + 215f) and (bullet_position_y[1] <= boss_y[0] + 215f) and (bullet_position_y[1] >= boss_y[0] - 15f)) {
                         if (!just_shot_bullet[1]) {
                             just_shot_bullet[1] = true
@@ -1856,7 +1863,7 @@ class MyView(context: Context?, weat:String?, Color :String?, Bul :String?, Logg
                                     expPos1_Boss[0][0] = boss_x[0] + lateral_movement_boss[0]
                                     expPos1_Boss[0][1] = boss_y[0]
                                     music.playBossDeathSound(context)
-                                    //boss1_spawned = false
+                                    boss1_spawned = false
                                 } else {
                                     just_shot_bullet[1] = false
                                     if(!boss_hit[0]) {
@@ -1869,7 +1876,7 @@ class MyView(context: Context?, weat:String?, Color :String?, Bul :String?, Logg
                         }
                     }
                 }
-                if(is_visible_bul[2]) {
+                if((is_visible_bul[2])and(boss_visible[0])) {
                     if ((bullet_position_x[2] >= boss_x[0] + lateral_movement_boss[0] - 15f) and (bullet_position_x[2] <= boss_x[0] + lateral_movement_boss[0] + 215f) and (bullet_position_y[2] <= boss_y[0] + 215f) and (bullet_position_y[2] >= boss_y[0] - 15f)) {
                         if (!just_shot_bullet[2]) {
                             just_shot_bullet[2] = true
@@ -1890,7 +1897,7 @@ class MyView(context: Context?, weat:String?, Color :String?, Bul :String?, Logg
                                     expPos1_Boss[0][0] = boss_x[0] + lateral_movement_boss[0]
                                     expPos1_Boss[0][1] = boss_y[0]
                                     music.playBossDeathSound(context)
-                                    //boss1_spawned = false
+                                    boss1_spawned = false
                                 } else {
                                     just_shot_bullet[2] = false
                                     if(!boss_hit[0]) {
@@ -1905,6 +1912,7 @@ class MyView(context: Context?, weat:String?, Color :String?, Bul :String?, Logg
                 }
 
                 //////////******** OUR BULLET HIT BOSS 2 *******////////////////
+                /*
                 if((bullet_position_x[0]>=boss_x[1]+lateral_movement_boss[1]-15f)and(bullet_position_x[0]<=boss_x[1]+lateral_movement_boss[1]+215f)and(bullet_position_y[0]<=boss_y[1]+215f)and(bullet_position_y[0]>=boss_y[1]-15f)) {
                     if(!just_shot_bullet[0]){
                         just_shot_bullet[1] = true
@@ -1958,7 +1966,7 @@ class MyView(context: Context?, weat:String?, Color :String?, Bul :String?, Logg
                             music.playHitBossSound(context)
                         }
                     }
-                }
+                }*/
                 //////////////// ********** END COLLISION BULLET WITH BOSS *******************///////////////
 
                 //////////////////////// EXPLOSION BOSS  /////////////////////////////////////////
@@ -1983,6 +1991,7 @@ class MyView(context: Context?, weat:String?, Color :String?, Bul :String?, Logg
                     }
                 }
                 /////////////////ESPLOSIONE BULLET 1 BOSS 2
+                /*
                 if (isExpBul1_Boss[1]) {
                     if (expFrame1_Boss[1] < 18) {
                         if(expFrame1_Boss[1] == 0){
@@ -2001,7 +2010,7 @@ class MyView(context: Context?, weat:String?, Color :String?, Bul :String?, Logg
                         expFrame1_Boss[1] = 0
                         isExpBul1_Boss[1] = false
                     }
-                }
+                }*/
                 /////////////////ESPLOSIONE BULLET 2 BOSS 1
                 if (isExpBul2_Boss[0]) {
                     if (expFrame2_Boss[0] < 18) {
@@ -2023,6 +2032,7 @@ class MyView(context: Context?, weat:String?, Color :String?, Bul :String?, Logg
                     }
                 }
                 /////////////////ESPLOSIONE BULLET 2 BOSS 2
+                /*
                 if (isExpBul2_Boss[1]) {
                     if (expFrame2_Boss[1] < 18) {
                         if(expFrame2_Boss[1] == 0){
@@ -2041,7 +2051,7 @@ class MyView(context: Context?, weat:String?, Color :String?, Bul :String?, Logg
                         expFrame2_Boss[1] = 0
                         isExpBul2_Boss[1] = false
                     }
-                }
+                }*/
                 /////////////////ESPLOSIONE BULLET 3 BOSS 1
                 if (isExpBul3_Boss[0]) {
                     if (expFrame3_Boss[0] < 18) {
@@ -2063,6 +2073,7 @@ class MyView(context: Context?, weat:String?, Color :String?, Bul :String?, Logg
                     }
                 }
                 /////////////////ESPLOSIONE BULLET 3 BOSS 2
+                /*
                 if (isExpBul3_Boss[1]) {
                     if (expFrame3_Boss[1] < 18) {
                         if(expFrame3_Boss[1] == 0){
@@ -2081,7 +2092,7 @@ class MyView(context: Context?, weat:String?, Color :String?, Bul :String?, Logg
                         expFrame3_Boss[1] = 0
                         isExpBul3_Boss[1] = false
                     }
-                }
+                }*/
 
                 ///////////////////////////***************************************************/////////////////////////////////////
                 /////////// after death we have explosion and then can go to the gameover page
