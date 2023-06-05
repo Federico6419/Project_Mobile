@@ -129,6 +129,7 @@ class MyView(context: Context?, weat:String?, Color :String?, Bul :String?, Logg
     lateinit var airplaneRightDamaged : Bitmap
     lateinit var bullet : Bitmap
     lateinit var bulletAvailable : Bitmap
+    lateinit var bossBullet: Bitmap
     var enemy_type1 : Bitmap
     var enemy_type2 : Bitmap
     var enemy_type3 : Bitmap
@@ -391,6 +392,11 @@ class MyView(context: Context?, weat:String?, Color :String?, Bul :String?, Logg
                 null
             )?.toBitmap(widthBullet.toInt(), heighBullet.toInt())!!
         }
+
+        bossBullet = ResourcesCompat.getDrawable(
+            resources, R.drawable.bossbullet,
+            null
+        )?.toBitmap(widthBullet.toInt(), heighBullet.toInt())!!
 
         if (Bul == "normal"){
             //Bullet available
@@ -1009,7 +1015,7 @@ class MyView(context: Context?, weat:String?, Color :String?, Bul :String?, Logg
                     withTranslation(0f, upboss[0]) {
                         if (shotboss[0]) {
                             is_visible_boss_bullet[0]=true
-                            drawBitmap(bullet, lateral_movement_boss[0]+boss_x[0]+90f, (boss_y[0]+200f), null)
+                            drawBitmap(bossBullet, lateral_movement_boss[0]+boss_x[0]+90f, (boss_y[0]+200f), null)
                             resboss = lateral_movement_boss[0]+boss_x[0]+90f
                             resbossy = (boss_y[0]+200f)
                             shotboss[0] = false
@@ -1018,7 +1024,7 @@ class MyView(context: Context?, weat:String?, Color :String?, Bul :String?, Logg
                             music.playShootBossSound(context)
                         } else {
                             if(is_visible_boss_bullet[0]) {
-                                drawBitmap(bullet, resboss, (resbossy), null)
+                                drawBitmap(bossBullet, resboss, (resbossy), null)
                             }
                             if((upboss[0])>1400f){
                                 is_visible_boss_bullet[0] = true
@@ -1037,7 +1043,7 @@ class MyView(context: Context?, weat:String?, Color :String?, Bul :String?, Logg
                         upboss[1]+= 10f
                         if (shotboss[1]) {
                             is_visible_boss_bullet[1]=true
-                            drawBitmap(bullet, lateral_movement_boss[1]+boss_x[1]+90f, (boss_y[1]+200f), null)
+                            drawBitmap(bossBullet, lateral_movement_boss[1]+boss_x[1]+90f, (boss_y[1]+200f), null)
                             resboss2_1 = lateral_movement_boss[1]+boss_x[1]+90f
                             resbossy2_1 = (upboss[1]+boss_y[1]+200f)
                             shotboss[1] = false
@@ -1046,7 +1052,7 @@ class MyView(context: Context?, weat:String?, Color :String?, Bul :String?, Logg
                             music.playShootBossSound(context)
                         } else {
                             if(is_visible_boss_bullet[1]) {
-                                drawBitmap(bullet, resboss2_1, (resbossy2_1), null)
+                                drawBitmap(bossBullet, resboss2_1, (resbossy2_1), null)
                             }
                             if((upboss[1])>1400f){
                                 is_visible_boss_bullet[1] = true
@@ -1066,7 +1072,7 @@ class MyView(context: Context?, weat:String?, Color :String?, Bul :String?, Logg
                         upboss[1]+= 10f
                         if (shotboss[1]) {
                             is_visible_boss_bullet[2]=true
-                            drawBitmap(bullet, lateral_movement_boss[1]+boss_x[1]+90f,(boss_y[1]+200f), null)
+                            drawBitmap(bossBullet, lateral_movement_boss[1]+boss_x[1]+90f,(boss_y[1]+200f), null)
                             resboss2_2 = lateral_movement_boss[1]+boss_x[1]+90f
                             resbossy2_2 = (upboss[1]+boss_y[1]+200f)
                             shotboss[1] = false
@@ -1075,7 +1081,7 @@ class MyView(context: Context?, weat:String?, Color :String?, Bul :String?, Logg
                             music.playShootBossSound(context)
                         }else{
                             if(is_visible_boss_bullet[2]) {
-                                drawBitmap(bullet, resboss2_2, (resbossy2_2), null)
+                                drawBitmap(bossBullet, resboss2_2, (resbossy2_2), null)
                             }
                             if((upboss[1])>1400f){
                                 is_visible_boss_bullet[2]=true
