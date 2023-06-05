@@ -71,7 +71,7 @@ class CameraActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        supportActionBar?.setTitle("                     Death Planes")     //Define the name of the application
+        supportActionBar?.setTitle("                         Death Planes")     //Define the name of the application
 
         //Inflate the camera binding
         binding = ActivityCameraBinding.inflate(layoutInflater)

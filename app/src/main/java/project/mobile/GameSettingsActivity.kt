@@ -38,7 +38,7 @@ class GameSettingsActivity : AppCompatActivity(), LocationListener {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        supportActionBar?.setTitle("                     Death Planes")     //Define the name of the application
+        supportActionBar?.setTitle("                         Death Planes")     //Define the name of the application
 
         var isRestarted = intent.getStringExtra("Restarted")
         if(isRestarted == "1"){

@@ -59,7 +59,7 @@ class SignUpActivity : AppCompatActivity() {
 
         firebaseAuth = FirebaseAuth.getInstance()   //Get instance from Firebase Authentication
 
-        supportActionBar?.setTitle("                     Death Planes")     //Decide the title of the application
+        supportActionBar?.setTitle("                         Death Planes")     //Decide the title of the application
 
         //Music management
         music.playSoundMenu(this)
@@ -262,8 +262,8 @@ class SignUpActivity : AppCompatActivity() {
             if(username.isEmpty()){
                 Toast.makeText(this, "Username not inserted", Toast.LENGTH_SHORT).show()
             }
-            else if(username.length > 12){
-                Toast.makeText(this, "Username must be shorter than 12 characters", Toast.LENGTH_SHORT).show()
+            else if(username.length > 10){
+                Toast.makeText(this, "Username must be shorter than 10 characters", Toast.LENGTH_SHORT).show()
             }
             //Check if the email is not empty
             else if(email.isEmpty()){

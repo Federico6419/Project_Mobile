@@ -29,7 +29,7 @@ class SignInActivity : AppCompatActivity() {
 
         firebaseAuth = FirebaseAuth.getInstance()
 
-        supportActionBar?.setTitle("                     Death Planes")
+        supportActionBar?.setTitle("                         Death Planes")
 
         //Music management
         music.playSoundMenu(this)

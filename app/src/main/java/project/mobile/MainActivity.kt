@@ -84,7 +84,7 @@ class MainActivity : AppCompatActivity(), LifecycleObserver {
         }
         ProcessLifecycleOwner.get().getLifecycle().addObserver(lifecycleEventObserver)
 
-        supportActionBar?.setTitle("                     Death Planes")     //Define the name of the application
+        supportActionBar?.setTitle("                         Death Planes")     //Define the name of the application
 
         //If the previous user is logged, sign him out
         if((firebaseAuth.currentUser?.email != null) and justExecuted){
@@ -157,6 +157,7 @@ class MainActivity : AppCompatActivity(), LifecycleObserver {
                 current_username = ""        //Username of the current user
                 current_id = ""              //ID of the current user
                 current_score = 0           //Score of the current user
+                userimage = null
 
                 intent = Intent(this, MainActivity::class.java)
                 startActivity(intent)

@@ -21,7 +21,7 @@ class SettingsActivity : AppCompatActivity() {
 
         firebaseAuth = FirebaseAuth.getInstance()   //Get instance from Firebase Authentication
 
-        supportActionBar?.setTitle("                     Death Planes")
+        supportActionBar?.setTitle("                         Death Planes")
 
         //val id=intent.getStringExtra("ID")
 
@@ -53,8 +53,8 @@ class SettingsActivity : AppCompatActivity() {
             if(user.isEmpty()){
                 Toast.makeText(this, "Username not inserted", Toast.LENGTH_SHORT).show()
             }
-            else if(user.length > 12){
-                Toast.makeText(this, "Username must be shorter than 12 characters", Toast.LENGTH_SHORT).show()
+            else if(user.length > 10){
+                Toast.makeText(this, "Username must be shorter than 10 characters", Toast.LENGTH_SHORT).show()
             }
             else {
 

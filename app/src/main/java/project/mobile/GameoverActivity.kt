@@ -40,7 +40,7 @@ class GameoverActivity : AppCompatActivity() {
 
         conxt = this
 
-        supportActionBar?.setTitle("                     Death Planes")
+        supportActionBar?.setTitle("                         Death Planes")
 
         val color = intent.getStringExtra("Color")
         val bul = intent.getStringExtra("Bullet")

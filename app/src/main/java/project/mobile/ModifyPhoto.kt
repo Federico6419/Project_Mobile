@@ -24,7 +24,7 @@ class ModifyPhoto : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        supportActionBar?.setTitle("                     Death Planes")     //Define the name of the application
+        supportActionBar?.setTitle("                         Death Planes")     //Define the name of the application
 
         setContentView(R.layout.activity_modify_photo)
 
