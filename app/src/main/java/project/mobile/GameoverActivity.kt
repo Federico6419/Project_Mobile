@@ -33,6 +33,9 @@ class GameoverActivity : AppCompatActivity() {
     var opponent = ""   //Opponent's name
     var isOpponentSet = false
 
+    var opponentResult = 0
+    var difference = 0
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
@@ -65,10 +68,6 @@ class GameoverActivity : AppCompatActivity() {
                         getDifference(current_username, opponent)
                     }
 
-                    GlobalScope.launch {
-                        getLeaderB()
-                    }
-
                     var usernameText = findViewById(R.id.UsernameText) as TextView
                     usernameText.text = current_username
 
@@ -96,7 +95,6 @@ class GameoverActivity : AppCompatActivity() {
 
                     //Get the record
                     scoreReference.get().addOnSuccessListener {
-                        Log.i("BUG", it.value.toString())
                         var recordView = findViewById(R.id.RecordText) as TextView
                         recordView.text = "Record: " + it.value.toString()
                     }
@@ -132,6 +130,24 @@ class GameoverActivity : AppCompatActivity() {
                     loading.visibility = View.INVISIBLE
                     val gameoverView = findViewById(R.id.Gameover) as ImageView
                     gameoverView.visibility = View.INVISIBLE
+                    var profileImageView = findViewById(R.id.ProfileImage) as ImageView
+                    profileImageView.visibility = View.INVISIBLE
+                    var usernameText = findViewById(R.id.UsernameText) as TextView
+                    usernameText.visibility = View.INVISIBLE
+
+                    if(isOpponentSet){
+                        var rankingTextOpponent = findViewById(R.id.RankingTextOpponent) as TextView
+                        rankingTextOpponent.visibility = View.INVISIBLE
+                        var opponentText = findViewById(R.id.UsernameTextOpponent) as TextView
+                        opponentText.visibility = View.INVISIBLE
+                        var recordOpponent = findViewById(R.id.RecordTextOpponent) as TextView
+                        recordOpponent.visibility = View.INVISIBLE
+                        var profileImageOpponent = findViewById(R.id.ProfileImageOpponent) as ImageView
+                        profileImageOpponent.visibility = View.INVISIBLE
+                        var winnerView = findViewById(R.id.WinnerText) as TextView
+                        winnerView.visibility = View.INVISIBLE
+                    }
+
 
                     //Change loading game views to visible
                     var progressView = findViewById(R.id.progress_loader_game) as ProgressBar
@@ -397,8 +413,13 @@ class GameoverActivity : AppCompatActivity() {
                                     if (current_username == cur_user) {
                                         var profileImageView = findViewById(R.id.ProfileImage) as ImageView
                                         profileImageView.setImageResource(R.drawable.profileimage)
-                                        profileImageView.getLayoutParams().height = 120
-                                        profileImageView.getLayoutParams().width = 120
+                                        if(isOpponentSet) {
+                                            profileImageView.getLayoutParams().height = 120
+                                            profileImageView.getLayoutParams().width = 120
+                                        } else{
+                                            profileImageView.getLayoutParams().height = 250
+                                            profileImageView.getLayoutParams().width = 250
+                                        }
                                     } else if (isOpponentSet and (cur_user == opponent)){
                                         var profileImageOpponent = findViewById(R.id.ProfileImageOpponent) as ImageView
                                         profileImageOpponent.setImageResource(R.drawable.profileimage)
@@ -461,6 +482,23 @@ class GameoverActivity : AppCompatActivity() {
                 }
                 progressBar.visibility = View.INVISIBLE
                 loading.visibility = View.INVISIBLE
+
+                if(isOpponentSet) {
+                    var winnerView = findViewById(R.id.WinnerText) as TextView
+                    if (opponentResult == 0) {
+                        winnerView.text =
+                            "You're beating " + opponent + " by " + difference + " points!"
+                        winnerView.setTextColor(Color.GREEN)
+                    } else if (opponentResult == 1) {
+                        winnerView.text =
+                            "You need " + difference + " points more to beat " + opponent + "!"
+                        winnerView.setTextColor(Color.RED)
+                    } else {
+                        winnerView.text = "You have the same record of " + opponent + "!"
+                        winnerView.setTextColor(Color.YELLOW)
+                    }
+                }
+
                 firebaseAuth.uid?.let {
                     var rankingText = findViewById(R.id.RankingText) as TextView
                     isFinished = true
@@ -485,19 +523,19 @@ class GameoverActivity : AppCompatActivity() {
                     val items = response.body()
                     if (items != null) {
                         var winner = items.winner
-                        var difference = items.difference
+                        difference = items.difference!!
                         Log.i("DIFFERENCE", items.toString())
 
-                        var winnerView = findViewById(R.id.WinnerText) as TextView
                         if(winner == current_username) {
-                            winnerView.text = "You're beating " + opponent + " by " + difference + " points!"
-                            winnerView.setTextColor(Color.GREEN)
+                            opponentResult = 0
                         } else if(winner == opponent) {
-                            winnerView.text = "You need " + difference + " points more to beat " + opponent + "!"
-                            winnerView.setTextColor(Color.RED)
+                            opponentResult = 1
                         } else {
-                            winnerView.text = "You have the same record of " + opponent + "!"
-                            winnerView.setTextColor(Color.YELLOW)
+                            opponentResult = 2
+                        }
+
+                        GlobalScope.launch {
+                            getLeaderB()
                         }
                     }
                 }
