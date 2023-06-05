@@ -54,7 +54,7 @@ class ModifyPhoto : AppCompatActivity() {
             ChangePhotoButton.visibility = View.INVISIBLE
             ChangePhotoButton.isClickable = false
 
-            /// hide change photo button
+            /// hide submit photo button
             SubmitButton.visibility = View.INVISIBLE
             SubmitButton.isClickable = false
 
@@ -78,6 +78,7 @@ class ModifyPhoto : AppCompatActivity() {
                 // File deleted successfully
                 Toast.makeText(this, "Photo deleted successfully", Toast.LENGTH_SHORT)
                 userimage = null
+                hasphoto = false
             }.addOnFailureListener {
                 // Uh-oh, an error occurred!
                 Toast.makeText(this, "Something goes wrong", Toast.LENGTH_SHORT)
@@ -93,6 +94,7 @@ class ModifyPhoto : AppCompatActivity() {
             var storageRef = storage.reference
 
             var file = userimage
+            hasphoto = true
 
             val imageRef = storageRef.child("Images/$current_username")
             var uploadTask = file?.let { imageRef.putFile(it) }
