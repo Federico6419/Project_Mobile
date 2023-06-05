@@ -660,6 +660,8 @@ class MyView(context: Context?, weat:String?, Color :String?, Bul :String?, Logg
                         dx_if_true_boss[0] = true
                         lateral_movement_boss[0] = 0f
                         life_boss[0] = 3
+                        boss_hit[0] = false
+                        count_boss[0] = 0
                         //boss_visible=true
                         spawn_boss(0)
                     }
@@ -671,50 +673,80 @@ class MyView(context: Context?, weat:String?, Color :String?, Bul :String?, Logg
                     }
                 }*/
                 ///////////------------------ manage position of boss 1 -------------///////////////
-                if((boss_visible[0])){
-                    //// permette al boss di muoversi avanti e indietro per count volte lungo asse y
-                    if((boss_y[0]>1000f) and(!up_if_true[0]) and (count_boss[0]<4)){
-                        up_if_true[0] = true
-                        count_boss[0] +=1
-                    }
-                    if((boss_y[0]<100f) and (up_if_true[0]) and (count_boss[0]<4)){
-                        up_if_true[0] = false
-                    }
-                    ////// incremento lungo asse y
-                    if(up_if_true[0]){ boss_y[0] -=5f}
-                    if(!up_if_true[0]){ boss_y[0] +=5f}
-                    //// controlla se andare a destra o sinisra entro certi limiti
-                    if((lateral_movement_boss[0]+boss_x[0]>900f) and (dx_if_true_boss[0] == true)){
-                        dx_if_true_boss[0] = false
-                    }else if((lateral_movement_boss[0]+boss_x[0]<100f) and (dx_if_true_boss[0]==false)){
-                        dx_if_true_boss[0] = true
-                    }
-                    /////// incremento lungo asse x a seconda se va a dx o sx
-                    if(current_time%4==0){
-                        random_x = ((5..14).random()).toFloat()
-                        change =((0..2).random())
-                        /*if(change == 0) {
-                            dx_if_true_boss[0] = !dx_if_true_boss[0]
-                        }*/
-                    }
-                    if(dx_if_true_boss[0]==true){lateral_movement_boss[0] =lateral_movement_boss[0]+random_x}
-                    if(dx_if_true_boss[0]==false){lateral_movement_boss[0] =lateral_movement_boss[0]-random_x}
-
-                    withTranslation (lateral_movement_boss[0],boss_y[0]) {
-                        if(boss_hit[0]){
-                            timeout_boss_hit += 1
-                            if(timeout_boss_hit == 100){
-                                boss_hit[0] = false
-                                timeout_boss_hit = 0
-                            }
-                            if((timeout_boss_hit < 20) or ((40 < timeout_boss_hit) and (timeout_boss_hit < 60)) or ((80 < timeout_boss_hit) and (timeout_boss_hit < 100))) {
-                                drawBitmap(boss1_hit, boss_x[0], 0f, null)
-                            }
-                            else{
+                if((boss_visible[0])) {
+                    //// after tot times the boss go away
+                    if (count_boss[0] == 35) {
+                        boss_y[0] += 10f
+                        withTranslation(lateral_movement_boss[0], boss_y[0]) {
+                            if (boss_hit[0]) {
+                                timeout_boss_hit += 1
+                                if (timeout_boss_hit == 100) {
+                                    boss_hit[0] = false
+                                    timeout_boss_hit = 0
+                                }
+                                if ((timeout_boss_hit < 20) or ((40 < timeout_boss_hit) and (timeout_boss_hit < 60)) or ((80 < timeout_boss_hit) and (timeout_boss_hit < 100))) {
+                                    drawBitmap(boss1_hit, boss_x[0], 0f, null)
+                                } else {
+                                    drawBitmap(boss1, boss_x[0], 0f, null)
+                                }
+                            } else {
                                 drawBitmap(boss1, boss_x[0], 0f, null)
                             }
-                        } else {
-                            drawBitmap(boss1, boss_x[0], 0f, null)
+                        }
+                    }
+                    else {
+                        //// permette al boss di muoversi avanti e indietro per count volte lungo asse y
+                        if ((boss_y[0] > 1000f) and (!up_if_true[0])) {
+                            up_if_true[0] = true
+                        }
+                        if ((boss_y[0] < 100f) and (up_if_true[0])) {
+                            up_if_true[0] = false
+                        }
+                        ////// incremento lungo asse y
+                        if (up_if_true[0]) {
+                            boss_y[0] -= 5f
+                        }
+                        if (!up_if_true[0]) {
+                            boss_y[0] += 5f
+                        }
+                        //// controlla se andare a destra o sinisra entro certi limiti
+                        if ((lateral_movement_boss[0] + boss_x[0] > 900f) and (dx_if_true_boss[0] == true)) {
+                            dx_if_true_boss[0] = false
+                            count_boss[0] += 1
+                        } else if ((lateral_movement_boss[0] + boss_x[0] < 100f) and (dx_if_true_boss[0] == false)) {
+                            dx_if_true_boss[0] = true
+                            count_boss[0] += 1
+                        }
+                        /////// incremento lungo asse x a seconda se va a dx o sx
+                        if (current_time % 4 == 0) {
+                            random_x = ((5..14).random()).toFloat()
+                            change = ((0..2).random())
+                            /*if(change == 0) {
+                                dx_if_true_boss[0] = !dx_if_true_boss[0]
+                            }*/
+                        }
+                        if (dx_if_true_boss[0] == true) {
+                            lateral_movement_boss[0] = lateral_movement_boss[0] + random_x
+                        }
+                        if (dx_if_true_boss[0] == false) {
+                            lateral_movement_boss[0] = lateral_movement_boss[0] - random_x
+                        }
+
+                        withTranslation(lateral_movement_boss[0], boss_y[0]) {
+                            if (boss_hit[0]) {
+                                timeout_boss_hit += 1
+                                if (timeout_boss_hit == 100) {
+                                    boss_hit[0] = false
+                                    timeout_boss_hit = 0
+                                }
+                                if ((timeout_boss_hit < 20) or ((40 < timeout_boss_hit) and (timeout_boss_hit < 60)) or ((80 < timeout_boss_hit) and (timeout_boss_hit < 100))) {
+                                    drawBitmap(boss1_hit, boss_x[0], 0f, null)
+                                } else {
+                                    drawBitmap(boss1, boss_x[0], 0f, null)
+                                }
+                            } else {
+                                drawBitmap(boss1, boss_x[0], 0f, null)
+                            }
                         }
                     }
                 }
