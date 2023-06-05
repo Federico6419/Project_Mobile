@@ -36,7 +36,7 @@
             android:padding="10dp">
 
             <TextView
-                android:layout_width="3dp"
+                android:layout_width="5dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:text="Ranking" />
@@ -45,12 +45,14 @@
                 android:layout_width="67dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
+                android:layout_marginLeft="10dp"
                 android:text="Player" />
 
             <TextView
                 android:layout_width="12dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
+                android:layout_marginRight="60dp"
                 android:text="Score" />
         </TableRow>
     </TableLayout>
