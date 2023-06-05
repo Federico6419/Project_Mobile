@@ -42,6 +42,15 @@ class GameoverActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
+        music.playGameoverMusic(this)
+
+        //Mute management
+        if (muted) {
+            music.setVolume(0.0f, 0.0f)
+        } else {
+            music.setVolume(1.0f, 1.0f)
+        }
+
         firebaseAuth = FirebaseAuth.getInstance()   //Get instance from Firebase Authentication
 
         conxt = this
@@ -160,6 +169,7 @@ class GameoverActivity : AppCompatActivity() {
                     var view = findViewById(R.id.View) as ConstraintLayout
                     view.setBackgroundColor(Color.BLUE)
 
+                    music.stopSound()
                     intent = Intent(this, GameActivity::class.java)
                     intent.putExtra("Color", color)
                     intent.putExtra("Bullet", bul)
@@ -169,6 +179,7 @@ class GameoverActivity : AppCompatActivity() {
 
                 val returnMenuButton = findViewById(R.id.ReturnButton) as ImageButton
                 returnMenuButton.setOnClickListener() {
+                    music.stopSound()
                     uid?.let {
                         intent = Intent(this, MainActivity::class.java)
                         startActivity(intent)
@@ -194,6 +205,7 @@ class GameoverActivity : AppCompatActivity() {
 
             val signUpButton = findViewById(R.id.SignUpButton) as Button
             signUpButton.setOnClickListener() {
+                music.stopSound()
                 intent = Intent(this, SignUpActivity::class.java)
                 startActivity(intent)
                 finish()
@@ -201,6 +213,7 @@ class GameoverActivity : AppCompatActivity() {
 
             val signInButton = findViewById(R.id.SignInButton) as Button
             signInButton.setOnClickListener() {
+                music.stopSound()
                 intent = Intent(this, SignInActivity::class.java)
                 startActivity(intent)
                 finish()
@@ -238,6 +251,7 @@ class GameoverActivity : AppCompatActivity() {
                 var view = findViewById(R.id.View) as ConstraintLayout
                 view.setBackgroundColor(Color.BLUE)
 
+                music.stopSound()
                 intent = Intent(this, GameActivity::class.java)
                 intent.putExtra("Color", color)
                 intent.putExtra("Bullet", bul)
@@ -247,6 +261,7 @@ class GameoverActivity : AppCompatActivity() {
 
             val returnMenuButton = findViewById(R.id.ReturnButton) as ImageButton
             returnMenuButton.setOnClickListener() {
+                music.stopSound()
                 uid?.let {
                     intent = Intent(this, MainActivity::class.java)
                     startActivity(intent)

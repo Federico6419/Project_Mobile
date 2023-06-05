@@ -457,5 +457,13 @@ public class MusicManager {
             }
         }
     }
+
+    fun playGameoverMusic(conxt: Context) {
+        if (mMediaPlayer == null) {
+            mMediaPlayer = MediaPlayer.create(conxt, R.raw.gameovermusic)
+            mMediaPlayer!!.isLooping = false
+            mMediaPlayer!!.start()
+        } else mMediaPlayer!!.start()
+    }
 }
 
