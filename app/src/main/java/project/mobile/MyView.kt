@@ -2142,6 +2142,7 @@ class MyView(context: Context?, weat:String?, Color :String?, Bul :String?, Logg
                         )
                         expFrameFinal = expFrameFinal + 1
                     } else {
+                        music.stopSound()
                         //expFrameFinal = 0
                         count_to_exit += 1
                         if(count_to_exit ==100) {
@@ -2173,7 +2174,6 @@ class MyView(context: Context?, weat:String?, Color :String?, Bul :String?, Logg
                 intent.putExtra("Color", col)
                 intent.putExtra("Bullet", bul)
                 intent.putExtra("Score", Score.toString())
-                music.stopSound()
                 startActivity(context, intent, null)
                 (context as Activity).finish()
 

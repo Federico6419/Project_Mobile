@@ -36,8 +36,20 @@ class GameoverActivity : AppCompatActivity() {
     var opponentResult = 0
     var difference = 0
 
+    var isFinished = false
+    var isFinishedOpponent = false
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
+        music.playGameoverMusic(this)
+
+        //Mute management
+        if (muted) {
+            music.setVolume(0.0f, 0.0f)
+        } else {
+            music.setVolume(1.0f, 1.0f)
+        }
 
         firebaseAuth = FirebaseAuth.getInstance()   //Get instance from Firebase Authentication
 
@@ -157,6 +169,7 @@ class GameoverActivity : AppCompatActivity() {
                     var view = findViewById(R.id.View) as ConstraintLayout
                     view.setBackgroundColor(Color.BLUE)
 
+                    music.stopSound()
                     intent = Intent(this, GameActivity::class.java)
                     intent.putExtra("Color", color)
                     intent.putExtra("Bullet", bul)
@@ -166,6 +179,7 @@ class GameoverActivity : AppCompatActivity() {
 
                 val returnMenuButton = findViewById(R.id.ReturnButton) as ImageButton
                 returnMenuButton.setOnClickListener() {
+                    music.stopSound()
                     uid?.let {
                         intent = Intent(this, MainActivity::class.java)
                         startActivity(intent)
@@ -191,6 +205,7 @@ class GameoverActivity : AppCompatActivity() {
 
             val signUpButton = findViewById(R.id.SignUpButton) as Button
             signUpButton.setOnClickListener() {
+                music.stopSound()
                 intent = Intent(this, SignUpActivity::class.java)
                 startActivity(intent)
                 finish()
@@ -198,6 +213,7 @@ class GameoverActivity : AppCompatActivity() {
 
             val signInButton = findViewById(R.id.SignInButton) as Button
             signInButton.setOnClickListener() {
+                music.stopSound()
                 intent = Intent(this, SignInActivity::class.java)
                 startActivity(intent)
                 finish()
@@ -235,6 +251,7 @@ class GameoverActivity : AppCompatActivity() {
                 var view = findViewById(R.id.View) as ConstraintLayout
                 view.setBackgroundColor(Color.BLUE)
 
+                music.stopSound()
                 intent = Intent(this, GameActivity::class.java)
                 intent.putExtra("Color", color)
                 intent.putExtra("Bullet", bul)
@@ -244,6 +261,7 @@ class GameoverActivity : AppCompatActivity() {
 
             val returnMenuButton = findViewById(R.id.ReturnButton) as ImageButton
             returnMenuButton.setOnClickListener() {
+                music.stopSound()
                 uid?.let {
                     intent = Intent(this, MainActivity::class.java)
                     startActivity(intent)
@@ -264,51 +282,34 @@ class GameoverActivity : AppCompatActivity() {
         //Manage points after loading text
         var loading = findViewById(R.id.LoadingText) as TextView
 
-        var numPoints = 1
-        val timer = Timer()
-        timer.scheduleAtFixedRate(object : TimerTask() {
-            override fun run() {
-                Handler(Looper.getMainLooper()).post(java.lang.Runnable {
-                    if (numPoints == 4) numPoints = 1
-                    loading.text = "Downloading leaderboard" + ".".repeat(numPoints)
-                    numPoints += 1
-                })
-            }
-        }, 10, 600)
-
-        var ranking = 0
-        var isFinished = false
-        var isFinishedOpponent = false
-
-        firebaseAuth.uid?.let {
-            var rankingText = findViewById(R.id.RankingText) as TextView
-
-            var numPointsRanking = 1
-            val timerRanking = Timer()
-            timerRanking.scheduleAtFixedRate(object : TimerTask() {
+        if(!isOpponentSet) {
+            var numPoints = 1
+            val timer = Timer()
+            timer.scheduleAtFixedRate(object : TimerTask() {
                 override fun run() {
                     Handler(Looper.getMainLooper()).post(java.lang.Runnable {
-                        if(!isFinished) {
-                            if (numPointsRanking == 4) numPointsRanking = 1
-                            rankingText.text = "Ranking: " + ".".repeat(numPointsRanking)
-                            numPointsRanking += 1
-                        }
+                        if (numPoints == 4) numPoints = 1
+                        loading.text = "Downloading leaderboard" + ".".repeat(numPoints)
+                        numPoints += 1
                     })
                 }
             }, 10, 600)
+        }
 
-            if(isOpponentSet){
-                var rankingTextOpponent = findViewById(R.id.RankingTextOpponent) as TextView
+        var ranking = 0
 
-                var numPointsRankingOpponent  = 1
-                val timerRankingOpponent  = Timer()
-                timerRankingOpponent .scheduleAtFixedRate(object : TimerTask() {
+        firebaseAuth.uid?.let {
+            if(!isOpponentSet){
+                var rankingText = findViewById(R.id.RankingText) as TextView
+                var numPointsRanking = 1
+                val timerRanking = Timer()
+                timerRanking.scheduleAtFixedRate(object : TimerTask() {
                     override fun run() {
                         Handler(Looper.getMainLooper()).post(java.lang.Runnable {
-                            if(!isFinishedOpponent) {
-                                if (numPointsRankingOpponent  == 4) numPointsRankingOpponent  = 1
-                                rankingTextOpponent .text = "Ranking: " + ".".repeat(numPointsRankingOpponent )
-                                numPointsRankingOpponent  += 1
+                            if(!isFinished) {
+                                if (numPointsRanking == 4) numPointsRanking = 1
+                                rankingText.text = "Ranking: " + ".".repeat(numPointsRanking)
+                                numPointsRanking += 1
                             }
                         })
                     }
@@ -510,6 +511,53 @@ class GameoverActivity : AppCompatActivity() {
     }
 
     suspend fun getDifference(username1: String, username2: String) {
+        //Manage points after loading text
+        var loading = findViewById(R.id.LoadingText) as TextView
+
+        var numPoints = 1
+        val timer = Timer()
+        timer.scheduleAtFixedRate(object : TimerTask() {
+            override fun run() {
+                Handler(Looper.getMainLooper()).post(java.lang.Runnable {
+                    if (numPoints == 4) numPoints = 1
+                    loading.text = "Downloading leaderboard" + ".".repeat(numPoints)
+                    numPoints += 1
+                })
+            }
+        }, 10, 600)
+
+        var rankingText = findViewById(R.id.RankingText) as TextView
+        var numPointsRanking = 1
+        val timerRanking = Timer()
+        timerRanking.scheduleAtFixedRate(object : TimerTask() {
+            override fun run() {
+                Handler(Looper.getMainLooper()).post(java.lang.Runnable {
+                    if(!isFinished) {
+                        if (numPointsRanking == 4) numPointsRanking = 1
+                        rankingText.text = "Ranking: " + ".".repeat(numPointsRanking)
+                        numPointsRanking += 1
+                    }
+                })
+            }
+        }, 10, 600)
+
+        if(isOpponentSet){
+            var rankingTextOpponent = findViewById(R.id.RankingTextOpponent) as TextView
+
+            var numPointsRankingOpponent  = 1
+            val timerRankingOpponent  = Timer()
+            timerRankingOpponent .scheduleAtFixedRate(object : TimerTask() {
+                override fun run() {
+                    Handler(Looper.getMainLooper()).post(java.lang.Runnable {
+                        if(!isFinishedOpponent) {
+                            if (numPointsRankingOpponent  == 4) numPointsRankingOpponent  = 1
+                            rankingTextOpponent .text = "Ranking: " + ".".repeat(numPointsRankingOpponent )
+                            numPointsRankingOpponent  += 1
+                        }
+                    })
+                }
+            }, 10, 600)
+        }
 
         val differenceApi = Request_Difference().retrofit.create(DifferenceInterface::class.java)
         CoroutineScope(Dispatchers.IO).launch {

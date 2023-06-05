@@ -108,6 +108,7 @@ class GameSettingsActivity : AppCompatActivity(), LocationListener {
                 //Change opponent
                 val opponentButton = findViewById(R.id.SubmitButton) as Button
                 opponentButton.setOnClickListener() {
+                    music.playChooseSound(this)
                     val user = findViewById(R.id.Username) as EditText
 
                     val numUsersReference = database.getReference("NumberOfUsers")
@@ -144,6 +145,7 @@ class GameSettingsActivity : AppCompatActivity(), LocationListener {
                 //Remove opponent
                 val removeButton = findViewById(R.id.RemoveButton) as Button
                 removeButton.setOnClickListener() {
+                    music.playChooseSound(this)
                     val opponentNameReference = database.getReference("Users/$current_id/Opponent")
                     opponentNameReference.removeValue()
                     var opponentNameView = findViewById(R.id.Opponent) as TextView
@@ -229,6 +231,7 @@ class GameSettingsActivity : AppCompatActivity(), LocationListener {
 
             val weatherButton = findViewById(R.id.WeatherButton) as Button
             weatherButton.setOnClickListener {
+                music.playChooseSound(this)
                 weatherButton.visibility = View.INVISIBLE
                 var processBar = findViewById(R.id.progress_loader) as ProgressBar
                 var loadingText = findViewById(R.id.LoadingText) as TextView
@@ -256,6 +259,7 @@ class GameSettingsActivity : AppCompatActivity(), LocationListener {
 
             val removeWeatherButton = findViewById(R.id.RemoveWeatherButton) as Button
             removeWeatherButton.setOnClickListener {
+                music.playChooseSound(this)
                 weather = ""
                 removeWeatherButton.visibility = View.INVISIBLE
                 weatherButton.visibility = View.VISIBLE
