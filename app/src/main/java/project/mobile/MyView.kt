@@ -675,8 +675,8 @@ class MyView(context: Context?, weat:String?, Color :String?, Bul :String?, Logg
                 ///////////------------------ manage position of boss 1 -------------///////////////
                 if((boss_visible[0])) {
                     //// after tot times the boss go away
-                    if (count_boss[0] == 35) {
-                        boss_y[0] += 10f
+                    if (count_boss[0] == 28) {
+                        boss_y[0] -= 10f
                         withTranslation(lateral_movement_boss[0], boss_y[0]) {
                             if (boss_hit[0]) {
                                 timeout_boss_hit += 1
@@ -713,7 +713,7 @@ class MyView(context: Context?, weat:String?, Color :String?, Bul :String?, Logg
                         if ((lateral_movement_boss[0] + boss_x[0] > 900f) and (dx_if_true_boss[0] == true)) {
                             dx_if_true_boss[0] = false
                             count_boss[0] += 1
-                        } else if ((lateral_movement_boss[0] + boss_x[0] < 100f) and (dx_if_true_boss[0] == false)) {
+                        } else if ((lateral_movement_boss[0] + boss_x[0] < 50f) and (dx_if_true_boss[0] == false)) {
                             dx_if_true_boss[0] = true
                             count_boss[0] += 1
                         }
