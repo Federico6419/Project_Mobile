@@ -54,7 +54,7 @@ class ModifyPhoto : AppCompatActivity() {
             ChangePhotoButton.visibility = View.INVISIBLE
             ChangePhotoButton.isClickable = false
 
-            /// hide change photo button
+            /// hide submit photo button
             SubmitButton.visibility = View.INVISIBLE
             SubmitButton.isClickable = false
 
@@ -84,7 +84,7 @@ class ModifyPhoto : AppCompatActivity() {
                 Toast.makeText(this, "Something goes wrong", Toast.LENGTH_SHORT)
             }
 
-            //userimage = null
+            userimage = null
         }
 
         ////submit intent
