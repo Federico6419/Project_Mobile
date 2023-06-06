@@ -158,6 +158,7 @@ class MainActivity : AppCompatActivity(), LifecycleObserver {
                 current_id = ""              //ID of the current user
                 current_score = 0           //Score of the current user
                 userimage = null
+                hasphoto = false
 
                 intent = Intent(this, MainActivity::class.java)
                 startActivity(intent)

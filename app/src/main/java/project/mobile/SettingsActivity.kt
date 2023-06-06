@@ -10,6 +10,7 @@ import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.DatabaseReference
 import com.google.firebase.database.ktx.database
 import com.google.firebase.ktx.Firebase
+import com.google.firebase.storage.ktx.storage
 
 
 class SettingsActivity : AppCompatActivity() {
@@ -186,6 +187,25 @@ class SettingsActivity : AppCompatActivity() {
                     //Alert of success
                     Toast.makeText(this, "ACCOUNT DELETED SUCCESSFULLY", Toast.LENGTH_SHORT).show()
 
+                    //DELETE PHOTO
+                    val storage = Firebase.storage      //Firebase Storage variable
+                    // Create a storage reference from our app
+                    val storageRefDelete = storage.reference
+                    // Create a reference to the file to delete
+                    val userImageRef = storageRefDelete.child("Images/" + current_username)
+                    Log.i("YOSHI", current_username)
+                    // Delete the file
+                    userImageRef.delete().addOnSuccessListener {
+                        // File deleted successfully
+                        userimage = null
+                        hasphoto = false
+                    }.addOnFailureListener {
+                        // Uh-oh, an error occurred!
+                    }
+
+                    userimage = null
+                    hasphoto = false
+
                     //Delete account
                     firebaseAuth.currentUser?.delete()
 
@@ -256,6 +276,25 @@ class SettingsActivity : AppCompatActivity() {
 
                                         //Alert of success
                                         Toast.makeText(this, "ACCOUNT DELETED SUCCESSFULLY", Toast.LENGTH_SHORT).show()
+
+                                        //DELETE PHOTO
+                                        val storage = Firebase.storage      //Firebase Storage variable
+                                        // Create a storage reference from our app
+                                        val storageRefDelete = storage.reference
+                                        // Create a reference to the file to delete
+                                        val userImageRef = storageRefDelete.child("Images/" + current_username)
+                                        Log.i("YOSHI", current_username)
+                                        // Delete the file
+                                        userImageRef.delete().addOnSuccessListener {
+                                            // File deleted successfully
+                                            userimage = null
+                                            hasphoto = false
+                                        }.addOnFailureListener {
+                                            // Uh-oh, an error occurred!
+                                        }
+
+                                        userimage = null
+                                        hasphoto = false
 
                                         //Delete account
                                         firebaseAuth.currentUser?.delete()
