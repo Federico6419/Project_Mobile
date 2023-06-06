@@ -156,6 +156,7 @@ class ModifyPhoto : AppCompatActivity() {
                     RemoveButton.isClickable = true
 
                     TAKE_FROM_GALLERY = false
+
                 }
             }
 
