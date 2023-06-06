@@ -168,6 +168,7 @@ class MyView(context: Context?, weat:String?, Color :String?, Bul :String?, Logg
     var id = ""
     var PAUSE = false
     var gameover = false
+    var newRecord = false
     
     var numKills = 0        //Variable that counts the number of kills
 
@@ -2172,6 +2173,7 @@ class MyView(context: Context?, weat:String?, Color :String?, Bul :String?, Logg
                     referenceOldScore.setValue(Score.toString())
                     old_score = Score
                     current_score = Score
+                    newRecord = true
                 }
                 plane_x = 500f
                 hearts = 3
@@ -2180,6 +2182,9 @@ class MyView(context: Context?, weat:String?, Color :String?, Bul :String?, Logg
                 intent.putExtra("Color", col)
                 intent.putExtra("Bullet", bul)
                 intent.putExtra("Score", Score.toString())
+                if (newRecord) {
+                    intent.putExtra("NewRecord", "true")
+                }
                 startActivity(context, intent, null)
                 (context as Activity).finish()
 
