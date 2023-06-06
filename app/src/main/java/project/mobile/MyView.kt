@@ -1011,7 +1011,7 @@ class MyView(context: Context?, weat:String?, Color :String?, Bul :String?, Logg
                     Log.i("BUL1", is_visible_bul[2].toString())
                 }
                 ///////// boss1 bullet /////////////
-                if(boss_visible[0]){
+                if(boss_visible[0] or is_visible_boss_bullet[0]){
                     upboss[0]+= 20f
                     withTranslation(0f, upboss[0]) {
                         if (shotboss[0]) {
@@ -1028,7 +1028,7 @@ class MyView(context: Context?, weat:String?, Color :String?, Bul :String?, Logg
                                 drawBitmap(bossBullet, resboss, (resbossy), null)
                             }
                             if((upboss[0])>1400f){
-                                is_visible_boss_bullet[0] = true
+                                is_visible_boss_bullet[0] = false
                                 upboss[0] = 0f
                                 shotboss[0]= true
                                 just_shot_bullet_boss[0] = false
