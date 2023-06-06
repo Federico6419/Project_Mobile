@@ -140,6 +140,12 @@ class ModifyPhoto : AppCompatActivity() {
                 }
             }
 
+        ////take photo profile intent
+        PhotoButton.setOnClickListener() {
+            intent = Intent(this, ChangePhotoProfile::class.java)
+            resultLauncher.launch(intent)
+        }
+
         //// if user has already a photo stored
         if(userimage!=null){
             //Show image
@@ -148,12 +154,10 @@ class ModifyPhoto : AppCompatActivity() {
             showimage.getLayoutParams().width = 240
 
             /// hide take photo button
-            val PhotoButton = findViewById(R.id.PhotoButton) as Button
             PhotoButton.visibility = View.INVISIBLE
             PhotoButton.isClickable = false
 
             // show remove button
-            val RemoveButton = findViewById(R.id.RemoveButton) as Button
             RemoveButton.visibility = View.VISIBLE
             RemoveButton.isClickable = true
 
