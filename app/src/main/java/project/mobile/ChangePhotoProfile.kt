@@ -90,9 +90,9 @@ class ChangePhotoProfile : AppCompatActivity() {
             noButton.isClickable = false
 
             //Show Gallery Button
-            var galleryButton = findViewById(R.id.GalleryButton) as Button
+            /*var galleryButton = findViewById(R.id.GalleryButton) as Button
             galleryButton.visibility = View.VISIBLE
-            galleryButton.isClickable = true
+            galleryButton.isClickable = true*/
 
             //Show Back Button
             var backButton = findViewById(R.id.BackButton) as ImageButton
@@ -108,7 +108,7 @@ class ChangePhotoProfile : AppCompatActivity() {
             photoButton.visibility = View.VISIBLE
             photoButton.isClickable = true
         }
-
+        /*
         ///******************** GALLERY INTENT MANAGEMENT *******************///////////////////
         // result launcher to get the result of the intent of take image from gallery
         var resultLauncherGallery = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
@@ -166,7 +166,7 @@ class ChangePhotoProfile : AppCompatActivity() {
             resultLauncherGallery.launch(intent)
         }
         ///******************** END GALLERY MANAGEMENT *******************///////////////////
-
+*/
         //Get the output directory
         outputDirectory = getOutputDirectory()
 
@@ -247,9 +247,9 @@ class ChangePhotoProfile : AppCompatActivity() {
                     photoButton.isClickable = false
 
                     //Hide Gallery Button
-                    var galleryButton = findViewById(R.id.GalleryButton) as Button
+                    /*var galleryButton = findViewById(R.id.GalleryButton) as Button
                     galleryButton.visibility = View.INVISIBLE
-                    galleryButton.isClickable = false
+                    galleryButton.isClickable = false*/
 
                     //Hide Back Button
                     var backButton = findViewById(R.id.BackButton) as ImageButton

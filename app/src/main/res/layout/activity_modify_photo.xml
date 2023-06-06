@@ -66,8 +66,8 @@
 
     <Button
         android:id="@+id/PhotoButton"
-        android:layout_width="90dp"
-        android:layout_height="90dp"
+        android:layout_width="91dp"
+        android:layout_height="53dp"
         android:backgroundTint="@color/blu_figo"
         android:text="Take Photo"
         android:textAllCaps="false"
@@ -76,7 +76,21 @@
         app:layout_constraintHorizontal_bias="0.728"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.65" />
+        app:layout_constraintVertical_bias="0.601" />
+
+    <Button
+        android:id="@+id/GalleryButton"
+        android:layout_width="93dp"
+        android:layout_height="58dp"
+        android:backgroundTint="@color/blu_figo"
+        android:text="Take from gallery"
+        android:textAllCaps="false"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.731"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.703" />
 
     <Button
         android:id="@+id/ChangeButton"
