@@ -157,6 +157,7 @@ class ModifyPhoto : AppCompatActivity() {
 
                     TAKE_FROM_GALLERY = false
 
+
                 }
             }
 
