@@ -3,6 +3,7 @@ package project.mobile
 import android.content.Context
 import android.content.Intent
 import android.graphics.Color
+import android.media.Image
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.os.Handler
@@ -112,6 +113,12 @@ class GameoverActivity : AppCompatActivity() {
                     }
                 }
 
+                val newRecord = intent.getStringExtra("NewRecord")
+                if(newRecord == "true") {
+                    var newRecordView = findViewById(R.id.NewRecord) as ImageView
+                    newRecordView.visibility = View.VISIBLE
+                }
+
                 //Set your score text
                 var scoreView = findViewById(R.id.ScoreText) as TextView
                 Log.i("SCORE", score.toString())
@@ -146,6 +153,8 @@ class GameoverActivity : AppCompatActivity() {
                     profileImageView.visibility = View.INVISIBLE
                     var usernameText = findViewById(R.id.UsernameText) as TextView
                     usernameText.visibility = View.INVISIBLE
+                    var newRecordView = findViewById(R.id.NewRecord) as ImageView
+                    newRecordView.visibility = View.INVISIBLE
 
                     if(isOpponentSet){
                         var rankingTextOpponent = findViewById(R.id.RankingTextOpponent) as TextView
