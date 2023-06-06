@@ -101,7 +101,7 @@ class MainActivity : AppCompatActivity(), LifecycleObserver {
 
             val changephotoButton = findViewById(R.id.iv_capture_button) as ImageButton
 
-            if(hasphoto){
+            if(hasphoto and !TAKE_FROM_GALLERY){
                 changephotoButton.setImageURI(userimage)
             }else {
                 //////////download the image of the user from storage and set to the userimage view

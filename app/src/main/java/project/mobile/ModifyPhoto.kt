@@ -3,6 +3,7 @@ package project.mobile
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.provider.MediaStore
 import android.util.Log
 import android.view.View
 import android.widget.Button
@@ -16,6 +17,7 @@ import com.google.firebase.ktx.Firebase
 import com.google.firebase.storage.ktx.storage
 import kotlinx.android.synthetic.main.activity_modify_photo.*
 
+var TAKE_FROM_GALLERY = false
 class ModifyPhoto : AppCompatActivity() {
 
     //private lateinit var firebaseAuth: FirebaseAuth         //Firebase Authenticatoin variable
@@ -42,6 +44,8 @@ class ModifyPhoto : AppCompatActivity() {
 
         var showimage = findViewById(R.id.ProfileImage) as ImageView
 
+        val galleryButton = findViewById(R.id.GalleryButton) as Button
+
         // show remove button
         val RemoveButton = findViewById(R.id.RemoveButton) as Button
         ////remove photo button setted to true and remove from storage the photo if clicked
@@ -61,6 +65,10 @@ class ModifyPhoto : AppCompatActivity() {
             /// show photo button
             PhotoButton.visibility = View.VISIBLE
             PhotoButton.isClickable = true
+
+            //show Gallery Button
+            galleryButton.visibility = View.VISIBLE
+            galleryButton.isClickable = true
 
             /// show photoprofile generica
             showimage.setImageResource(R.drawable.profileimage)
@@ -85,6 +93,7 @@ class ModifyPhoto : AppCompatActivity() {
             }
 
             userimage = null
+            hasphoto = false
         }
 
         ////submit intent
@@ -133,6 +142,14 @@ class ModifyPhoto : AppCompatActivity() {
                     SubmitButton.visibility = View.VISIBLE
                     SubmitButton.isClickable = true
 
+                    // show change photo button
+                    ChangePhotoButton.visibility = View.VISIBLE
+                    ChangePhotoButton.isClickable = true
+
+                    //// hide gallery button
+                    galleryButton.visibility = View.INVISIBLE
+                    galleryButton.isClickable = false
+
 
                     /// show remove button
                     RemoveButton.visibility = View.VISIBLE
@@ -145,6 +162,53 @@ class ModifyPhoto : AppCompatActivity() {
             intent = Intent(this, ChangePhotoProfile::class.java)
             resultLauncher.launch(intent)
         }
+        ChangePhotoButton.setOnClickListener() {
+            intent = Intent(this, ChangePhotoProfile::class.java)
+            resultLauncher.launch(intent)
+        }
+
+        ///////////////////GALLERY RESULT LAUNCHER ///////////////////
+        // result launcher to get the result of the intent of take image from gallery
+        var resultLauncherGallery = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
+            if (result.resultCode == RESULT_OK) {
+                val data = result.data
+                userimage = data?.data!!
+
+                // hide photo button
+                PhotoButton.visibility = View.INVISIBLE
+                PhotoButton.isClickable = false
+
+                //Hide Gallery Button
+                galleryButton.visibility = View.INVISIBLE
+                galleryButton.isClickable = false
+
+                //Show image
+                showimage.setImageURI(userimage)
+                showimage.getLayoutParams().height = 300
+                showimage.getLayoutParams().width = 240
+
+                // show change photo button
+                ChangePhotoButton.visibility = View.VISIBLE
+                ChangePhotoButton.isClickable = true
+
+                // show remove button
+                RemoveButton.visibility = View.VISIBLE
+                RemoveButton.isClickable = true
+
+                /// show submit photo button
+                SubmitButton.visibility = View.VISIBLE
+                SubmitButton.isClickable = true
+
+                TAKE_FROM_GALLERY = true
+
+            }
+        }
+        //gallery button listener
+        galleryButton.setOnClickListener {
+            val intent = Intent(Intent.ACTION_PICK, MediaStore.Images.Media.INTERNAL_CONTENT_URI)
+            resultLauncherGallery.launch(intent)
+        }
+        /////////////////////////////**************************//////////////////////////
 
         //// if user has already a photo stored
         if(userimage!=null){
@@ -161,13 +225,13 @@ class ModifyPhoto : AppCompatActivity() {
             RemoveButton.visibility = View.VISIBLE
             RemoveButton.isClickable = true
 
+            //Hide Gallery Button
+            galleryButton.visibility = View.INVISIBLE
+            galleryButton.isClickable = false
+
             ////change photo profile intent
             ChangePhotoButton.visibility = View.VISIBLE
             ChangePhotoButton.isClickable = true
-            ChangePhotoButton.setOnClickListener() {
-                intent = Intent(this, ChangePhotoProfile::class.java)
-                resultLauncher.launch(intent)
-            }
 
         }else{
             ///hide submit button
