@@ -154,6 +154,8 @@ class ModifyPhoto : AppCompatActivity() {
                     /// show remove button
                     RemoveButton.visibility = View.VISIBLE
                     RemoveButton.isClickable = true
+
+                    TAKE_FROM_GALLERY = false
                 }
             }
 
